@@ -1,0 +1,63 @@
+<ion-header no-border >
+  <ion-navbar transparent>
+    <ion-label text-center class="title" >Prise de Rendez-vous</ion-label>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding >
+  <ion-item>
+    <ion-label color="primary">Cliente</ion-label>
+    <ion-input [(ngModel)]="autocompleteCliente" type="text"  clearInput="true" autocomplete="on"></ion-input>
+  </ion-item>
+  <!-- Selection des prestations-->
+  <ion-list>
+  <ion-item>
+    <ion-label color="primary">Prestations</ion-label>
+    <ion-select [(ngModel)]="prestation">
+      <ion-option value="Pose capsule,25" selected="true" >Pose capsule</ion-option>
+      <ion-option value="Pose chablon,30">Pose chablon</ion-option>
+      <ion-option value="Remplissage,15">Remplissage</ion-option>
+      <ion-option value="Guenage,15">Guenage</ion-option>
+      <ion-option value="Main - Vernis semi-permanent,12">Main - Vernis semi-permanent</ion-option>
+      <ion-option value="Pied - Vernis semi-permanent,7">Pied - Vernis semi-permanent</ion-option>
+      <ion-option value="Remplissage main et vernis semi-permanent pied,20">Remplissage main et vernis semi-permanent pied</ion-option>
+      <ion-option value="Dépose,10">Dépose</ion-option>
+    </ion-select>
+  </ion-item>
+  </ion-list>
+
+  <ion-item>
+    <ion-label color="primary">Date</ion-label>
+    <ion-input type="date" [(ngModel)]="date"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary">Heure de début</ion-label>
+    <ion-input type="time" [(ngModel)]="heureDebut"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary">Durée</ion-label>
+    <ion-input type="time" [(ngModel)]="duree"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary">Prix</ion-label>
+    <ion-input type="number" [(ngModel)]="prixSpec" ></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label color="primary"> Récursivité </ion-label>
+    <ion-toggle (ionChange)="changeToggle()" checked="false"></ion-toggle>
+  </ion-item>
+  <ion-item *ngIf="visibleFrequence" >
+    <ion-label color="primary">Fréquence en semaine</ion-label>
+    <ion-input type="number" [(ngModel)]="frequence" ></ion-input>
+  </ion-item>
+  <br/>
+  <div text-center >
+    <!-- BOUTON Validation -->
+    <button ion-button round (click)="setRdv()">
+      <!-- ICONE cercle de validation -->
+      <ion-icon name="checkmark-circle"></ion-icon>
+      Valider
+    </button>
+  </div>
+</ion-content>
