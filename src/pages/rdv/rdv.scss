@@ -1,17 +1,2 @@
 page-rdv {
-  ion-content{
-    background: url("../assets/imgs/secondary-bg.png") no-repeat fixed center;
-    background-size: cover;
-  }
-  ion-input, ion-option, ion-select, ion-label{
-    color: color($colors,primary);
-  }
-  ion-item{
-    background: transparent !important;
-  }
-
-  .title{
-    font-size: 25px;
-    font-family:'TitleFont';
-  }
 }

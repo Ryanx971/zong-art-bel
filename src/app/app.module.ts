@@ -5,6 +5,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Calendar } from '@ionic-native/calendar';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { Dialogs } from '@ionic-native/dialogs';
+// import { LOCALE_ID } from '@angular/core';
+
 
 import { MyApp } from './app.component';
 
@@ -26,6 +29,8 @@ import { MyApp } from './app.component';
     SplashScreen,
     Calendar,
     SocialSharing,
+    Dialogs,
+    // {provide: LOCALE_ID, useValue: "fr-FR" },
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

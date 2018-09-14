@@ -1,38 +1,33 @@
-<ion-menu [content]="content" >
+<ion-menu  persistent="true" [content]="content">
   <ion-header text-center>
-    <ion-toolbar>
-      <ion-title>Zong Art Bel</ion-title>
+    <ion-toolbar color="secondary">
+      <ion-label>Zong Art Bel</ion-label>
     </ion-toolbar>
   </ion-header>
 
   <ion-content>
     <ion-list>
-      <button ion-item (click)="openPage(HomePage)">
+      <button ion-item menuClose (click)="openPage('HomePage')">
         <ion-icon name="home" item-left></ion-icon>
         Acceuil
       </button>
-      <button ion-item (click)="openPage(RdvPage)">
+      <button ion-item menuClose (click)="openPage('RdvPage')">
         <ion-icon name="add-circle" item-left></ion-icon>
         Prendre un rendez-vous
       </button>
-      <button ion-item (click)="openCalendar()">
+      <button ion-item menuClose (click)="openCalendar()">
         <ion-icon name="calendar" item-left></ion-icon>
         Calendrier
       </button>
-      <button ion-item (click)="openPage(eventsPage)">
+      <button ion-item menuClose (click)="openPage('StatsPage')">
         <ion-icon name="stats" item-left></ion-icon>
         Les statistiques
       </button>
-      <button ion-item (click)="closeMenu()">
+      <button ion-item menuClose>
         <ion-icon name="close" item-left></ion-icon>
         Fermer
       </button>
-      <!-- <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
-      </button> -->
-      <!-- <ion-item menuClose detail-none>Close Menu</ion-item> -->
     </ion-list>
   </ion-content>
-
 </ion-menu>
-<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
+<ion-nav [root]="rootPage" #content></ion-nav>

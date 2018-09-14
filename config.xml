@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="fr.zongartbel.rdv" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Zong Art Bel</name>
-    <description>Prise de rendez-vous ZAB.</description>
+    <description>Prise de rendez-vous de l'institut Zong Art Bel.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
     <content original-src="index.html" src="http://192.168.0.11:8100" />
     <access origin="*" />
@@ -82,8 +82,9 @@
     <plugin name="cordova-plugin-ionic-webview" spec="^2.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <allow-navigation href="http://192.168.0.11:8100" />
-    <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.1" />
     <allow-navigation href="http://192.168.7.50:8100" />
+    <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.1" />
+    <allow-navigation href="http://192.168.42.118:8100" />
     <engine name="browser" spec="5.0.3" />
     <engine name="android" spec="6.3.0" />
 </widget>

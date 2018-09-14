@@ -1,15 +1,16 @@
-<ion-header no-border >
-  <ion-navbar transparent >
-    <button color="light" ion-button menuToggle icon-only item-left>
+<ion-header no-border>
+  <ion-navbar transparent hideBackButton>
+    <button color="light" icon-only ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
   </ion-navbar>
 </ion-header>
 
+
 <ion-content padding>
   <ion-label text-center>{{ titre }}</ion-label>
   <div id="btn_group" text-center>
-    <button color="light" ion-button round outline icon-start (click)="openPage(RdvPage)">
+    <button color="light" ion-button round outline icon-start (click)="openRdvPage(RdvPage)">
       <ion-icon name="add-circle"></ion-icon>
       Prendre un rendez-vous
     </button>
@@ -17,7 +18,7 @@
       <ion-icon name="calendar"></ion-icon>
       Accéder au calendrier
     </button>
-    <button color="light" ion-button round outline icon-start (click)="openPage(StatsPage)">
+    <button color="light" ion-button round outline icon-start (click)="openStatsPage(StatsPage)">
       <ion-icon name="stats"></ion-icon>
       Accéder aux statistiques
     </button>

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-import { ToastController } from 'ionic-angular';
+import { NavController, NavParams} from 'ionic-angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Calendar } from '@ionic-native/calendar';
 
 /**
@@ -9,63 +9,56 @@ import { Calendar } from '@ionic-native/calendar';
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-
+@IonicPage()
 @Component({
   selector: 'page-stats',
   templateUrl: 'stats.html',
 })
 export class StatsPage {
-  // Liste des événéments
-  events: any[] = [];
-  // Nombre de Rdv
+  titre: string = "Mes statistiques";
+  statsForm: FormGroup;
+  mois: string;
   nbRdv: number = 0;
-  // Argent pour le mois
   argent: number = 0;
-  // Visibilité de la carte affichant les prix
   visibleCard: boolean = false;
-  // Mois et Année
-  moisAnnee: string;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController, private calendar: Calendar) {
-  }
+  constructor(
+    navCtrl: NavController,
+    public navParams: NavParams,
+    private formBuilder: FormBuilder,
+    private calendar: Calendar)
+    {
+      this.statsForm = this.formBuilder.group({
+        moisAnnee: ['', Validators.required]
+      });
+    }
 
-  // Verification des saisies
-  public verification(): boolean {
-    var champs = "";
-    if (this.moisAnnee == null) {
-      champs += "Mois & Année";
-    }
-    if (champs == "") {
-      return true;
-    }
-    else {
-      // Toast affichant les champs manquants
-      let toast = this.toastCtrl.create(
-        {
-          message: 'Erreur, veuillez remplir : ' + champs + ".",
-          duration: 4000
-        });
-      toast.present();
-      return false;
-    }
-  }
 
   ionViewDidLoad() {
-    console.log('Ouverture de la page Statistiques');
+    console.log('Ouverture StatsPage');
   }
 
-  public changeDateStats(): void {
-    var money = 0;
-    if (this.verification()) {
-      let startDate = new Date(this.moisAnnee + "-01T00:00:00.000Z");
+  changeDateStats(){
+    if (this.statsForm.valid){
+      this.argent = 0;
+      this.nbRdv = 0;
+      var tabMois = [
+       "Janvier", "Fevrier", "Mars",
+       "Avril", "Mai", "Juin", "Juillet",
+       "Août", "Septembre", "Octobre",
+       "Novembre", "Decembre"
+      ];
+      var moisAnnee = this.statsForm.controls['moisAnnee'].value;
+      let startDate = new Date(moisAnnee + "-01T02:00:00.000Z");
       let endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 2, 0);
+      this.mois = tabMois[startDate.getMonth()]+" "+startDate.getFullYear();
       this.calendar.listEventsInRange(startDate, endDate).then(data=>{
-        this.events = data;
-        this.nbRdv = this.events.length;
-        this.events.forEach(ev=> {
-          if(ev.eventLocation)
+        data.forEach(ev=> {
+          if(ev.eventLocation == "Zong Art Bel")
           {
-            this.argent+= parseInt(ev.eventLocation);
+            this.nbRdv += 1;
+            var split = ev.title.split(",");
+            this.argent+= parseInt(split[1]);
           }
         });
         this.visibleCard = true;
@@ -77,7 +70,5 @@ export class StatsPage {
     else {
       this.visibleCard = false;
     }
-
   }
-
 }
