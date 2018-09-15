@@ -85,6 +85,7 @@
     <allow-navigation href="http://192.168.7.50:8100" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.1" />
     <allow-navigation href="http://192.168.42.118:8100" />
+    <plugin name="cordova-plugin-nativestorage" spec="^2.3.2" />
     <engine name="browser" spec="5.0.3" />
     <engine name="android" spec="6.3.0" />
 </widget>

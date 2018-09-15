@@ -6,7 +6,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { Calendar } from '@ionic-native/calendar';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { Dialogs } from '@ionic-native/dialogs';
-// import { LOCALE_ID } from '@angular/core';
+import { NativeStorage } from '@ionic-native/native-storage';
 
 
 import { MyApp } from './app.component';
@@ -30,7 +30,7 @@ import { MyApp } from './app.component';
     Calendar,
     SocialSharing,
     Dialogs,
-    // {provide: LOCALE_ID, useValue: "fr-FR" },
+    NativeStorage,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

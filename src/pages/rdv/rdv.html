@@ -12,6 +12,12 @@
   <form [formGroup]="rdvForm">
 
     <ion-item>
+      <!-- <ion-searchbar [formControl]="rdvForm.controls['cliente']" (ionInput)="getItems($event)"></ion-searchbar>
+      <ion-list>
+        <ion-item *ngFor="let item of items">
+          {{ item }}
+        </ion-item>
+      </ion-list> -->
       <ion-label color="primary" floating>Cliente*</ion-label>
       <ion-input [formControl]="rdvForm.controls['cliente']"
           type="text"></ion-input>
