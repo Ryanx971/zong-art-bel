@@ -1,9 +1,11 @@
 page-home {
   ion-content{
-    background: linear-gradient(
-      rgba(0, 0, 0, 0.45),
-      rgba(0, 0, 0, 0.45)
-    ),url("../assets/imgs/bg-home.png") no-repeat center center;
+    // background: linear-gradient(
+    //   rgba(0, 0, 0, 0.45),
+    //   rgba(0, 0, 0, 0.45)
+    // ),url("../assets/imgs/bg-home.png") no-repeat center center;
+
+    background: url("../assets/imgs/bg-home.png") no-repeat center center;
 
     ion-label{
       font-family:'TitleFont';
@@ -16,7 +18,7 @@ page-home {
       button{
         width: 32rem;
         height: 8rem;
-        font-size: 1.7rem; 
+        font-size: 1.7rem;
       }
     }
   }

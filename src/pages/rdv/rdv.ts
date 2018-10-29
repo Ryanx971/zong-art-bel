@@ -78,27 +78,27 @@ export class RdvPage {
   onChange(select: string)
   {
     if(select == "Pose capsules,25")
-      this.rdvForm.controls['duree'].setValue("3:00");
+      this.rdvForm.controls['duree'].setValue("01:30");
     if(select == "Pose capsules & vernis semi-permanent pieds,32")
-      this.rdvForm.controls['duree'].setValue("14:00");
+      this.rdvForm.controls['duree'].setValue("02:00");
     if(select == "Pose chablon,30")
-      this.rdvForm.controls['duree'].setValue("3:00");
+      this.rdvForm.controls['duree'].setValue("01:30");
     if(select == "Pose chablon & vernis semi-permanent pieds,37")
-      this.rdvForm.controls['duree'].setValue("14:00");
+      this.rdvForm.controls['duree'].setValue("02:00");
     if(select == "Remplissage,15")
-      this.rdvForm.controls['duree'].setValue("3:00");
+      this.rdvForm.controls['duree'].setValue("01:30");
     if(select == "Gainage,15")
-      this.rdvForm.controls['duree'].setValue("14:00");
+      this.rdvForm.controls['duree'].setValue("01:30");
     if(select == "Vernis semi-permanent - mains,12")
-      this.rdvForm.controls['duree'].setValue("3:00");
+      this.rdvForm.controls['duree'].setValue("01:00");
     if(select == "Vernis semi-permanent - pieds,7")
-      this.rdvForm.controls['duree'].setValue("14:00");
+      this.rdvForm.controls['duree'].setValue("00:30");
     if(select == "Vernis semi-permanent - mains & pieds,15")
-      this.rdvForm.controls['duree'].setValue("3:00");
+      this.rdvForm.controls['duree'].setValue("01:15");
     if(select == "Remplissage mains & vernis semi-permanent pieds,20")
-      this.rdvForm.controls['duree'].setValue("14:00");
+      this.rdvForm.controls['duree'].setValue("01:30");
     if(select == "Dépose,10")
-      this.rdvForm.controls['duree'].setValue("3:00");
+      this.rdvForm.controls['duree'].setValue("00:30");
   }
 
   // Création d'un RDV
