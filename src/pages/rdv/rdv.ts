@@ -4,7 +4,6 @@ import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { Dialogs } from '@ionic-native/dialogs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SocialSharing } from '@ionic-native/social-sharing';
-import { NativeStorage } from '@ionic-native/native-storage';
 
 @IonicPage()
 @Component({
@@ -14,9 +13,8 @@ import { NativeStorage } from '@ionic-native/native-storage';
 export class RdvPage {
 
   titre: string = "Prise de rendez-vous";
+  calendarId: number = 0;
   rdvForm: FormGroup;
-  // searchQuery: string = '';
-  // items: string[];
 
   constructor(
     public dialogs: Dialogs,
@@ -24,10 +22,8 @@ export class RdvPage {
     navCtrl: NavController,
     private formBuilder: FormBuilder,
     public socialSharing: SocialSharing,
-    private nativeStorage: NativeStorage,
     private calendar: Calendar
   ) {
-    // this.initializeItems();
     this.rdvForm = this.formBuilder.group({
       cliente: ['', Validators.required],
       prestation: [''],
@@ -41,39 +37,8 @@ export class RdvPage {
 
   ionViewDidLoad() {
     console.log('Ouverture PageRdv');
+    this.checkCalendar();
   }
-
-  // initializeItems() {
-  //   this.nativeStorage.getItem('cliente_liste').then(data=>
-  //   {
-  //     // this.items = JSON.parse(data);
-  //     console.log(JSON.stringify(data ));
-  //     return true;
-  //   },
-  //   e=>
-  //   {
-  //     console.log("Cliente_liste don't exist");
-  //     return false;
-  //   });
-  // }
-
-  // getItems(ev: any)
-  // {
-  //   // Reset items back to all of the items
-  //   if(this.initializeItems())
-  //   {
-  //     // set val to the value of the searchbar
-  //     const val = ev.target.value;
-  //     // if the value is an empty string don't filter the items
-  //     if (val && val.trim() != '')
-  //     {
-  //       this.items = this.items.filter((item) =>
-  //       {
-  //         return (item.toLowerCase().indexOf(val.toLowerCase()) > -1);
-  //       })
-  //     }
-  //   }
-  // }
 
   onChange(select: string)
   {
@@ -124,16 +89,20 @@ export class RdvPage {
       {
         prixPrestation[1] = this.rdvForm.controls['prix'].value;
       }
+
+      var calOptions = this.calendar.getCalendarOptions();
+      calOptions.calendarId = this.calendarId;
+      var titre = cliente+" - "+prixPrestation[0]+", "+prixPrestation[1];
+
       if(frequence != "aucune")
       {
-        var calOptions = this.calendar.getCalendarOptions();
         calOptions.recurrence = "weekly";
         calOptions.recurrenceInterval = +frequence;
-        this.calendar.createEventWithOptions(prixPrestation[0]+" - "+cliente+", "+prixPrestation[1],"Zong Art Bel",prixPrestation[1]+"€",dateDebut,dateFin,calOptions);
+        this.calendar.createEventWithOptions(titre,"Zong Art Bel",prixPrestation[1]+" €",dateDebut,dateFin,calOptions);
       }
       else
       {
-        this.calendar.createEvent(prixPrestation[0]+" - "+cliente+", "+prixPrestation[1],"Zong Art Bel",prixPrestation[1]+"€",dateDebut,dateFin);
+        this.calendar.createEventWithOptions(titre,"Zong Art Bel",prixPrestation[1]+" €",dateDebut,dateFin,calOptions);
       }
       // this.saveCliente(cliente.toLowerCase());
       this.dialogs.confirm("Voulez-vous envoyer le rendez-vous sous forme de message ?",
@@ -155,30 +124,24 @@ export class RdvPage {
     }
   }
 
-  // saveCliente(cliente: string)
-  // {
-  //   this.nativeStorage.getItem('cliente_liste').then(data=>
-  //   {
-  //     console.log(JSON.stringify(data));
-  //     var dataArray: string[] = [];
-  //     dataArray = data;
-  //     console.log(dataArray);
-  //     if(dataArray.indexOf(cliente) != -1)
-  //     {
-  //       console.log("La cliente est déjà enregistrée");
-  //     }
-  //     else
-  //     {
-  //       console.log("La cliente n'est pas encore enregistrée, enregistrement en cours ...");
-  //       dataArray.push(cliente);
-  //       // this.nativeStorage.setItem('cliente_liste',dataArray);
-  //     }
-  //
-  //   },
-  //   e=>
-  //   {
-  //     this.nativeStorage.setItem('cliente_liste',cliente);
-  //     console.log("La liste n'existe pas, création en cours");
-  //   });
-  // }
+  checkCalendar()
+  {
+    this.calendar.listCalendars().then(data =>
+    {
+      var id;
+      data.forEach(function(cal)
+      {
+        if(cal.name == "zongartbel@gmail.com")
+        {
+          console.log("Calendar already exist id : "+cal.id);
+          id = parseInt(cal.id);
+        }
+      });
+      this.calendarId = id;
+    },
+    e=>
+    {
+      console.log("Error get listCalendars "+e);
+    });
+  }
 }
