@@ -51,7 +51,7 @@ export class StatsPage {
       var moisAnnee = this.statsForm.controls['moisAnnee'].value;
       let startDate = new Date(moisAnnee + "-01T02:00:00.000Z");
       let endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 2, 0);
-      this.mois = tabMois[startDate.getMonth()]+" "+startDate.getFullYear();
+      this.mois = tabMois[startDate.getMonth()+1]+" "+startDate.getFullYear();
       this.calendar.listEventsInRange(startDate, endDate).then(data=>{
         data.forEach(ev=> {
           if(ev.eventLocation == "Zong Art Bel")
