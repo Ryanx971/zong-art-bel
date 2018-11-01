@@ -8,19 +8,42 @@
 
 
 <ion-content padding>
-  <ion-label text-center>{{ titre }}</ion-label>
-  <div id="btn_group" text-center>
-    <button color="light" ion-button round outline icon-start (click)="openRdvPage(RdvPage)">
-      <ion-icon name="add-circle"></ion-icon>
-      Prendre un rendez-vous
-    </button>
-    <button color="light" ion-button round outline icon-start (click)="openCalendar()">
-      <ion-icon name="calendar"></ion-icon>
-      Accéder au calendrier
-    </button>
-    <button color="light" ion-button round outline icon-start (click)="openStatsPage(StatsPage)">
-      <ion-icon name="stats"></ion-icon>
-      Accéder aux statistiques
-    </button>
-  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12>
+        <ion-label text-center>{{ titre }}</ion-label>
+      </ion-col>
+    </ion-row>
+    <div class="menu">
+      <ion-row>
+        <ion-col>
+          <div class="icon-menu" (click)="openCalendar();">
+            <div class="icon">
+              <img src="assets/icon/calendar.svg" alt="" class="icon">
+            </div>
+            <h3 class="icon-title">Accéder au calendrier</h3>
+          </div>
+        </ion-col>
+        <ion-col>
+          <div class="icon-menu" (click)="openRdvPage();">
+            <div class="icon"><img src="assets/icon/add.svg" alt="" class="icon"></div>
+            <h3 class="icon-title">Prendre un rendez-vous</h3>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <div class="icon-menu" (click)="openStatsPage();">
+            <div class="icon"><img src="assets/icon/stat.svg" alt="" class="icon"></div>
+            <h3 class="icon-title">Accéder aux statistiques</h3>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-grid>
 </ion-content>
+<ion-footer>
+  <ion-toolbar color="primary" text-center>
+    <p style="font-size: 2rem; color: white;">{{ nbrRdv }}</p>
+  </ion-toolbar>
+</ion-footer>

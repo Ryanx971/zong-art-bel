@@ -10,6 +10,7 @@ import { IonicPage, NavController } from 'ionic-angular';
 export class HomePage {
 
   titre: string = "Zong Art Bel";
+  nbrRdv: string = "";
 
   constructor(
     public navCtrl: NavController,
@@ -19,6 +20,24 @@ export class HomePage {
 
   ionViewDidLoad() {
     console.log("Ouverture de la page d'accueil");
+    let startDate = new Date();
+    let endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 2, 0);
+    var count = 0;
+    this.calendar.listEventsInRange(startDate, endDate).then(data=>{
+        data.forEach(ev=> {
+          if(ev.eventLocation == "Zong Art Bel")
+          {
+            count += 1;
+          }
+        });
+        if(count == 0)
+          this.nbrRdv = "Vous n'avez aucun rendez-vous aujourd'hui";
+        else
+          this.nbrRdv = "Vous avez "+count+" rendez-vous aujourd'hui";
+      },
+      error=>{
+        console.log("Can\'t get list of rdv");
+      });
   }
 
   openRdvPage() {

@@ -9,11 +9,9 @@
 ion-menu{
   color: color($colors, light);
 
-  ion-toolbar{
-
-    ion-label{
-      font-family: 'TitleFont';
-      font-size: 3rem;
+  ion-toolbar {
+    img {
+      max-width: 35%;
     }
   }
 
@@ -27,12 +25,10 @@ ion-menu{
       ion-icon{
         color: color($colors, light);
       }
-
     }
-
   }
 }
-// --
+//  /Side menu
 
 
 // Titre pour chaques pages
