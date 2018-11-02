@@ -2,10 +2,11 @@ page-stats {
   ion-card-header {
     background-color: color($colors, secondary);
 
-    ion-icon{
-      height: 2rem;
-      width: 2rem;
-      font-size: 40px;
+    img{
+      width: auto;
+      margin: auto;
+      display: block;
+      max-width: 20%;
     }
   }
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams} from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Calendar } from '@ionic-native/calendar';
+import { Toast } from '@ionic-native/toast';
 
 /**
  * Generated class for the StatsPage page.
@@ -26,7 +27,8 @@ export class StatsPage {
     navCtrl: NavController,
     public navParams: NavParams,
     private formBuilder: FormBuilder,
-    private calendar: Calendar)
+    private calendar: Calendar,
+    private toast: Toast)
     {
       this.statsForm = this.formBuilder.group({
         moisAnnee: ['', Validators.required]
@@ -43,25 +45,41 @@ export class StatsPage {
       this.argent = 0;
       this.nbRdv = 0;
       var tabMois = [
-       "Janvier", "Fevrier", "Mars",
-       "Avril", "Mai", "Juin", "Juillet",
-       "Août", "Septembre", "Octobre",
-       "Novembre", "Decembre"
+       "janvier", "fevrier", "mars",
+       "avril", "mai", "juin", "juillet",
+       "août", "septembre", "octobre",
+       "novembre", "decembre"
       ];
-      var moisAnnee = this.statsForm.controls['moisAnnee'].value;
-      let startDate = new Date(moisAnnee + "-01T02:00:00.000Z");
-      let endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 2, 0);
+      console.log(new Date());
+      var moisAnnee = new Date(this.statsForm.controls['moisAnnee'].value);
+      console.log(moisAnnee.getFullYear());
+      console.log(moisAnnee.getMonth());
+      let startDate = new Date(moisAnnee.getFullYear()+"-"+moisAnnee.getMonth()+"-01T01:00:00.000Z");
+      let endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
+      console.log("Start "+startDate);
+      console.log("End "+endDate);
+      console.log(new Date());
       this.mois = tabMois[startDate.getMonth()+1]+" "+startDate.getFullYear();
       this.calendar.listEventsInRange(startDate, endDate).then(data=>{
-        data.forEach(ev=> {
-          if(ev.eventLocation == "Zong Art Bel")
-          {
-            this.nbRdv += 1;
-            var split = ev.title.split(",");
-            this.argent+= parseInt(split[1]);
-          }
-        });
-        this.visibleCard = true;
+        if (data.length == 0)
+        {
+          this.toast.show(`Vous n'avez pas réaliser de rendez-vous durant ce mois`, '5000', 'bottom').subscribe(toast => {});
+          this.visibleCard = false;
+        }
+        else
+        {
+          data.forEach(ev=> {
+            if(ev.eventLocation == "Zong Art Bel")
+            {
+              this.nbRdv += 1;
+              var split = ev.title.split(",");
+              console.log(split[1]);
+              console.log(split[0]);
+              this.argent+= parseInt(split[1]);
+            }
+          });
+          this.visibleCard = true;
+        }
       },
       error=>{
         console.log("Can\'t get list of rdv");

@@ -5,12 +5,12 @@ page-home {
 
     ion-label{
       font-family:'TitleFont';
-      font-size: 11rem;
+      font-size: 6rem;
       color: color($colors, light);
     }
 
     .menu {
-      margin-top: 15rem;
+      margin-top: 5rem;
     }
 
     ion-col {
@@ -29,7 +29,7 @@ page-home {
 
     .icon-menu .icon-title {
       font-family:'TitleFont';
-      font-size: 2.5rem;
+      font-size: 1.8rem;
       color: color($colors, light);
     }
   }

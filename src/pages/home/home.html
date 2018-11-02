@@ -16,26 +16,26 @@
     </ion-row>
     <div class="menu">
       <ion-row>
-        <ion-col>
+        <ion-col col-6>
           <div class="icon-menu" (click)="openCalendar();">
             <div class="icon">
               <img src="assets/icon/calendar.svg" alt="" class="icon">
             </div>
-            <h3 class="icon-title">Accéder au calendrier</h3>
+            <h3 class="icon-title">Calendrier</h3>
           </div>
         </ion-col>
-        <ion-col>
+        <ion-col col-6>
           <div class="icon-menu" (click)="openRdvPage();">
             <div class="icon"><img src="assets/icon/add.svg" alt="" class="icon"></div>
-            <h3 class="icon-title">Prendre un rendez-vous</h3>
+            <h3 class="icon-title">Rendez-vous</h3>
           </div>
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col>
+        <ion-col col-6>
           <div class="icon-menu" (click)="openStatsPage();">
             <div class="icon"><img src="assets/icon/stat.svg" alt="" class="icon"></div>
-            <h3 class="icon-title">Accéder aux statistiques</h3>
+            <h3 class="icon-title">Statistiques</h3>
           </div>
         </ion-col>
       </ion-row>
@@ -44,6 +44,6 @@
 </ion-content>
 <ion-footer>
   <ion-toolbar color="primary" text-center>
-    <p style="font-size: 2rem; color: white;">{{ nbrRdv }}</p>
+    <p style="font-size: 1.5rem; color: white;" (tap)="openCalendar();">{{ nbrRdv }}</p>
   </ion-toolbar>
 </ion-footer>

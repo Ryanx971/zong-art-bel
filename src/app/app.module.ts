@@ -7,6 +7,7 @@ import { Calendar } from '@ionic-native/calendar';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { Dialogs } from '@ionic-native/dialogs';
 import { NativeStorage } from '@ionic-native/native-storage';
+import { Toast } from '@ionic-native/toast';
 
 
 import { MyApp } from './app.component';
@@ -31,6 +32,7 @@ import { MyApp } from './app.component';
     SocialSharing,
     Dialogs,
     NativeStorage,
+    Toast,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

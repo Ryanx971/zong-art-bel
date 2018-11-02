@@ -4,6 +4,8 @@ import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { Dialogs } from '@ionic-native/dialogs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { Toast } from '@ionic-native/toast';
+
 
 @IonicPage()
 @Component({
@@ -22,7 +24,8 @@ export class RdvPage {
     navCtrl: NavController,
     private formBuilder: FormBuilder,
     public socialSharing: SocialSharing,
-    private calendar: Calendar
+    private calendar: Calendar,
+    private toast: Toast
   ) {
     this.rdvForm = this.formBuilder.group({
       cliente: ['', Validators.required],
@@ -113,13 +116,8 @@ export class RdvPage {
           var msg = "Bonjour "+cliente+",\nVotre prochain rendez-vous est le "+date+" à "+heureDebut+".\nPour un/une "+prixPrestation[0]+", le prix sera de "+prixPrestation[1]+"€\n À bientôt";
           this.socialSharing.share(msg,"Rendez-vous",null,null);
         }
-        let toast = this.toastCtrl.create(
-          {
-            message: "Rendez-vous ajouté avec succès",
-            duration: 2000
-          });
-          toast.present();
-          this.rdvForm.reset();
+        this.toast.show(`Rendez-vous ajouté avec succès`, '2000', 'bottom').subscribe(toast => {});
+        this.rdvForm.reset();
       });
     }
   }

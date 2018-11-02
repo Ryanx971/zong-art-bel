@@ -21,7 +21,7 @@ export class HomePage {
   ionViewDidLoad() {
     console.log("Ouverture de la page d'accueil");
     let startDate = new Date();
-    let endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 2, 0);
+    let endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
     var count = 0;
     this.calendar.listEventsInRange(startDate, endDate).then(data=>{
         data.forEach(ev=> {
@@ -31,9 +31,9 @@ export class HomePage {
           }
         });
         if(count == 0)
-          this.nbrRdv = "Vous n'avez aucun rendez-vous aujourd'hui";
+          this.nbrRdv = "Il ne vous reste plus de rendez-vous aujourd'hui";
         else
-          this.nbrRdv = "Vous avez "+count+" rendez-vous aujourd'hui";
+          this.nbrRdv = "Il vous reste "+count+" rendez-vous aujourd'hui";
       },
       error=>{
         console.log("Can\'t get list of rdv");
