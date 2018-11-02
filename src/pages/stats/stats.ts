@@ -22,6 +22,7 @@ export class StatsPage {
   nbRdv: number = 0;
   argent: number = 0;
   visibleCard: boolean = false;
+  calendarId: number = 0;
 
   constructor(
     navCtrl: NavController,
@@ -38,6 +39,7 @@ export class StatsPage {
 
   ionViewDidLoad() {
     console.log('Ouverture StatsPage');
+    this.checkCalendar();
   }
 
   changeDateStats(){
@@ -45,21 +47,17 @@ export class StatsPage {
       this.argent = 0;
       this.nbRdv = 0;
       var tabMois = [
-       "janvier", "fevrier", "mars",
+       "none","janvier", "fevrier", "mars",
        "avril", "mai", "juin", "juillet",
        "août", "septembre", "octobre",
        "novembre", "decembre"
       ];
-      console.log(new Date());
-      var moisAnnee = new Date(this.statsForm.controls['moisAnnee'].value);
-      console.log(moisAnnee.getFullYear());
-      console.log(moisAnnee.getMonth());
-      let startDate = new Date(moisAnnee.getFullYear()+"-"+moisAnnee.getMonth()+"-01T01:00:00.000Z");
+      var moisAnnee = this.statsForm.controls['moisAnnee'].value.split("-");
+      // moisAnnee[0] = Année
+      // moisAnnee[1] = Mois
+      let startDate = new Date(moisAnnee[0],moisAnnee[1]-1,1);
       let endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
-      console.log("Start "+startDate);
-      console.log("End "+endDate);
-      console.log(new Date());
-      this.mois = tabMois[startDate.getMonth()+1]+" "+startDate.getFullYear();
+      this.mois = tabMois[startDate.getMonth()]+" "+startDate.getFullYear();
       this.calendar.listEventsInRange(startDate, endDate).then(data=>{
         if (data.length == 0)
         {
@@ -69,13 +67,14 @@ export class StatsPage {
         else
         {
           data.forEach(ev=> {
-            if(ev.eventLocation == "Zong Art Bel")
+            if(ev.calendar_id == this.calendarId)
             {
               this.nbRdv += 1;
               var split = ev.title.split(",");
-              console.log(split[1]);
-              console.log(split[0]);
-              this.argent+= parseInt(split[1]);
+              if(split[1]!= null)
+              {
+                this.argent+= parseInt(split[1]);
+              }
             }
           });
           this.visibleCard = true;
@@ -88,5 +87,26 @@ export class StatsPage {
     else {
       this.visibleCard = false;
     }
+  }
+
+  checkCalendar()
+  {
+    this.calendar.listCalendars().then(data =>
+    {
+      var id;
+      data.forEach(function(cal)
+      {
+        if(cal.name == "zongartbel@gmail.com")
+        {
+          console.log("Calendar already exist id : "+cal.id);
+          id = parseInt(cal.id);
+        }
+      });
+      this.calendarId = id;
+    },
+    e=>
+    {
+      console.log("Error get listCalendars "+e);
+    });
   }
 }

@@ -21,7 +21,11 @@ export class HomePage {
   ionViewDidLoad() {
     console.log("Ouverture de la page d'accueil");
     let startDate = new Date();
-    let endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
+    console.log(startDate);
+    let endDate = new Date();
+    endDate.setHours(23,59,59,999);
+    console.log(endDate)
+
     var count = 0;
     this.calendar.listEventsInRange(startDate, endDate).then(data=>{
         data.forEach(ev=> {
@@ -30,9 +34,7 @@ export class HomePage {
             count += 1;
           }
         });
-        if(count == 0)
-          this.nbrRdv = "Il ne vous reste plus de rendez-vous aujourd'hui";
-        else
+        if(count > 0)
           this.nbrRdv = "Il vous reste "+count+" rendez-vous aujourd'hui";
       },
       error=>{

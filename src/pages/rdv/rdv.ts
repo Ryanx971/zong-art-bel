@@ -105,6 +105,7 @@ export class RdvPage {
       }
       else
       {
+        console.log(prixPrestation[1]);
         this.calendar.createEventWithOptions(titre,"Zong Art Bel",prixPrestation[1]+" €",dateDebut,dateFin,calOptions);
       }
       // this.saveCliente(cliente.toLowerCase());
