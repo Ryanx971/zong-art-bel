@@ -21,10 +21,8 @@ export class HomePage {
   ionViewDidLoad() {
     console.log("Ouverture de la page d'accueil");
     let startDate = new Date();
-    console.log(startDate);
     let endDate = new Date();
     endDate.setHours(23,59,59,999);
-    console.log(endDate)
 
     var count = 0;
     this.calendar.listEventsInRange(startDate, endDate).then(data=>{
