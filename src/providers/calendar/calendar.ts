@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Calendar } from '@ionic-native/calendar';
 
-
-
 @Injectable()
 export class CalendarProvider {
 
@@ -39,20 +37,29 @@ export class CalendarProvider {
     });
   }
 
-
-  getNews(start:number = 0, range:number = 6): Promise<any> {
+  countDayRdv(): Promise<any>
+  {
     return new Promise ((resolve, reject) => {
-      let options = {
-        api_key: IMAIRIE_API_KEY,
-        page: 'api',
-        json: 'actus',
-        start: start.toString(),
-        range: range.toString()
-      }
-      this.http.get(IMAIRIE_URL, options, {}).then(res => {
-        let data = JSON.parse(res.data);
-				resolve(data);
-      }, e => reject(e));
+      let startDate = new Date();
+      let endDate = new Date();
+      endDate.setHours(23,59,59,999);
+
+      var count = 0;
+      this.calendar.listEventsInRange(startDate, endDate).then(data=>{
+          data.forEach(ev=> {
+            if(ev.eventLocation == "Zong Art Bel")
+            {
+              count += 1;
+            }
+          });
+          if(count > 0)
+            resolve("Il vous reste "+count+" rendez-vous aujourd'hui");
+          else
+            reject("");
+        },
+        error=>{
+          console.log("Can\'t get list of rdv of the day");
+        });
     });
   }
 }

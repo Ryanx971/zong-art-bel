@@ -31,8 +31,9 @@ export class StatsPage {
     public navParams: NavParams,
     private formBuilder: FormBuilder,
     private calendar: Calendar,
-    private toast: Toast
-    private calProvider: CalendarProvider)
+    private toast: Toast,
+    private calProvider: CalendarProvider
+  )
     {
       this.statsForm = this.formBuilder.group({
         moisAnnee: ['', Validators.required]
@@ -50,7 +51,7 @@ export class StatsPage {
       this.argent = 0;
       this.nbRdv = 0;
       var tabMois = [
-       "none","janvier", "fevrier", "mars",
+       "janvier", "fevrier", "mars",
        "avril", "mai", "juin", "juillet",
        "août", "septembre", "octobre",
        "novembre", "decembre"
@@ -70,7 +71,7 @@ export class StatsPage {
         else
         {
           data.forEach(ev=> {
-            if(ev.calendar_id == this.calendarId)
+            if(ev.calendar_id == this.calProvider.calendarId && ev.eventLocation == "Zong Art Bel")
             {
               this.nbRdv += 1;
               var split = ev.title.split(",");

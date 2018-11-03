@@ -32,7 +32,7 @@ export class RdvPage {
     private calendar: Calendar,
     private nativeStorage: NativeStorage,
     private toast: Toast,
-    private calProvider: CalendarProvider
+    private calProvider: CalendarProvider,
   ) {
     this.cliente = '';
     this.rdvForm = this.formBuilder.group({
@@ -105,7 +105,7 @@ export class RdvPage {
       }
 
       var calOptions = this.calendar.getCalendarOptions();
-      calOptions.calendarId = this.calendarId;
+      calOptions.calendarId = this.calProvider.calendarId;
       var titre = cliente+" - "+prixPrestation[0]+", "+prixPrestation[1];
 
       if(frequence != "aucune")
@@ -116,7 +116,6 @@ export class RdvPage {
       }
       else
       {
-        console.log(prixPrestation[1]);
         this.calendar.createEventWithOptions(titre,"Zong Art Bel",prixPrestation[1]+" €",dateDebut,dateFin,calOptions);
       }
       this.dialogs.confirm("Voulez-vous envoyer le rendez-vous sous forme de message ?",
@@ -177,9 +176,7 @@ export class RdvPage {
         {
           data.push(nom);
           this.nativeStorage.setItem('cliente-liste',data)
-          .then(() => {
-            console.log('Stored customer '+nom);
-          },
+          .then(() => {},
           error => {
             console.error('Error storing item', error);
           });

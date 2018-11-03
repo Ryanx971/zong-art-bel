@@ -2,6 +2,8 @@ import { Calendar } from '@ionic-native/calendar';
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
 
+import { CalendarProvider } from '../../providers/calendar/calendar';
+
 @IonicPage()
 @Component({
   selector: 'page-home',
@@ -14,30 +16,21 @@ export class HomePage {
 
   constructor(
     public navCtrl: NavController,
-    private calendar: Calendar
+    private calendar: Calendar,
+    private calProvider: CalendarProvider,
   ) {
   }
 
   ionViewDidLoad() {
     console.log("Ouverture de la page d'accueil");
-    let startDate = new Date();
-    let endDate = new Date();
-    endDate.setHours(23,59,59,999);
-
-    var count = 0;
-    this.calendar.listEventsInRange(startDate, endDate).then(data=>{
-        data.forEach(ev=> {
-          if(ev.eventLocation == "Zong Art Bel")
-          {
-            count += 1;
-          }
-        });
-        if(count > 0)
-          this.nbrRdv = "Il vous reste "+count+" rendez-vous aujourd'hui";
-      },
-      error=>{
-        console.log("Can\'t get list of rdv");
-      });
+    this.calProvider.countDayRdv().then(resolve =>
+    {
+      this.nbrRdv = resolve;
+    },
+    reject =>
+    {
+      this.nbrRdv = reject;
+    });
   }
 
   openRdvPage() {
