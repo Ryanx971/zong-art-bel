@@ -3,6 +3,8 @@ import { Platform, Nav} from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Calendar } from '@ionic-native/calendar';
+import { NativeStorage } from '@ionic-native/native-storage';
+
 
 @Component({
   templateUrl: 'app.html'
@@ -16,10 +18,23 @@ export class MyApp {
     platform: Platform,
     statusBar: StatusBar,
     splashScreen: SplashScreen,
+    private nativeStorage: NativeStorage,
     private calendar: Calendar
   )
   {
     platform.ready().then(() => {
+      this.nativeStorage.getItem('first')
+      .then(data =>{},
+        error => {
+          this.nativeStorage.setItem('first', "done")
+          .then(() => console.log('Stored item!'),
+            error => console.error('Error storing item', error));
+
+          var array = ["Angélique"];
+          this.nativeStorage.setItem('cliente-liste', array)
+          .then(() => console.log('Stored item!'),
+            error => console.error('Error storing item', error));
+        });
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       statusBar.styleLightContent();

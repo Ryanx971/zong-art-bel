@@ -4,6 +4,7 @@ import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { Dialogs } from '@ionic-native/dialogs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { NativeStorage } from '@ionic-native/native-storage';
 import { Toast } from '@ionic-native/toast';
 
 
@@ -17,6 +18,8 @@ export class RdvPage {
   titre: string = "Prise de rendez-vous";
   calendarId: number = 0;
   rdvForm: FormGroup;
+  cliente: string = "";
+  items = [];
 
   constructor(
     public dialogs: Dialogs,
@@ -25,8 +28,10 @@ export class RdvPage {
     private formBuilder: FormBuilder,
     public socialSharing: SocialSharing,
     private calendar: Calendar,
+    private nativeStorage: NativeStorage,
     private toast: Toast
   ) {
+    this.cliente = '';
     this.rdvForm = this.formBuilder.group({
       cliente: ['', Validators.required],
       prestation: [''],
@@ -82,6 +87,9 @@ export class RdvPage {
       var duree = this.rdvForm.controls['duree'].value;
       var frequence = this.rdvForm.controls['frequence'].value;
 
+      // Sauvegarde du nom de la cliente
+      this.saveCliente(cliente.toLowerCase());
+
       let dateDebut = new Date(date+"T"+heureDebut);
       // Transformation de la duree en minute
       var minutes =(+duree.substring(0,2)*60) + +duree.substring(3,5);
@@ -108,7 +116,6 @@ export class RdvPage {
         console.log(prixPrestation[1]);
         this.calendar.createEventWithOptions(titre,"Zong Art Bel",prixPrestation[1]+" €",dateDebut,dateFin,calOptions);
       }
-      // this.saveCliente(cliente.toLowerCase());
       this.dialogs.confirm("Voulez-vous envoyer le rendez-vous sous forme de message ?",
       "Rendez-vous",
       ["Oui", "Non"]).then(buttonIndex=>{
@@ -142,5 +149,60 @@ export class RdvPage {
     {
       console.log("Error get listCalendars "+e);
     });
+  }
+
+  getItems() {
+    var q = this.cliente;
+    // if the value is an empty string don't filter the items
+    if (q.length < 3)
+      return;
+
+    this.nativeStorage.getItem('cliente-liste')
+    .then(
+      data =>{
+        this.items = data.filter((v) => {
+          if (v.toLowerCase().indexOf(q.toLowerCase()) > -1) {
+            return true;
+          }
+          return false;
+        })
+      },
+      error => {
+        console.error("Error get cliente-liste "+error);
+      });
+  }
+
+  itemListClick(item :string) {
+    this.cliente = item;
+    this.items = [];
+  }
+
+  saveCliente(nom :string)
+  {
+    this.nativeStorage.getItem('cliente-liste')
+    .then(
+      data =>{
+        var existe = false;
+        data.forEach(item => {
+          if(item == nom)
+            existe = true;
+        });
+
+        // Si le nom n'existe pas on l'ajoute
+        if(!existe)
+        {
+          data.push(nom);
+          this.nativeStorage.setItem('cliente-liste',data)
+          .then(() => {
+            console.log('Stored customer '+nom);
+          },
+          error => {
+            console.error('Error storing item', error);
+          });
+        }
+      },
+      error => {
+        console.error("Error get cliente-liste "+error);
+      });
   }
 }
