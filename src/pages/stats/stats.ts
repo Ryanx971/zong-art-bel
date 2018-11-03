@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Calendar } from '@ionic-native/calendar';
 import { Toast } from '@ionic-native/toast';
 
+import { CalendarProvider } from '../../providers/calendar/calendar';
+
 /**
  * Generated class for the StatsPage page.
  *
@@ -29,7 +31,8 @@ export class StatsPage {
     public navParams: NavParams,
     private formBuilder: FormBuilder,
     private calendar: Calendar,
-    private toast: Toast)
+    private toast: Toast
+    private calProvider: CalendarProvider)
     {
       this.statsForm = this.formBuilder.group({
         moisAnnee: ['', Validators.required]
@@ -39,7 +42,7 @@ export class StatsPage {
 
   ionViewDidLoad() {
     console.log('Ouverture StatsPage');
-    this.checkCalendar();
+    this.calProvider.checkCalendar();
   }
 
   changeDateStats(){
@@ -87,26 +90,5 @@ export class StatsPage {
     else {
       this.visibleCard = false;
     }
-  }
-
-  checkCalendar()
-  {
-    this.calendar.listCalendars().then(data =>
-    {
-      var id;
-      data.forEach(function(cal)
-      {
-        if(cal.name == "zongartbel@gmail.com")
-        {
-          console.log("Calendar already exist id : "+cal.id);
-          id = parseInt(cal.id);
-        }
-      });
-      this.calendarId = id;
-    },
-    e=>
-    {
-      console.log("Error get listCalendars "+e);
-    });
   }
 }

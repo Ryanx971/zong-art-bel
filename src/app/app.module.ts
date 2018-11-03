@@ -9,6 +9,9 @@ import { Dialogs } from '@ionic-native/dialogs';
 import { NativeStorage } from '@ionic-native/native-storage';
 import { Toast } from '@ionic-native/toast';
 
+import { CalendarProvider } from './../providers/calendar/calendar';
+
+
 
 import { MyApp } from './app.component';
 
@@ -33,7 +36,8 @@ import { MyApp } from './app.component';
     Dialogs,
     NativeStorage,
     Toast,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    CalendarProvider
   ]
 })
 export class AppModule {}

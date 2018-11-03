@@ -7,6 +7,9 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { NativeStorage } from '@ionic-native/native-storage';
 import { Toast } from '@ionic-native/toast';
 
+import { CalendarProvider } from '../../providers/calendar/calendar';
+
+
 
 @IonicPage()
 @Component({
@@ -16,7 +19,6 @@ import { Toast } from '@ionic-native/toast';
 export class RdvPage {
 
   titre: string = "Prise de rendez-vous";
-  calendarId: number = 0;
   rdvForm: FormGroup;
   cliente: string = "";
   items = [];
@@ -29,7 +31,8 @@ export class RdvPage {
     public socialSharing: SocialSharing,
     private calendar: Calendar,
     private nativeStorage: NativeStorage,
-    private toast: Toast
+    private toast: Toast,
+    private calProvider: CalendarProvider
   ) {
     this.cliente = '';
     this.rdvForm = this.formBuilder.group({
@@ -45,8 +48,9 @@ export class RdvPage {
 
   ionViewDidLoad() {
     console.log('Ouverture PageRdv');
-    this.checkCalendar();
+    this.calProvider.checkCalendar();
   }
+
 
   onChange(select: string)
   {
@@ -74,7 +78,6 @@ export class RdvPage {
       this.rdvForm.controls['duree'].setValue("00:30");
   }
 
-  // Création d'un RDV
   setRdv()
   {
     if(this.rdvForm.valid)
@@ -130,28 +133,8 @@ export class RdvPage {
     }
   }
 
-  checkCalendar()
+  getItems()
   {
-    this.calendar.listCalendars().then(data =>
-    {
-      var id;
-      data.forEach(function(cal)
-      {
-        if(cal.name == "zongartbel@gmail.com")
-        {
-          console.log("Calendar already exist id : "+cal.id);
-          id = parseInt(cal.id);
-        }
-      });
-      this.calendarId = id;
-    },
-    e=>
-    {
-      console.log("Error get listCalendars "+e);
-    });
-  }
-
-  getItems() {
     var q = this.cliente;
     // if the value is an empty string don't filter the items
     if (q.length < 3)
@@ -172,7 +155,8 @@ export class RdvPage {
       });
   }
 
-  itemListClick(item :string) {
+  itemListClick(item :string)
+  {
     this.cliente = item;
     this.items = [];
   }
