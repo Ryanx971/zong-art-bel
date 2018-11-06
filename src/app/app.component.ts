@@ -23,6 +23,8 @@ export class MyApp {
   )
   {
     platform.ready().then(() => {
+
+      // On remplit la "cliente-liste" au premier lancement
       this.nativeStorage.getItem('first')
       .then(data =>{},
         error => {
@@ -30,7 +32,7 @@ export class MyApp {
           .then(() => console.log('Stored item!'),
             error => console.error('Error storing item', error));
 
-          var array = ["Angélique"];
+          var array = ["Angelique"];
           this.nativeStorage.setItem('cliente-liste', array)
           .then(() => console.log('Stored item!'),
             error => console.error('Error storing item', error));

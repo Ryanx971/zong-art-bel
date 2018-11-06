@@ -90,8 +90,11 @@ export class RdvPage {
       var duree = this.rdvForm.controls['duree'].value;
       var frequence = this.rdvForm.controls['frequence'].value;
 
+      // Majuscule de la cliente
+      cliente = cliente.charAt(0).toUpperCase() + cliente.slice(1);
+
       // Sauvegarde du nom de la cliente
-      this.saveCliente(cliente.toLowerCase());
+      this.saveCliente(cliente);
 
       let dateDebut = new Date(date+"T"+heureDebut);
       // Transformation de la duree en minute
@@ -99,8 +102,10 @@ export class RdvPage {
       let dateFin = new Date(dateDebut.getTime()+minutes*60000);
 
       // Si l'utilisateur a mit un prix special il remplace l'ancien prix
-      if (this.rdvForm.controls['prix'].value != "")
+      console.log(this.rdvForm.controls['prix'].value.length);
+      if (this.rdvForm.controls['prix'].value.length != 0)
       {
+        console.log("in");
         prixPrestation[1] = this.rdvForm.controls['prix'].value;
       }
 
@@ -110,12 +115,14 @@ export class RdvPage {
 
       if(frequence != "aucune")
       {
+        console.log(prixPrestation[1]);
         calOptions.recurrence = "weekly";
         calOptions.recurrenceInterval = +frequence;
         this.calendar.createEventWithOptions(titre,"Zong Art Bel",prixPrestation[1]+" €",dateDebut,dateFin,calOptions);
       }
       else
       {
+        console.log(prixPrestation[1]);
         this.calendar.createEventWithOptions(titre,"Zong Art Bel",prixPrestation[1]+" €",dateDebut,dateFin,calOptions);
       }
       this.dialogs.confirm("Voulez-vous envoyer le rendez-vous sous forme de message ?",
@@ -128,6 +135,8 @@ export class RdvPage {
         }
         this.toast.show(`Rendez-vous ajouté avec succès`, '2000', 'bottom').subscribe(toast => {});
         this.rdvForm.reset();
+        this.rdvForm.controls["prix"].setValue('');
+        this.rdvForm.controls["frequence"].setValue('aucune');
       });
     }
   }
@@ -136,7 +145,7 @@ export class RdvPage {
   {
     var q = this.cliente;
     // if the value is an empty string don't filter the items
-    if (q.length < 3)
+    if (q.trim() == '')
       return;
 
     this.nativeStorage.getItem('cliente-liste')

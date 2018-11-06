@@ -9,4 +9,12 @@ page-stats {
       max-width: 20%;
     }
   }
+
+  .scroll-content {
+            background-color: map-get($colors, light);
+        }
+
+        ion-card-header {
+            font-weight: bold;
+        }
 }

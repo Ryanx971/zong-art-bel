@@ -3,7 +3,7 @@
     <name>Zong Art Bel</name>
     <description>Prise de rendez-vous de l'institut Zong Art Bel.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.0.18:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -87,6 +87,7 @@
     <allow-navigation href="http://192.168.42.118:8100" />
     <plugin name="cordova-plugin-nativestorage" spec="^2.3.2" />
     <allow-navigation href="http://192.168.0.15:8100" />
+    <allow-navigation href="http://192.168.0.18:8100" />
     <engine name="browser" spec="5.0.3" />
     <engine name="android" spec="6.3.0" />
 </widget>

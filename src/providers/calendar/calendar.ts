@@ -5,6 +5,12 @@ import { Calendar } from '@ionic-native/calendar';
 export class CalendarProvider {
 
   calendarId: number = 0;
+  tabMois: Array<string> = [
+   "janvier", "fevrier", "mars",
+   "avril", "mai", "juin", "juillet",
+   "août", "septembre", "octobre",
+   "novembre", "decembre"
+  ];
 
   constructor(
     private calendar: Calendar,
@@ -21,11 +27,11 @@ export class CalendarProvider {
             if(cal.name == "zongartbel@gmail.com")
             {
               id = parseInt(cal.id);
-              resolve(true);
+              resolve();
             }
             else
             {
-              reject(false);
+              reject();
             }
           });
           this.calendarId = id;
@@ -60,6 +66,98 @@ export class CalendarProvider {
         error=>{
           console.log("Can\'t get list of rdv of the day");
         });
+    });
+  }
+
+  graphValue(): Promise<any>
+  {
+      return new Promise ((resolve, reject) =>
+      {
+        var arrayValue = [];
+        var initialDate = new Date();
+        var endDate = new Date(initialDate.getFullYear(), initialDate.getMonth() + 1, 0);
+        // Les 2 derniers mois
+        for (var i = 2; i > 0; i--)
+        {
+          var dateDebutPrevious= new Date(initialDate.getFullYear(),initialDate.getMonth()-i,1);
+          var dateFinPrevious = new Date(dateDebutPrevious.getFullYear(), dateDebutPrevious.getMonth() + 1, 0);
+          this.getMonthMoney(dateDebutPrevious,dateFinPrevious).then(res =>
+            {
+              arrayValue.push(res["argent"]);
+            },
+            e =>
+            {
+              reject("2 Derniers mois: "+e);
+            });
+        }
+
+        // Mois actuel
+        this.getMonthMoney(initialDate,endDate).then(res =>
+          {
+            arrayValue.push(res["argent"]);
+          },
+          e =>
+          {
+            reject("Mois actuel: "+e);
+          });
+
+        // 2 Mois suivant
+        for (var k = 1; k < 3; k++)
+        {
+            var dateDebutNext = new Date(initialDate.getFullYear(),initialDate.getMonth()+k,1);
+            var dateFinNext = new Date(dateDebutNext.getFullYear(), dateDebutNext.getMonth() + 1, 0);
+            this.getMonthMoney(dateDebutNext,dateFinNext).then(res =>
+              {
+                arrayValue.push(res["argent"]);
+              },
+              e =>
+              {
+                reject("2 Derniers mois: "+e);
+              });
+        }
+        resolve(arrayValue);
+      });
+  }
+
+  getMonthMoney(debut,fin): Promise<any>
+  {
+    return new Promise ((resolve, reject) =>
+    {
+      var nbRdv = 0;
+      var argent = 0;
+      var res = {};
+      this.calendar.listEventsInRange(debut,fin).then(data=>{
+        if (data.length == 0)
+        {
+          resolve(false);
+        }
+        else
+        {
+          var promise = new Promise((resolve, reject) =>
+          {
+            data.forEach((ev,index,array)=> {
+              if(ev.calendar_id == this.calendarId && ev.eventLocation == "Zong Art Bel")
+              {
+                nbRdv += 1;
+                var split = ev.title.split(",");
+                argent += parseInt(split[1]);
+              }
+              if (index === array.length -1)
+              resolve();
+            });
+          });
+          promise.then(() => {
+            res = {
+              'argent' : argent,
+              'nbRdv' : nbRdv
+            };
+            resolve(res);
+          });
+        }
+      },
+      error=>{
+        reject("Can\'t get list of rdv"+error);
+      });
     });
   }
 }
