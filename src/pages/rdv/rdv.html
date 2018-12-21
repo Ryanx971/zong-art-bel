@@ -1,0 +1,84 @@
+<ion-header>
+  <ion-navbar color="primary" hideBackButton>
+    <button color="light" icon-only ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-label text-center >{{ titre }}</ion-label>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding >
+  <form [formGroup]="rdvForm">
+
+    <ion-item>
+      <ion-searchbar [(ngModel)]="cliente" [formControl]="rdvForm.controls['cliente']" (ionInput)="getItems()"></ion-searchbar>
+      <ion-list>
+        <ion-item *ngFor="let item of items" (tap)="itemListClick(item)">
+          {{ item }}
+        </ion-item>
+      </ion-list>
+      <!-- <ion-label color="primary" floating>Cliente*</ion-label>
+      <ion-input [formControl]="rdvForm.controls['cliente']"
+          type="text"></ion-input> -->
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Prestation*</ion-label>
+      <ion-select [formControl]="rdvForm.controls['prestation']" #C (ionChange)="onChange(C.value)">
+        <ion-option value="Pose capsules,25">Pose capsules</ion-option>
+        <ion-option value="Pose capsules & vernis semi-permanent pieds,32">Pose capsules & vernis semi-permanent pieds</ion-option>
+        <ion-option value="Pose chablon,30">Pose chablon</ion-option>
+        <ion-option value="Pose chablon & vernis semi-permanent pieds,37">Pose chablon & vernis semi-permanent pieds</ion-option>
+        <ion-option value="Remplissage,15">Remplissage</ion-option>
+        <ion-option value="Gainage,15">Gainage</ion-option>
+        <ion-option value="Vernis semi-permanent - mains,12">Vernis semi-permanent - mains</ion-option>
+        <ion-option value="Vernis semi-permanent - pieds,7">Vernis semi-permanent - pieds</ion-option>
+        <ion-option value="Vernis semi-permanent - mains & pieds,15">Vernis semi-permanent - mains & pieds</ion-option>
+        <ion-option value="Remplissage mains & vernis semi-permanent pieds,20">Remplissage mains & vernis semi-permanent pieds</ion-option>
+        <ion-option value="Dépose,10">Dépose</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Date*</ion-label>
+      <ion-input [formControl]="rdvForm.controls['date']"
+      type="date"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Heure du début*</ion-label>
+      <ion-input [formControl]="rdvForm.controls['heureDebut']"
+      type="time"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Durée du rendez-vous*</ion-label>
+      <ion-input [formControl]="rdvForm.controls['duree']"
+      type="time"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Prix spécial</ion-label>
+      <ion-input [formControl]="rdvForm.controls['prix']"
+          type="number"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Fréquence*</ion-label>
+      <ion-select [formControl]="rdvForm.controls['frequence']">
+        <ion-option value="aucune" selected="true" >Aucune</ion-option>
+        <ion-option value="2">2 semaines</ion-option>
+        <ion-option value="3">3 semaines</ion-option>
+        <ion-option value="4">4 semaines</ion-option>
+      </ion-select>
+    </ion-item>
+
+    <div text-center >
+      <button ion-button [disabled]="!rdvForm.valid" round (click)="setRdv()">
+        <ion-icon name="checkmark-circle"></ion-icon>
+        Valider
+      </button>
+    </div>
+  </form>
+</ion-content>

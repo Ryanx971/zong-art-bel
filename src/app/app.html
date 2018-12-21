@@ -1,0 +1,33 @@
+<ion-menu  persistent="true" [content]="content">
+  <ion-header text-center>
+    <ion-toolbar color="secondary">
+      <img src="assets/imgs/logo.png" alt="">
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <button ion-item menuClose (click)="openPage('HomePage')">
+        <ion-icon name="home" item-left></ion-icon>
+        Accueil
+      </button>
+      <button ion-item menuClose (click)="openPage('RdvPage')">
+        <ion-icon name="add-circle" item-left></ion-icon>
+        Prendre un rendez-vous
+      </button>
+      <button ion-item menuClose (click)="openCalendar()">
+        <ion-icon name="calendar" item-left></ion-icon>
+        Calendrier
+      </button>
+      <button ion-item menuClose (click)="openPage('StatsPage')">
+        <ion-icon name="stats" item-left></ion-icon>
+        Les statistiques
+      </button>
+      <button ion-item menuClose>
+        <ion-icon name="close" item-left></ion-icon>
+        Fermer
+      </button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+<ion-nav [root]="rootPage" #content></ion-nav>
