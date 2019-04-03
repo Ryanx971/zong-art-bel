@@ -1,7 +1,5 @@
 {
-  "name": "OngleProject",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "ionic-angular"
+  "name": "app",
+  "integrations": {},
+  "type": "angular"
 }

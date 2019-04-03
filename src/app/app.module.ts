@@ -1,43 +1,23 @@
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
-import { Calendar } from '@ionic-native/calendar';
-import { SocialSharing } from '@ionic-native/social-sharing';
-import { Dialogs } from '@ionic-native/dialogs';
-import { NativeStorage } from '@ionic-native/native-storage';
-import { Toast } from '@ionic-native/toast';
+import { RouteReuseStrategy } from '@angular/router';
 
-import { CalendarProvider } from './../providers/calendar/calendar';
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-
-
-import { MyApp } from './app.component';
-
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
-  declarations: [
-    MyApp,
-  ],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(MyApp)
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-  ],
+  declarations: [AppComponent],
+  entryComponents: [],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [
     StatusBar,
     SplashScreen,
-    Calendar,
-    SocialSharing,
-    Dialogs,
-    NativeStorage,
-    Toast,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    CalendarProvider
-  ]
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}
