@@ -1,3 +1,13 @@
+/**
+ * @Author: Ryan BALOJI <ryanx971>
+ * @Date:   2019-08-13T22:24:39+02:00
+ * @Email:  ryan.baloji9@gmail.com
+ * @Last modified by:   ryanx971
+ * @Last modified time: 2019-08-14T15:57:27+02:00
+ */
+
+
+
 import { Component } from '@angular/core';
 
 @Component({
@@ -7,6 +17,9 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
-  constructor() {}
+  title:string = "Zong'Aw Bel";
+  
+  constructor() {
+  }
 
 }

@@ -1,1 +1,52 @@
+// @Author: Ryan BALOJI <ryanx971>
+// @Date:   2019-08-13T22:24:39+02:00
+// @Email:  ryan.baloji9@gmail.com
+// @Last modified by:   ryanx971
+// @Last modified time: 2019-08-14T16:36:31+02:00
 
+
+
+ion-header {
+  ion-toolbar {
+    --background: transparent;
+    --ion-color-base: transparent !important;
+
+    ion-title {
+      font-size: 2rem;
+    }
+  }
+}
+
+ion-content {
+    --background: url("../../assets/imgs/bg-home.png") no-repeat center center fixed;
+    background-size: cover;
+
+    .menu {
+      margin-top: 2rem;
+    }
+
+    ion-col {
+      text-align: center;
+    }
+
+    .icon-menu {
+      max-width: 50%;
+      max-height: 50%;
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .icon-menu .icon {
+      text-align: center;
+    }
+
+    .icon-menu .icon-title {
+      font-size: 1.2rem;
+      color: var(--ion-color-light);
+    }
+  }
+
+  ion-footer{
+    font-size: 1.5rem;
+    color: var(--ion-color-light);
+  }
