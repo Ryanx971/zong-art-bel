@@ -1,9 +1,23 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>services</ion-title>
+<ion-header no-border>
+  <ion-toolbar mode="ios">
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="light"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-list>
+    <div class="services" *ngFor="let item of services">
+      <ion-item (click)="manage(item)">
+        <ion-label>{{ item.name }}</ion-label>
+      </ion-item>
+    </div>
+  </ion-list>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="manage()">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

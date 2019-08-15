@@ -3,7 +3,7 @@
  * @Date:   2019-08-14T17:00:40+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-15T17:20:49+02:00
+ * @Last modified time: 2019-08-15T20:10:44+02:00
  */
 
 
@@ -30,6 +30,7 @@ export class RdvAddPage implements OnInit {
   cliente: string;
   service: any;
   customers = [];
+  services = [];
 
   constructor(
     public formBuilder: FormBuilder,
@@ -52,6 +53,13 @@ export class RdvAddPage implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter(){
+    this.nativeStorage.getItem("services").then(data => {
+      this.services = data;
+      console.log(data);
+    }, e => console.error("Error get services", e));
   }
 
   setRdv()

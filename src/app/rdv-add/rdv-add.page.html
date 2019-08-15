@@ -22,17 +22,9 @@
     <ion-item>
       <ion-label color="primary" floating>Prestation <span class="errors">*</span></ion-label>
       <ion-select formControlName="prestation" [(ngModel)]="service" (ionChange)="onSelectChange()">
-        <ion-select-option value="Pose capsules,25">Pose capsules</ion-select-option>
-        <ion-select-option value="Pose capsules & vernis semi-permanent pieds,32">Pose capsules & vernis semi-permanent pieds</ion-select-option>
-        <ion-select-option value="Pose chablon,30">Pose chablon</ion-select-option>
-        <ion-select-option value="Pose chablon & vernis semi-permanent pieds,37">Pose chablon & vernis semi-permanent pieds</ion-select-option>
-        <ion-select-option value="Remplissage,20">Remplissage</ion-select-option>
-        <ion-select-option value="Gainage,15">Gainage</ion-select-option>
-        <ion-select-option value="Vernis semi-permanent - mains,15">Vernis semi-permanent - mains</ion-select-option>
-        <ion-select-option value="Vernis semi-permanent - pieds,10">Vernis semi-permanent - pieds</ion-select-option>
-        <ion-select-option value="Vernis semi-permanent - mains & pieds,20">Vernis semi-permanent - mains & pieds</ion-select-option>
-        <ion-select-option value="Remplissage mains & vernis semi-permanent pieds,25">Remplissage mains & vernis semi-permanent pieds</ion-select-option>
-        <ion-select-option value="Dépose,10">Dépose</ion-select-option>
+        <div class="options" *ngFor="let item of services">
+          <ion-select-option value="{{ item.name }},{{ item.price }}">{{ item.name }}</ion-select-option>
+        </div>
       </ion-select>
     </ion-item>
 
