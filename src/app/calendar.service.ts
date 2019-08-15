@@ -3,7 +3,7 @@
  * @Date:   2019-08-14T16:38:54+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-15T15:16:38+02:00
+ * @Last modified time: 2019-08-15T15:49:39+02:00
  */
 
 
@@ -17,13 +17,19 @@ import { Calendar } from '@ionic-native/calendar/ngx';
 export class CalendarService {
 
   EVENT_LOCATION: string = "Zong Art Bel";
+  public MONTHS: Array<string> = [
+   "Janvier", "Fevrier", "Mars",
+   "Avril", "Mai", "Juin", "Juillet",
+   "Août", "Septembre", "Octobre",
+   "Novembre", "Decembre"
+  ];
 
   constructor(private calendar: Calendar) {}
 
   getMonthBenefits(start, end): Promise<any> {
     return new Promise ((resolve, reject) => {
       let nbRdv = 0;
-      let argent = 0;
+      let money = 0;
 
       this.checkCalendar().then((cal) => {
         this.calendar.listEventsInRange(start, end).then(data => {
@@ -31,12 +37,10 @@ export class CalendarService {
             if(ev.calendar_id == cal.calendarId && ev.eventLocation == this.EVENT_LOCATION) {
               nbRdv += 1;
               let split = ev.title.split(",");
-              argent += parseInt(split[1]);
+              money += parseInt(split[1]);
             }
           });
-          let res = { nbRdv: nbRdv, argent: argent, have: true};
-          if(nbRdv === 0)
-            res.have = false;
+          let res = { nbRdv: nbRdv, money: money};
           resolve(res);
        },
        e => {

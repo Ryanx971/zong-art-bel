@@ -2,18 +2,19 @@
 // @Date:   2019-08-15T12:53:34+02:00
 // @Email:  ryan.baloji9@gmail.com
 // @Last modified by:   ryanx971
-// @Last modified time: 2019-08-15T14:32:12+02:00
+// @Last modified time: 2019-08-15T15:41:23+02:00
 
 
 
-ion-header {
-  .banner {
-    background-color: var(--ion-color-complementary);
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+.banner {
+  background-color: var(--ion-color-complementary);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  color: var(--ion-color-light);
+}
 
-    span {
-      color: var(--ion-color-light);
-    }
+ion-content {
+  .result {
+    margin-top: 1rem;
   }
 }

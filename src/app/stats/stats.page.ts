@@ -3,7 +3,7 @@
  * @Date:   2019-08-15T12:53:34+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-15T14:51:45+02:00
+ * @Last modified time: 2019-08-15T15:56:11+02:00
  */
 
 
@@ -21,9 +21,9 @@ import { ToastService } from '../toast.service';
 export class StatsPage implements OnInit {
 
   title: string = "Mes statistiques";
-  mois: string;
+  displayDate: string;
   nbRdv: number;
-  argent: number;
+  money: number;
   visible: boolean = false;
   monthYear: any;
 
@@ -40,23 +40,18 @@ export class StatsPage implements OnInit {
     let monthYear = this.monthYear.split("-");
     let month = monthYear[1];
     let year = monthYear[0];
+    this.displayDate = this.calendar.MONTHS[parseInt(month)-1] + " " + year;
     let startDate = new Date(year, month-1, 1);
     let endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
-
-    // this.mois = this.calProvider.tabMois[startDate.getMonth()]+" "+startDate.getFullYear();
-    // this.calProvider.getMonthMoney(startDate,endDate).then(res =>
-    // {
-    //   if(res==false)
-    //   {
-    //     this.toast.show(`Vous n'avez pas réaliser de rendez-vous durant ce mois`, '5000', 'bottom').subscribe(toast => {});
-    //     this.visibleCard = false;
-    //   }
-    //   else
-    //   {
-    //     this.argent = res["argent"];
-    //     this.nbRdv = res["nbRdv"];
-    //     this.visibleCard = true;
-    //   }
+    this.calendar.getMonthBenefits(startDate, endDate).then(res => {
+        this.money = res.money;
+        this.nbRdv = res.nbRdv;
+        if(this.nbRdv === 0)
+          this.toast.show("Vous n'avez pas effectué  de prestation en " + this.displayDate + ".", "danger-toast", "bottom", 6000);
+        this.visible = true;
+    }, e => {
+      console.error("Error get month benefits", e);
+      this.visible = false;
+    });
   }
-
 }
