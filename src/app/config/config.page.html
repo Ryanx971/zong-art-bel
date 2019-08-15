@@ -1,0 +1,21 @@
+<ion-header no-border>
+  <ion-toolbar mode="ios">
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="light"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list class="param-list">
+  <ion-item (click)="open('services/update')">
+    <ion-icon name="settings" slot="start"></ion-icon>
+    <ion-label>Gestion des prestations</ion-label>
+  </ion-item>
+  <ion-item>
+    <ion-icon name="people" slot="start"></ion-icon>
+    <ion-label>Gestion des clientes</ion-label>
+  </ion-item>
+</ion-list>
+</ion-content>

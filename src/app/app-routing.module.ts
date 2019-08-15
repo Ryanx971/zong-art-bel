@@ -3,7 +3,7 @@
  * @Date:   2019-08-14T17:00:40+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-14T17:02:35+02:00
+ * @Last modified time: 2019-08-15T19:28:13+02:00
  */
 
 
@@ -16,6 +16,8 @@ const routes: Routes = [
   { path: 'home', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)},
   { path: 'rdv/add', loadChildren: './rdv-add/rdv-add.module#RdvAddPageModule' },
   { path: 'stats', loadChildren: './stats/stats.module#StatsPageModule' },
+  { path: 'config', loadChildren: './config/config.module#ConfigPageModule' },
+  { path: 'services/update', loadChildren: './services/services.module#ServicesPageModule' },
 ];
 
 @NgModule({

@@ -3,7 +3,7 @@
  * @Date:   2019-08-14T17:00:40+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-15T12:47:37+02:00
+ * @Last modified time: 2019-08-15T17:20:49+02:00
  */
 
 
@@ -15,8 +15,8 @@ import { CalendarService } from '../calendar.service';
 import { ToastService } from '../toast.service';
 
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { Dialogs } from '@ionic-native/dialogs/ngx';
+// import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+// import { Dialogs } from '@ionic-native/dialogs/ngx';
 
 @Component({
   selector: 'app-rdv-add',
@@ -34,8 +34,8 @@ export class RdvAddPage implements OnInit {
   constructor(
     public formBuilder: FormBuilder,
     private nativeStorage: NativeStorage,
-    private socialSharing: SocialSharing,
-    private dialogs: Dialogs,
+    // private socialSharing: SocialSharing,
+    // private dialogs: Dialogs,
     private calendar: CalendarService,
     private toast: ToastService
   ) {
@@ -86,16 +86,20 @@ export class RdvAddPage implements OnInit {
       let titre = cliente+" - "+prestation+", "+prix;
 
       this.calendar.createEvent(titre, prix, dateDebut, dateFin, frequence).then(() => {
-        this.dialogs.confirm("Voulez-vous envoyer le rendez-vous sous forme de message ?", "Rendez-vous", ["Oui", "Non"]).then(buttonIndex => {
-          if(buttonIndex === 1) {
-            let msg = "Bonjour " + cliente + ",\nVotre prochain rendez-vous est le " + date + " à " + heureDebut + ".\nPour un/une " + prestation + ", le prix sera de " + prix + "€\n À bientôt";
-            this.socialSharing.share(msg,"Rendez-vous",null,null);
-          }
-          this.toast.show("Rendez-vous ajouté avec succès", "success-toast", "bottom", 4000);
-          this.rdvForm.reset();
-          this.rdvForm.controls["prix"].setValue('');
-          this.rdvForm.controls["frequence"].setValue('aucune');
-        });
+        // this.dialogs.confirm("Voulez-vous envoyer le rendez-vous sous forme de message ?", "Rendez-vous", ["Oui", "Non"]).then(buttonIndex => {
+        //   if(buttonIndex === 1) {
+        //     let msg = "Bonjour " + cliente + ",\nVotre prochain rendez-vous est le " + date + " à " + heureDebut + ".\nPour un/une " + prestation + ", le prix sera de " + prix + "€\n À bientôt";
+        //     this.socialSharing.share(msg,"Rendez-vous",null,null);
+        //   }
+        //   this.toast.show("Rendez-vous ajouté avec succès", "success-toast", "bottom", 4000);
+        //   this.rdvForm.reset();
+        //   this.rdvForm.controls["prix"].setValue('');
+        //   this.rdvForm.controls["frequence"].setValue('aucune');
+        // });
+        this.toast.show("Rendez-vous ajouté avec succès", "success-toast", "bottom", 4000);
+        this.rdvForm.reset();
+        this.rdvForm.controls["prix"].setValue('');
+        this.rdvForm.controls["frequence"].setValue('aucune');
       }, e => {
         alert("Une erreur est survenue");
         console.error(e)

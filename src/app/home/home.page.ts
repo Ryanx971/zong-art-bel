@@ -3,7 +3,7 @@
  * @Date:   2019-08-13T22:24:39+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-15T11:55:26+02:00
+ * @Last modified time: 2019-08-15T19:29:10+02:00
  */
 
 
@@ -23,13 +23,6 @@ export class HomePage {
 
   title:string = "Zong'Aw Bel";
   rdvInProgress:string = "Aucun rendez-vous aujourd'hui";
-  calendarId: number = 0;
-  months: Array<string> = [
-   "Janvier", "Fevrier", "Mars",
-   "Avril", "Mai", "Juin", "Juillet",
-   "Août", "Septembre", "Octobre",
-   "Novembre", "Decembre"
-  ];
 
   constructor(
     private calendar: CalendarService,
@@ -50,6 +43,4 @@ export class HomePage {
   open(path: string){
     this.router.navigate([path]);
   }
-
-
 }
