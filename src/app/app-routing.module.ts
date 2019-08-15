@@ -1,9 +1,21 @@
+/**
+ * @Author: Ryan BALOJI <ryanx971>
+ * @Date:   2019-08-14T17:00:40+02:00
+ * @Email:  ryan.baloji9@gmail.com
+ * @Last modified by:   ryanx971
+ * @Last modified time: 2019-08-14T17:02:35+02:00
+ */
+
+
+
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)},
+  { path: 'rdv/add', loadChildren: './rdv-add/rdv-add.module#RdvAddPageModule' },
+  { path: 'stats', loadChildren: './stats/stats.module#StatsPageModule' },
 ];
 
 @NgModule({
