@@ -1,0 +1,73 @@
+<ion-header no-border>
+  <ion-toolbar mode="ios">
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="light"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-searchbar [(ngModel)]="cliente" (ionInput)="getItems()" placeholder="Votre cliente"></ion-searchbar>
+  <ion-list>
+    <ion-item *ngFor="let item of customers" (click)="itemListClick(item)">
+      <ion-label>{{ item }}</ion-label>
+    </ion-item>
+  </ion-list>
+  <form [formGroup]="rdvForm" id="form">
+    <ion-item>
+      <ion-label color="primary" floating>Cliente <span class="errors">*</span></ion-label>
+      <ion-input formControlName="cliente" type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary" floating>Prestation <span class="errors">*</span></ion-label>
+      <ion-select formControlName="prestation" [(ngModel)]="service" (ionChange)="onSelectChange()">
+        <ion-select-option value="Pose capsules,25">Pose capsules</ion-select-option>
+        <ion-select-option value="Pose capsules & vernis semi-permanent pieds,32">Pose capsules & vernis semi-permanent pieds</ion-select-option>
+        <ion-select-option value="Pose chablon,30">Pose chablon</ion-select-option>
+        <ion-select-option value="Pose chablon & vernis semi-permanent pieds,37">Pose chablon & vernis semi-permanent pieds</ion-select-option>
+        <ion-select-option value="Remplissage,20">Remplissage</ion-select-option>
+        <ion-select-option value="Gainage,15">Gainage</ion-select-option>
+        <ion-select-option value="Vernis semi-permanent - mains,15">Vernis semi-permanent - mains</ion-select-option>
+        <ion-select-option value="Vernis semi-permanent - pieds,10">Vernis semi-permanent - pieds</ion-select-option>
+        <ion-select-option value="Vernis semi-permanent - mains & pieds,20">Vernis semi-permanent - mains & pieds</ion-select-option>
+        <ion-select-option value="Remplissage mains & vernis semi-permanent pieds,25">Remplissage mains & vernis semi-permanent pieds</ion-select-option>
+        <ion-select-option value="Dépose,10">Dépose</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Date <span class="errors">*</span></ion-label>
+      <ion-input formControlName="date" type="date"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Heure du début <span class="errors">*</span></ion-label>
+      <ion-input formControlName="heureDebut" type="time"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Durée du rendez-vous <span class="errors">*</span></ion-label>
+      <ion-input formControlName="duree" type="time"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Prix spécial</ion-label>
+      <ion-input formControlName="prix" type="number"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Fréquence <span class="errors">*</span></ion-label>
+      <ion-select formControlName="frequence">
+        <ion-select-option value="aucune" selected="true">Aucune</ion-select-option>
+        <ion-select-option value="2">2 semaines</ion-select-option>
+        <ion-select-option value="3">3 semaines</ion-select-option>
+        <ion-select-option value="4">4 semaines</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </form>
+
+  <div text-center>
+    <ion-button color="primary" [disabled]="!rdvForm.valid" (click)="setRdv()">Valider</ion-button>
+  </div>
+</ion-content>

@@ -1,0 +1,18 @@
+<ion-header no-border>
+  <ion-toolbar mode="ios">
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="light"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <div class="banner" text-center>
+    <span>Retrouvez vos gains mensuelles en temps réel !</span>
+  </div>
+</ion-header>
+
+<ion-content padding>
+  <ion-item>
+    <ion-label color="primary" floating>Selectionner le mois <span class="errors">*</span></ion-label>
+    <ion-input [(ngModel)]="monthYear" type="month" (ionChange)="monthChange()"></ion-input>
+  </ion-item>
+</ion-content>

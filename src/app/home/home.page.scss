@@ -2,7 +2,7 @@
 // @Date:   2019-08-13T22:24:39+02:00
 // @Email:  ryan.baloji9@gmail.com
 // @Last modified by:   ryanx971
-// @Last modified time: 2019-08-14T16:36:31+02:00
+// @Last modified time: 2019-08-14T17:03:49+02:00
 
 
 
@@ -46,7 +46,9 @@ ion-content {
     }
   }
 
-  ion-footer{
-    font-size: 1.5rem;
-    color: var(--ion-color-light);
+  ion-footer {
+    ion-toolbar {
+      font-size: 1rem;
+      color: var(--ion-color-light);
+    }
   }
