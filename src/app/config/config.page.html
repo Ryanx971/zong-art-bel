@@ -9,11 +9,11 @@
 
 <ion-content>
   <ion-list class="param-list">
-  <ion-item (click)="open('services/update')">
+  <ion-item (click)="open('services/manage')">
     <ion-icon name="settings" slot="start"></ion-icon>
     <ion-label>Gestion des prestations</ion-label>
   </ion-item>
-  <ion-item>
+  <ion-item (click)="open('customers/manage')">
     <ion-icon name="people" slot="start"></ion-icon>
     <ion-label>Gestion des clientes</ion-label>
   </ion-item>
