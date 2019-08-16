@@ -3,13 +3,13 @@
  * @Date:   2019-08-14T17:00:40+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-15T20:10:44+02:00
+ * @Last modified time: 2019-08-16T22:47:01+02:00
  */
 
 
 
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 
 import { CalendarService } from '../calendar.service';
 import { ToastService } from '../toast.service';
@@ -31,6 +31,7 @@ export class RdvAddPage implements OnInit {
   service: any;
   customers = [];
   services = [];
+  JSON;
 
   constructor(
     public formBuilder: FormBuilder,
@@ -40,9 +41,10 @@ export class RdvAddPage implements OnInit {
     private calendar: CalendarService,
     private toast: ToastService
   ) {
+    this.JSON = JSON;
     this.cliente = '';
     this.rdvForm = this.formBuilder.group({
-      cliente: ['', Validators.required],
+      cliente: ['', Validators.compose([Validators.required])],
       prestation: [''],
       date: ['', Validators.required],
       heureDebut: ['', Validators.required],
@@ -58,7 +60,6 @@ export class RdvAddPage implements OnInit {
   ionViewWillEnter(){
     this.nativeStorage.getItem("services").then(data => {
       this.services = data;
-      console.log(data);
     }, e => console.error("Error get services", e));
   }
 
@@ -68,13 +69,13 @@ export class RdvAddPage implements OnInit {
     {
       // Récupération des informations des formulaires
       let cliente = this.rdvForm.controls['cliente'].value;
-      let prixPrestation = this.rdvForm.controls['prestation'].value.split(",");
+      let prixPrestation = JSON.parse(this.rdvForm.controls['prestation'].value);
       let date = this.rdvForm.controls['date'].value;
       let heureDebut = this.rdvForm.controls['heureDebut'].value;
       let duree = this.rdvForm.controls['duree'].value;
       let frequence = this.rdvForm.controls['frequence'].value;
-      let prestation = prixPrestation[0];
-      let prix = prixPrestation[1];
+      let prestation = prixPrestation.name;
+      let prix = prixPrestation.price;
 
       // Majuscule de la cliente
       cliente = cliente.charAt(0).toUpperCase() + cliente.slice(1);
@@ -115,30 +116,9 @@ export class RdvAddPage implements OnInit {
     }
   }
 
-  onSelectChange(): void {
-    let select = this.service;
-    if(select === "Pose capsules,25")
-      this.rdvForm.controls['duree'].setValue("01:30");
-    if(select === "Pose capsules & vernis semi-permanent pieds,32")
-      this.rdvForm.controls['duree'].setValue("02:00");
-    if(select === "Pose chablon,30")
-      this.rdvForm.controls['duree'].setValue("01:30");
-    if(select === "Pose chablon & vernis semi-permanent pieds,37")
-      this.rdvForm.controls['duree'].setValue("02:00");
-    if(select === "Remplissage,15")
-      this.rdvForm.controls['duree'].setValue("01:30");
-    if(select === "Gainage,15")
-      this.rdvForm.controls['duree'].setValue("01:30");
-    if(select === "Vernis semi-permanent - mains,12")
-      this.rdvForm.controls['duree'].setValue("01:00");
-    if(select === "Vernis semi-permanent - pieds,7")
-      this.rdvForm.controls['duree'].setValue("00:30");
-    if(select === "Vernis semi-permanent - mains & pieds,15")
-      this.rdvForm.controls['duree'].setValue("01:15");
-    if(select === "Remplissage mains & vernis semi-permanent pieds,20")
-      this.rdvForm.controls['duree'].setValue("01:30");
-    if(select === "Dépose,10")
-      this.rdvForm.controls['duree'].setValue("00:30");
+  onSelectChange(event): void {
+    let service = JSON.parse(event.detail.value);
+    this.rdvForm.controls["duree"].setValue(service.duration);
   }
 
   getItems() {

@@ -21,10 +21,8 @@
     </ion-item>
     <ion-item>
       <ion-label color="primary" floating>Prestation <span class="errors">*</span></ion-label>
-      <ion-select formControlName="prestation" [(ngModel)]="service" (ionChange)="onSelectChange()">
-        <div class="options" *ngFor="let item of services">
-          <ion-select-option value="{{ item.name }},{{ item.price }}">{{ item.name }}</ion-select-option>
-        </div>
+      <ion-select formControlName="prestation" [(ngModel)]="service" (ionChange)="onSelectChange($event)" cancelText="Annuler" okText="Valider">
+        <ion-select-option *ngFor="let item of services" value="{{ JSON.stringify(item) }}">{{ item.name }}</ion-select-option>
       </ion-select>
     </ion-item>
 
