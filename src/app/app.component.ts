@@ -3,7 +3,7 @@
  * @Date:   2019-08-13T22:24:39+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-17T22:00:40+02:00
+ * @Last modified time: 2019-08-18T12:47:12+02:00
  */
 
 
@@ -16,7 +16,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
-import { SERVICES } from './settings';
+import { SERVICES, CUSTOMERS } from './settings';
 
 @Component({
   selector: 'app-root',
@@ -39,7 +39,7 @@ export class AppComponent {
       this.nativeStorage.getItem('first_time_customers').catch(() => {
           this.nativeStorage.setItem('first_time_customers', "true");
           console.log("Set default customers");
-          let customers = ["Angelique"];
+          let customers = CUSTOMERS;
           this.nativeStorage.setItem('customers', customers);
         });
 

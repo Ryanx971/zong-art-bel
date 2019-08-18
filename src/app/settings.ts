@@ -3,9 +3,10 @@
  * @Date:   2019-08-15T19:42:57+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-15T19:54:21+02:00
+ * @Last modified time: 2019-08-18T12:46:43+02:00
  */
 
+export const CUSTOMERS = [ "Angelique"];
 export const SERVICES = [
     {name: "Pose capsules", price: 25, duration: "01:30"},
     {name: "Pose capsules & vernis semi-permanent pieds", price: 32, duration: "02:00"},
