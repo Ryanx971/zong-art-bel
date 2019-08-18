@@ -3,7 +3,7 @@
  * @Date:   2019-08-16T20:35:56+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-16T21:44:09+02:00
+ * @Last modified time: 2019-08-18T12:44:25+02:00
  */
 
 
@@ -77,9 +77,11 @@ export class CustomersPage implements OnInit {
 
               // UPDATE
               if(!add) {
-                let index = this.customers.indexOf(res);
-                if(index != 1)
+                let index = this.customers.indexOf(customer);
+                if(index != 1) {
                   this.customers[index] = res;
+                  this.toast.show("Modification effectuée avec succès.", "success-toast", "bottom", 4000);
+                }
               }
               this.nativeStorage.setItem("customers", this.customers);
               return true;
