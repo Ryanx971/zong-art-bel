@@ -3,7 +3,7 @@
  * @Date:   2019-08-18T12:59:10+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-18T13:36:14+02:00
+ * @Last modified time: 2019-08-18T13:48:55+02:00
  */
 
 
@@ -12,6 +12,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
+
+import { ToastService } from '../../toast.service';
 
 import { SERVICES } from '../../settings';
 
@@ -24,7 +26,8 @@ export class LoadDefaultComponent implements OnInit {
 
   constructor(
     private dialogs: Dialogs,
-    private nativeStorage: NativeStorage
+    private nativeStorage: NativeStorage,
+    private toast: ToastService
   ) { }
 
   ngOnInit() {}
@@ -37,6 +40,7 @@ export class LoadDefaultComponent implements OnInit {
     ).then(number => {
       if(number === 2) {
         this.nativeStorage.setItem("services", SERVICES);
+        this.toast.show("Mise en place des valeurs par défaut terminée.", "success-toast", "bottom", 4000);
       }
     }, e => console.error("Error dialogs plugin", e));
   }

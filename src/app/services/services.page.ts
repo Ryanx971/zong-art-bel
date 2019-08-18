@@ -3,7 +3,7 @@
  * @Date:   2019-08-15T18:34:48+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-18T13:38:37+02:00
+ * @Last modified time: 2019-08-18T13:42:26+02:00
  */
 
 
@@ -135,7 +135,7 @@ export class ServicesPage implements OnInit {
   }
 
 
-  async remove(item) {
+  async remove(item: any) {
     let msg = "Êtes-vous sûr de vouloir supprimer la prestation <br><br> <strong> - Nom : " + item.name + " <br> - Prix : " + item.price+ "€ <br> - Durée : " + item.duration + "</strong>";
     const alert = await this.alertController.create({
       header: 'Suppression!',
