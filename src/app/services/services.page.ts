@@ -3,13 +3,15 @@
  * @Date:   2019-08-15T18:34:48+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-18T12:43:21+02:00
+ * @Last modified time: 2019-08-18T13:38:37+02:00
  */
 
 
 
 import { Component, OnInit } from '@angular/core';
-import { AlertController } from '@ionic/angular';
+import { LoadDefaultComponent } from '../components/load-default/load-default.component';
+
+import { AlertController, PopoverController } from '@ionic/angular';
 
 import { ToastService } from '../toast.service';
 
@@ -28,16 +30,21 @@ export class ServicesPage implements OnInit {
   constructor(
     private nativeStorage: NativeStorage,
     public alertController: AlertController,
+    public popoverController: PopoverController,
     private toast: ToastService
   ) { }
 
   ngOnInit() {
   }
 
-  ionViewWillEnter(){
+  loadServices(): void {
     this.nativeStorage.getItem("services").then(data => {
       this.services = data;
     }, e => console.error("Error get services", e));
+  }
+
+  ionViewWillEnter(){
+    this.loadServices();
   }
 
   async manage(service = null){
@@ -152,4 +159,20 @@ export class ServicesPage implements OnInit {
     });
     await alert.present();
   }
+
+  async getPopover(event: any) {
+    const popover = await this.popoverController.create({
+      component: LoadDefaultComponent,
+      event: event,
+      animated: true,
+      showBackdrop: true,
+      translucent: true
+    });
+    await popover.present();
+    popover.onDidDismiss().then(() => {
+      this.loadServices();
+    });
+    return;
+  }
+
 }
