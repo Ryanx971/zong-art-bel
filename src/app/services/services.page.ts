@@ -3,7 +3,7 @@
  * @Date:   2019-08-15T18:34:48+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-18T13:42:26+02:00
+ * @Last modified time: 2019-08-18T14:42:37+02:00
  */
 
 
@@ -104,7 +104,7 @@ export class ServicesPage implements OnInit {
               errors.push("Le prix est vide");
             }
             if(errors.length === 0) {
-              let res = {name: data.name, price: data.price, duration: data.duration}
+              let res = {name: data.name, price: +data.price, duration: data.duration}
               // ADD
               if(add)
                 this.services.push(res);
@@ -113,7 +113,9 @@ export class ServicesPage implements OnInit {
               if(!add) {
                 let index = this.services.indexOf(service);
                 console.log(index);
-                if(index != 1) {
+                console.log(res);
+                console.log(service);
+                if(index != -1) {
                   this.services[index] = res;
                   this.toast.show("Modification effectuée avec succès.", "success-toast", "bottom", 4000);
                 }

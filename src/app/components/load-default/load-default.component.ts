@@ -3,7 +3,7 @@
  * @Date:   2019-08-18T12:59:10+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-18T13:48:55+02:00
+ * @Last modified time: 2019-08-18T14:34:04+02:00
  */
 
 
@@ -40,7 +40,7 @@ export class LoadDefaultComponent implements OnInit {
     ).then(number => {
       if(number === 2) {
         this.nativeStorage.setItem("services", SERVICES);
-        this.toast.show("Mise en place des valeurs par défaut terminée.", "success-toast", "bottom", 4000);
+        this.toast.show("Mise en place des valeurs par défaut terminéeNon .", "success-toast", "bottom", 4000);
       }
     }, e => console.error("Error dialogs plugin", e));
   }
