@@ -1,15 +1,23 @@
+// @Author: Ryan BALOJI <ryanx971>
+// @Date:   2019-08-13T22:24:39+02:00
+// @Email:  ryan.baloji9@gmail.com
+// @Last modified by:   ryanx971
+// @Last modified time: 2019-08-15T14:32:40+02:00
+
+
+
 // Ionic Variables and Theming. For more info, please see:
 // http://ionicframework.com/docs/theming/
 
 /** Ionic CSS Variables **/
 :root {
   /** primary **/
-  --ion-color-primary: #3880ff;
-  --ion-color-primary-rgb: 56, 128, 255;
+  --ion-color-primary: #E65B73;
+  --ion-color-primary-rgb: 230,91, 115;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #3171e0;
-  --ion-color-primary-tint: #4c8dff;
+  --ion-color-primary-shade: #cf5167;
+  --ion-color-primary-tint: #e86b81;
 
   /** secondary **/
   --ion-color-secondary: #0cd1e8;
@@ -74,4 +82,7 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  /** complementary **/
+  --ion-color-complementary: #5be6ce;
 }

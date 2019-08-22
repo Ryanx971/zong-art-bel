@@ -8,7 +8,7 @@ cache:
   key: "$CI_PROJECT_ID"
   paths:
     - node_modules/
- 
+
 build_android:
   stage: deploy
   only:
@@ -22,4 +22,4 @@ build_android:
     - ls ./platforms/android/build/outputs/apk/android*.apk
   artifacts:
     paths:
-      - platforms/android/build/outputs/apk/
+      - apk/

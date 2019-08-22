@@ -1,0 +1,37 @@
+<ion-header no-border>
+  <ion-toolbar mode="ios">
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="light"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <div class="banner" text-center>
+    <span>Retrouvez vos gains mensuelles en temps réel !</span>
+  </div>
+</ion-header>
+
+<ion-content>
+  <div class="input" padding>
+    <ion-item>
+      <ion-label color="primary" floating>Selectionner le mois <span class="errors">*</span></ion-label>
+      <ion-input [(ngModel)]="monthYear" type="month" (ionChange)="monthChange()"></ion-input>
+    </ion-item>
+  </div>
+  <div *ngIf="nbRdv > 0 && visible" class="result">
+    <div class="banner" text-center>
+      {{ displayDate }}
+    </div>
+    <div class="informations" padding>
+      <p>Vous avez réalisé {{ nbRdv }} rendez-vous en mois.</p>
+      <p>Votre gain mensuel s'élève à <strong>{{ money }} euros.</strong></p>
+    </div>
+  </div>
+  <div *ngIf="nbRdv == 0 && visible" class="result">
+    <div class="banner" text-center>
+      {{ displayDate }}
+    </div>
+    <div class="informations" padding>
+      <p>Vous n'avez pas effectué  de prestation en mois.</p>
+    </div>
+  </div>
+</ion-content>
