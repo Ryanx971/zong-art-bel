@@ -3,7 +3,7 @@
  * @Date:   2019-08-15T18:34:48+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-18T14:42:37+02:00
+ * @Last modified time: 2019-08-18T14:51:58+02:00
  */
 
 
@@ -112,9 +112,6 @@ export class ServicesPage implements OnInit {
               // UPDATE
               if(!add) {
                 let index = this.services.indexOf(service);
-                console.log(index);
-                console.log(res);
-                console.log(service);
                 if(index != -1) {
                   this.services[index] = res;
                   this.toast.show("Modification effectuée avec succès.", "success-toast", "bottom", 4000);

@@ -3,7 +3,7 @@
  * @Date:   2019-08-13T22:24:39+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-17T22:00:58+02:00
+ * @Last modified time: 2019-08-22T20:53:44+02:00
  */
 
 
@@ -22,7 +22,7 @@ import { CalendarService } from '../calendar.service';
 export class HomePage {
 
   title:string = "Zong Art Bel";
-  rdvInProgress:string = "Aucun rendez-vous aujourd'hui";
+  // rdvInProgress:string = "Aucun rendez-vous aujourd'hui";
 
   constructor(
     private calendar: CalendarService,
@@ -31,9 +31,9 @@ export class HomePage {
   }
 
   ionViewWillEnter(){
-    this.calendar.getRdvOfDay().then(nbr => {
-      this.rdvInProgress = "Il vous reste "+ nbr +" rendez-vous aujourd'hui";
-    });
+    // this.calendar.getRdvOfDay().then(nbr => {
+    //   this.rdvInProgress = "Il vous reste "+ nbr +" rendez-vous aujourd'hui";
+    // });
   }
 
   openCalendar(date: Date = null) {

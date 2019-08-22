@@ -3,7 +3,7 @@
  * @Date:   2019-08-16T20:35:56+02:00
  * @Email:  ryan.baloji9@gmail.com
  * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-18T14:42:49+02:00
+ * @Last modified time: 2019-08-18T14:44:29+02:00
  */
 
 
@@ -100,7 +100,7 @@ export class CustomersPage implements OnInit {
   }
 
 
-  async remove(item) {
+  async remove(item: any) {
     let msg = "Êtes-vous sûr de vouloir supprimer la cliente <strong>" + item + "</strong> ?";
     const alert = await this.alertController.create({
       header: 'Suppression!',
