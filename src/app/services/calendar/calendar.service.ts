@@ -1,119 +1,153 @@
-/**
- * @Author: Ryan BALOJI <ryanx971>
- * @Date:   2019-08-14T16:38:54+02:00
- * @Email:  ryan.baloji9@gmail.com
- * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-15T15:49:39+02:00
- */
-
-
-
 import { Injectable } from '@angular/core';
-import { Calendar } from '@ionic-native/calendar/ngx';
+import { Calendar, CalendarOptions } from '@ionic-native/calendar/ngx';
+import { MONTHS, EVENT_LOCATION } from '../../constants/app.constant';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
+export interface Benefit {
+  nbVisit: number;
+  sum: number;
+}
+
 export class CalendarService {
-
-  EVENT_LOCATION: string = "Zong Art Bel";
-  public MONTHS: Array<string> = [
-   "Janvier", "Fevrier", "Mars",
-   "Avril", "Mai", "Juin", "Juillet",
-   "Août", "Septembre", "Octobre",
-   "Novembre", "Decembre"
-  ];
-
   constructor(private calendar: Calendar) {}
 
-  getMonthBenefits(start, end): Promise<any> {
-    return new Promise ((resolve, reject) => {
-      let nbRdv = 0;
-      let money = 0;
+  /**
+   * Retourne les bénéfices réalisés
+   * @param start Date de début
+   * @param end Date de fin
+   */
+  getMonthBenefits(start: Date, end: Date): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const result: Benefit = { nbVisit: 0, sum: 0 };
 
-      this.checkCalendar().then((cal) => {
-        this.calendar.listEventsInRange(start, end).then(data => {
-          data.forEach(ev => {
-            if(ev.calendar_id == cal.calendarId && ev.eventLocation == this.EVENT_LOCATION) {
-              nbRdv += 1;
-              let split = ev.title.split(",");
-              money += parseInt(split[1]);
-            }
-          });
-          let res = { nbRdv: nbRdv, money: money};
-          resolve(res);
-       },
-       e => {
-         reject("Can\'t get list of rdv " + e);
-       });
-     }, e => reject("Error check calendar " + e));
+      this.checkCalendar().then(
+        (cal: CalendarOptions) => {
+          this.calendar.listEventsInRange(start, end).then(
+            (data: any) => {
+              data.forEach((ev: any) => {
+                if (ev.calendar_id === cal.calendarId && ev.eventLocation === EVENT_LOCATION) {
+                  result.nbVisit += 1;
+                  const split = ev.title.split(',');
+                  result.sum += parseInt(split[1], 10);
+                }
+              });
+              resolve(result);
+            },
+            e => {
+              console.error('Erreur, impossible de trouver la liste des évenements [List Events In Range]' + e);
+              reject('Erreur, impossible de trouver la liste des évenements');
+            },
+          );
+        },
+        e => reject('Erreur, impossible de trouver le calendrier '),
+      );
     });
   }
 
-  checkCalendar(): Promise<any> {
-    return new Promise ((resolve, reject) => {
-      this.calendar.listCalendars().then(data => {
+  /**
+   * Vérifie si le calendrier est bien activé
+   */
+  checkCalendar(): Promise<CalendarOptions | string> {
+    return new Promise((resolve, reject) => {
+      this.calendar.listCalendars().then(
+        data => {
           let id = null;
-          data.forEach(cal => {
-            if(cal.name == "zongartbel@gmail.com")
-              id = parseInt(cal.id)
+          data.forEach((cal: any) => {
+            if (cal.name === 'zongartbel@gmail.com') {
+              id = parseInt(cal.id, 10);
+            }
           });
-          if(!id)
-            reject("Error, No calendar 'zongartbel@gmail.com'.")
-          let calOptions = this.calendar.getCalendarOptions();
+
+          if (!id) {
+            // tslint:disable-next-line: quotemark
+            reject("Erreur, pas de calendrier 'zongartbel@gmail.com'.");
+          }
+          const calOptions: CalendarOptions = this.calendar.getCalendarOptions();
           calOptions.calendarId = id;
           resolve(calOptions);
         },
-        e=>
-        {
-          console.error("Error get list of calendars ", e);
-        });
+        e => {
+          console.error('Erreur, impossible de récupérer la liste des calendriers. [List Calendars]', e);
+          reject('Erreur, impossible de récupérer la liste des calendriers.');
+        },
+      );
     });
   }
 
-  openCalendar(date:Date = null): void {
-    if(date === null)
+  /**
+   * Ouvre l'application calendrier du téléphone
+   */
+  openCalendar(date: Date = null): void {
+    if (date === null) {
       date = new Date();
+    }
     this.calendar.openCalendar(date);
   }
 
-  getRdvOfDay(): Promise<any> {
-    return new Promise ((resolve, reject) => {
-      let startDate = new Date();
-      let endDate = new Date();
-      endDate.setHours(23,59,59,999);
+  /**
+   * Retourne le nombre de rendez-vous qu'il reste à faire
+   * au cours de la journée
+   */
+  getRdvOfDay(): Promise<number | string> {
+    return new Promise((resolve, reject) => {
+      const startDate = new Date();
+      const endDate = new Date();
+      endDate.setHours(23, 59, 59, 999);
 
       let count = 0;
-      this.calendar.listEventsInRange(startDate, endDate).then(data=>{
-          if(data && data.length) {
-            data.forEach(ev => {
-              if(ev.eventLocation === this.EVENT_LOCATION)
-              count += 1;
+      this.calendar.listEventsInRange(startDate, endDate).then(
+        (data: any) => {
+          if (data && data.length) {
+            data.forEach((ev: any) => {
+              if (ev.eventLocation === EVENT_LOCATION) {
+                count += 1;
+              }
             });
           }
-          if(count > 0) {
+          if (count > 0) {
             resolve(count);
           }
-          else {
-            reject("No rdv today");
-          }
+          // tslint:disable-next-line: quotemark
+          reject("Pas de rendez-vous aujourd''hui.");
         },
-        e =>{
-          console.error("Can\'t get list of rdv of the day" + e);
-          reject("Can\'t get list of rdv of the day");
-        });
+        e => {
+          console.error('Erreur, impossible de trouver la liste des évenements [List Events In Range]' + e);
+          reject('Erreur, impossible de trouver la liste des évenements.');
+        },
+      );
     });
   }
 
-  createEvent(title:string, notes:string, startDate:Date, endDate:Date, frequence: string): Promise<any> {
-      return new Promise ((resolve, reject) => {
-        this.checkCalendar().then(calOptions => {
-          if(frequence != "aucune") {
-            calOptions.recurrence = "weekly";
+  /**
+   * Création d'un événement
+   * @param title nom de l'événement
+   * @param notes  notes
+   * @param startDate  date de début
+   * @param endDate  date de fin
+   * @param frequence  fréquences des rendez-vous
+   */
+  createEvent(title: string, notes: string, startDate: Date, endDate: Date, frequence: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.checkCalendar().then(
+        (calOptions: CalendarOptions) => {
+          if (frequence !== 'aucune') {
+            calOptions.recurrence = 'weekly';
             calOptions.recurrenceInterval = +frequence;
           }
-          this.calendar.createEventWithOptions(title, this.EVENT_LOCATION, notes +" €", startDate, endDate, calOptions).then(() => resolve(), (e)=> reject(e));
-        }, e => console.error(e));
-      });
+          this.calendar
+            .createEventWithOptions(title, EVENT_LOCATION, notes + ' €', startDate, endDate, calOptions)
+            .then(
+              () => resolve(),
+              e => {
+                console.error('Erreur, impossible de créer un évenement [Create Event With Options]' + e);
+                reject('Erreur, impossible de créer un évenement [Create Event With Options]');
+              },
+            );
+        },
+        e => console.error('Erreur, impossible de trouver le calendrier ' + e),
+      );
+    });
   }
 }

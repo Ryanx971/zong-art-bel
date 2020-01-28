@@ -1,5 +1,9 @@
-export const CUSTOMERS = ['Angelique'];
-export const SERVICES = [
+import { Customer } from './models/Customers';
+import { Service } from './models/Service';
+
+// Défault values
+export const CUSTOMERS: Customer[] = [{ name: 'Angelique' }];
+export const SERVICES: Service[] = [
   { name: 'Pose capsules', price: 25, duration: '01:30' },
   { name: 'Pose capsules & vernis semi-permanent pieds', price: 32, duration: '02:00' },
   { name: 'Pose chablon', price: 30, duration: '01:30' },

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CalendarService } from '../services/calendar/calendar.service';
-import { ToastService } from '../services/toast/toast.service';
+import { CalendarService } from '../../services/calendar/calendar.service';
+import { ToastService } from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-stats',
