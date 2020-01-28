@@ -1,7 +1,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ServicesPage } from './services.page';
+import { ServicesPage } from './service.page';
 
 describe('ServicesPage', () => {
   let component: ServicesPage;
@@ -9,10 +9,9 @@ describe('ServicesPage', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ServicesPage ],
+      declarations: [ServicesPage],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
