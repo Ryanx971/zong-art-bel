@@ -1,16 +1,8 @@
-/**
- * @Author: Ryan BALOJI <ryanx971>
- * @Date:   2019-08-16T20:35:56+02:00
- * @Email:  ryan.baloji9@gmail.com
- * @Last modified by:   ryanx971
- * @Last modified time: 2019-08-18T14:44:29+02:00
- */
-
 import { Component, OnInit } from '@angular/core';
-
 import { AlertController } from '@ionic/angular';
 import { ToastService } from '../../services/toast/toast.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
+import { Customer } from '../../models/Customer';
 
 @Component({
   selector: 'app-customers',
@@ -19,7 +11,7 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
 })
 export class CustomersPage implements OnInit {
   title = 'Mes clientes';
-  customers = [];
+  customers: Customer[] = [];
 
   constructor(
     private nativeStorage: NativeStorage,
@@ -31,15 +23,20 @@ export class CustomersPage implements OnInit {
 
   ionViewWillEnter() {
     this.nativeStorage.getItem('customers').then(
-      data => {
+      (data: Customer[]) => {
         this.customers = data;
       },
-      e => console.error('Error get customers', e),
+      e => console.error('Erreur, impossible de récupérer les clients [Get Item Customer]', e),
     );
   }
 
-  async manage(customer = null) {
+  /**
+   * Ajoute une cliente dans le localStorage
+   * @param customer Cliente à ajouter
+   */
+  async manage(customer: Customer = null, index: number) {
     let title = 'Ajout';
+    // Mode
     let add = true;
     if (customer != null) {
       title = 'Modification';
@@ -52,7 +49,7 @@ export class CustomersPage implements OnInit {
         {
           name: 'customer',
           type: 'text',
-          value: customer,
+          value: customer ? customer.name : '',
           placeholder: 'Nom de la cliente',
         },
       ],
@@ -65,29 +62,33 @@ export class CustomersPage implements OnInit {
         {
           text: 'Enregistrer',
           handler: data => {
-            let errors = [];
-            if (!data.customer.trim()) errors.push('Le nom de la cliente est vide');
+            const errors: string[] = [];
+            if (!data.customer.trim()) {
+              errors.push('Le nom de la cliente est vide');
+            }
 
             if (errors.length === 0) {
-              let res = data.customer;
-              // ADD
-              if (add) this.customers.push(res);
+              const result: Customer = { name: data.customer };
 
-              // UPDATE
+              // Ajout
+              if (add) {
+                this.customers.push(result);
+              }
+
+              // Mise à jour
               if (!add) {
-                let index = this.customers.indexOf(customer);
-                if (index != 1) {
-                  this.customers[index] = res;
-                  this.toast.show('Modification effectuée avec succès.', 'success-toast', 'bottom', 4000);
-                }
+                this.customers[index] = result;
+                this.toast.show('Modification effectuée avec succès.', 'success-toast', 'bottom', 4000);
               }
               this.nativeStorage.setItem('customers', this.customers);
               return true;
             }
+
             let msg = 'Erreur, veuillez vérifier : \n';
             errors.forEach(e => {
               msg += e + '\n';
             });
+
             this.toast.show(msg, 'danger-toast', 'bottom', 5000);
             return false;
           },
@@ -97,8 +98,12 @@ export class CustomersPage implements OnInit {
     await alert.present();
   }
 
-  async remove(item: any) {
-    let msg = 'Êtes-vous sûr de vouloir supprimer la cliente <strong>' + item + '</strong> ?';
+  /**
+   * Suppression d'une cliente
+   * @param customer Cliente  a supprimer
+   */
+  async remove(customer: Customer, index: number) {
+    const msg = 'Êtes-vous sûr de vouloir supprimer la cliente <strong>' + customer.name + '</strong> ?';
     const alert = await this.alertController.create({
       header: 'Suppression!',
       message: msg,
@@ -110,12 +115,9 @@ export class CustomersPage implements OnInit {
         {
           text: 'Supprimer',
           handler: () => {
-            let index = this.customers.indexOf(item);
-            if (index != -1) {
-              this.customers.splice(index, 1);
-              this.nativeStorage.setItem('customers', this.customers);
-              this.toast.show('Suppression effectuée avec succès', 'success-toast', 'bottom', 4000);
-            }
+            this.customers.splice(index, 1);
+            this.nativeStorage.setItem('customers', this.customers);
+            this.toast.show('Suppression effectuée avec succès', 'success-toast', 'bottom', 4000);
           },
         },
       ],

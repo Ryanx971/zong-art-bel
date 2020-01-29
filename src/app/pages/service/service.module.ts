@@ -5,17 +5,17 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ServicesPage } from './service.page';
+import { ServicePage } from './service.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: ServicesPage,
+    component: ServicePage,
   },
 ];
 
 @NgModule({
   imports: [CommonModule, FormsModule, IonicModule, RouterModule.forChild(routes)],
-  declarations: [ServicesPage],
+  declarations: [ServicePage],
 })
-export class ServicesPageModule {}
+export class ServicePageModule {}

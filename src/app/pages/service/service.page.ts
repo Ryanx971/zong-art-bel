@@ -3,15 +3,16 @@ import { LoadDefaultComponent } from '../../components/load-default/load-default
 import { AlertController, PopoverController } from '@ionic/angular';
 import { ToastService } from '../../services/toast/toast.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
+import { Service } from 'src/app/models/Service';
 
 @Component({
   selector: 'app-services',
   templateUrl: './service.page.html',
   styleUrls: ['./service.page.scss'],
 })
-export class ServicesPage implements OnInit {
+export class ServicePage implements OnInit {
   title = 'Mes prestations';
-  services = [];
+  services: Service[] = [];
 
   constructor(
     private nativeStorage: NativeStorage,
@@ -22,12 +23,15 @@ export class ServicesPage implements OnInit {
 
   ngOnInit() {}
 
+  /**
+   * Récupération des prestations dans le localStorage
+   */
   loadServices(): void {
     this.nativeStorage.getItem('services').then(
-      data => {
+      (data: Service[]) => {
         this.services = data;
       },
-      e => console.error('Error get services', e),
+      e => console.error('Erreur, impossible de récupérer les prestations [Get Item Services]', e),
     );
   }
 
@@ -35,12 +39,19 @@ export class ServicesPage implements OnInit {
     this.loadServices();
   }
 
-  async manage(service = null) {
+  /**
+   * Ajoute ou met à jour la prestation
+   * @param service Serive à modifier/créer
+   * @param index Position
+   */
+  async manage(service: Service = null, index: number) {
     let name = null;
     let price = null;
     let duration = '02:00';
     let title = 'Ajout';
+    // Mode
     let add = true;
+
     if (service != null) {
       name = service.name;
       price = service.price;
@@ -80,27 +91,34 @@ export class ServicesPage implements OnInit {
         {
           text: 'Enregistrer',
           handler: data => {
-            let errors = [];
-            if (!data.name.trim()) errors.push('Le nom est vide');
-            if (!data.duration) errors.push('La durée est vide');
+            const errors: string[] = [];
+            if (!data.name.trim()) {
+              errors.push('Le nom est vide');
+            }
+            if (!data.duration) {
+              errors.push('La durée est vide');
+            }
             if (data.price) {
-              if (data.price <= 0) errors.push('Le prix doit être positif');
+              if (data.price <= 0) {
+                errors.push('Le prix doit être positif');
+              }
             } else {
               errors.push('Le prix est vide');
             }
-            if (errors.length === 0) {
-              let res = { name: data.name, price: +data.price, duration: data.duration };
-              // ADD
-              if (add) this.services.push(res);
 
-              // UPDATE
-              if (!add) {
-                let index = this.services.indexOf(service);
-                if (index != -1) {
-                  this.services[index] = res;
-                  this.toast.show('Modification effectuée avec succès.', 'success-toast', 'bottom', 4000);
-                }
+            if (errors.length === 0) {
+              const result = { name: data.name, price: +data.price, duration: data.duration };
+              // Ajout
+              if (add) {
+                this.services.push(result);
               }
+
+              // Mise à jour
+              if (!add) {
+                this.services[index] = result;
+                this.toast.show('Modification effectuée avec succès.', 'success-toast', 'bottom', 4000);
+              }
+
               this.nativeStorage.setItem('services', this.services);
               return true;
             }
@@ -117,8 +135,13 @@ export class ServicesPage implements OnInit {
     await alert.present();
   }
 
-  async remove(item: any) {
-    let msg =
+  /**
+   * Supprimer une prestation
+   * @param item Service à supprimer
+   * @param index Position
+   */
+  async remove(item: Service, index: number) {
+    const msg =
       'Êtes-vous sûr de vouloir supprimer la prestation <br><br> <strong> - Nom : ' +
       item.name +
       ' <br> - Prix : ' +
@@ -137,12 +160,9 @@ export class ServicesPage implements OnInit {
         {
           text: 'Supprimer',
           handler: () => {
-            let index = this.services.indexOf(item);
-            if (index != -1) {
-              this.services.splice(index, 1);
-              this.nativeStorage.setItem('services', this.services);
-              this.toast.show('Suppression effectuée avec succès', 'success-toast', 'bottom', 4000);
-            }
+            this.services.splice(index, 1);
+            this.nativeStorage.setItem('services', this.services);
+            this.toast.show('Suppression effectuée avec succès', 'success-toast', 'bottom', 4000);
           },
         },
       ],
@@ -150,10 +170,13 @@ export class ServicesPage implements OnInit {
     await alert.present();
   }
 
+  /**
+   * Ouverture du popover (Remise des informations par défaut)
+   */
   async getPopover(event: any) {
     const popover = await this.popoverController.create({
       component: LoadDefaultComponent,
-      event: event,
+      event,
       animated: true,
       showBackdrop: true,
       translucent: true,

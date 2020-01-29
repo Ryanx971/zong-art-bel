@@ -1,4 +1,4 @@
-import { Customer } from './models/Customers';
+import { Customer } from './models/Customer';
 import { Service } from './models/Service';
 
 // Défault values

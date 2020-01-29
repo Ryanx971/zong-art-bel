@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Calendar, CalendarOptions } from '@ionic-native/calendar/ngx';
 import { MONTHS, EVENT_LOCATION } from '../../constants/app.constant';
+import { type } from 'os';
 
-@Injectable({
-  providedIn: 'root',
-})
 export interface Benefit {
   nbVisit: number;
   sum: number;
 }
 
+@Injectable({
+  providedIn: 'root',
+})
 export class CalendarService {
   constructor(private calendar: Calendar) {}
 
@@ -18,7 +19,7 @@ export class CalendarService {
    * @param start Date de début
    * @param end Date de fin
    */
-  getMonthBenefits(start: Date, end: Date): Promise<any> {
+  getMonthBenefits(start: Date, end: Date): Promise<Benefit | string> {
     return new Promise((resolve, reject) => {
       const result: Benefit = { nbVisit: 0, sum: 0 };
 
@@ -27,7 +28,7 @@ export class CalendarService {
           this.calendar.listEventsInRange(start, end).then(
             (data: any) => {
               data.forEach((ev: any) => {
-                if (ev.calendar_id === cal.calendarId && ev.eventLocation === EVENT_LOCATION) {
+                if (Number(ev.calendar_id) === cal.calendarId && ev.eventLocation === EVENT_LOCATION) {
                   result.nbVisit += 1;
                   const split = ev.title.split(',');
                   result.sum += parseInt(split[1], 10);
@@ -36,7 +37,7 @@ export class CalendarService {
               resolve(result);
             },
             e => {
-              console.error('Erreur, impossible de trouver la liste des évenements [List Events In Range]' + e);
+              console.error('Erreur, impossible de trouver la liste des évenements [List Events In Range]', e);
               reject('Erreur, impossible de trouver la liste des évenements');
             },
           );
@@ -113,7 +114,7 @@ export class CalendarService {
           reject("Pas de rendez-vous aujourd''hui.");
         },
         e => {
-          console.error('Erreur, impossible de trouver la liste des évenements [List Events In Range]' + e);
+          console.error('Erreur, impossible de trouver la liste des évenements [List Events In Range]', e);
           reject('Erreur, impossible de trouver la liste des évenements.');
         },
       );
@@ -141,12 +142,12 @@ export class CalendarService {
             .then(
               () => resolve(),
               e => {
-                console.error('Erreur, impossible de créer un évenement [Create Event With Options]' + e);
+                console.error('Erreur, impossible de créer un évenement [Create Event With Options]', e);
                 reject('Erreur, impossible de créer un évenement [Create Event With Options]');
               },
             );
         },
-        e => console.error('Erreur, impossible de trouver le calendrier ' + e),
+        e => console.error('Erreur, impossible de trouver le calendrier ', e),
       );
     });
   }

@@ -22,13 +22,13 @@ export class LoadDefaultComponent implements OnInit {
         ['Non', 'Oui, je suis sûr'], // buttonLabels
       )
       .then(
-        number => {
-          if (number === 2) {
+        (choice: number) => {
+          if (choice === 2) {
             this.nativeStorage.setItem('services', SERVICES);
-            this.toast.show('Mise en place des valeurs par défaut terminéeNon .', 'success-toast', 'bottom', 4000);
+            this.toast.show('Mise en place des valeurs par défaut terminée.', 'success-toast', 'bottom', 4000);
           }
         },
-        e => console.error('Error dialogs plugin', e),
+        e => console.error('Erreur, impossible de montrer la modale de dialogue [Dialogs Plugin].', e),
       );
   }
 }

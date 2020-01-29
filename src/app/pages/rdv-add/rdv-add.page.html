@@ -8,21 +8,29 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-searchbar [(ngModel)]="cliente" (ionInput)="getItems()" placeholder="Votre cliente"></ion-searchbar>
+  <ion-searchbar [(ngModel)]="customerSearch" (ionInput)="getItems()" placeholder="Votre cliente"></ion-searchbar>
   <ion-list>
     <ion-item *ngFor="let item of customers" (click)="itemListClick(item)">
-      <ion-label>{{ item }}</ion-label>
+      <ion-label>{{ item.name }}</ion-label>
     </ion-item>
   </ion-list>
   <form [formGroup]="rdvForm" id="form">
     <ion-item>
       <ion-label color="primary" floating>Cliente <span class="errors">*</span></ion-label>
-      <ion-input formControlName="cliente" type="text"></ion-input>
+      <ion-input formControlName="customer" type="text"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label color="primary" floating>Prestation <span class="errors">*</span></ion-label>
-      <ion-select formControlName="prestation" [(ngModel)]="service" (ionChange)="onSelectChange($event)" cancelText="Annuler" okText="Valider">
-        <ion-select-option *ngFor="let item of services" value="{{ JSON.stringify(item) }}">{{ item.name }}</ion-select-option>
+      <ion-select
+        formControlName="service"
+        [(ngModel)]="service"
+        (ionChange)="onSelectChange($event)"
+        cancelText="Annuler"
+        okText="Valider"
+      >
+        <ion-select-option *ngFor="let item of services" value="{{ JSON.stringify(item) }}"
+          >{{ item.name }}</ion-select-option
+        >
       </ion-select>
     </ion-item>
 
@@ -33,17 +41,17 @@
 
     <ion-item>
       <ion-label color="primary" floating>Heure du début <span class="errors">*</span></ion-label>
-      <ion-input formControlName="heureDebut" type="time"></ion-input>
+      <ion-input formControlName="startHour" type="time"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label color="primary" floating>Durée du rendez-vous <span class="errors">*</span></ion-label>
-      <ion-input formControlName="duree" type="time"></ion-input>
+      <ion-input formControlName="duration" type="time"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label color="primary" floating>Prix spécial</ion-label>
-      <ion-input formControlName="prix" type="number"></ion-input>
+      <ion-input formControlName="price" type="number"></ion-input>
     </ion-item>
 
     <ion-item>
