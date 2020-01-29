@@ -17,21 +17,17 @@
       <ion-input [(ngModel)]="monthYear" type="month" (ionChange)="monthChange()"></ion-input>
     </ion-item>
   </div>
-  <div *ngIf="nbRdv > 0 && visible" class="result">
+
+  <div *ngIf="visible" class="result">
     <div class="banner" text-center>
       {{ displayDate }}
     </div>
-    <div class="informations" padding>
-      <p>Vous avez réalisé {{ nbRdv }} rendez-vous en mois.</p>
-      <p>Votre gain mensuel s'élève à <strong>{{ money }} euros.</strong></p>
+    <div *ngIf="benefit.nbVisit !== 0" class="informations" padding>
+      <p>Vous avez réalisé {{ benefit.nbVisit }} rendez-vous en mois.</p>
+      <p>Votre gain mensuel s'élève à <strong>{{ benefit.sum }} euros.</strong></p>
     </div>
-  </div>
-  <div *ngIf="nbRdv == 0 && visible" class="result">
-    <div class="banner" text-center>
-      {{ displayDate }}
-    </div>
-    <div class="informations" padding>
-      <p>Vous n'avez pas effectué  de prestation en mois.</p>
+    <div *ngIf="benefit.nbVisit === 0" class="informations" padding>
+      <p>Vous n'avez pas effectué de prestation en mois.</p>
     </div>
   </div>
 </ion-content>
