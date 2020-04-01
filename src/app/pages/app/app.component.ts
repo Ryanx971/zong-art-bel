@@ -4,6 +4,8 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { SERVICES, CUSTOMERS } from '../../settings';
+import { Customer } from 'src/app/models/Customer';
+import { CronService } from 'src/app/services/cron/cron.service';
 
 @Component({
   selector: 'app-root',
@@ -15,6 +17,7 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private nativeStorage: NativeStorage,
+    private cronService: CronService,
   ) {
     this.initializeApp();
   }
@@ -25,7 +28,7 @@ export class AppComponent {
       this.nativeStorage.getItem('first_time_customers').catch(() => {
         this.nativeStorage.setItem('first_time_customers', 'true');
         console.log('Set default customers');
-        let customers = CUSTOMERS;
+        let customers: Customer[] = CUSTOMERS;
         this.nativeStorage.setItem('customers', customers);
       });
 
@@ -34,6 +37,9 @@ export class AppComponent {
         this.nativeStorage.setItem('services', SERVICES);
         this.nativeStorage.setItem('first_time_services', 'true');
       });
+
+      // Run cron
+      this.cronService.runMsgCron();
 
       this.statusBar.styleLightContent();
       this.statusBar.backgroundColorByHexString('#CC4159');
