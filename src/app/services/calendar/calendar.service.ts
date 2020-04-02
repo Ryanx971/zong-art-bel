@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Calendar, CalendarOptions } from '@ionic-native/calendar/ngx';
 import { MONTHS, EVENT_LOCATION } from '../../constants/app.constant';
 import { type } from 'os';
+import { Appointement } from 'src/app/models/Appointment';
 
 export interface Benefit {
   nbVisit: number;
@@ -110,7 +111,6 @@ export class CalendarService {
           if (count > 0) {
             resolve(count);
           }
-          // tslint:disable-next-line: quotemark
           reject("Pas de rendez-vous aujourd''hui.");
         },
         e => {
@@ -151,4 +151,15 @@ export class CalendarService {
       );
     });
   }
+
+  getEventsByDate = (startDate: Date, endDate: Date): Promise<Appointement[] | string> => {
+    return new Promise((resolve, reject) => {
+      this.calendar.listEventsInRange(startDate, endDate).then(
+        (data: any) => {
+          resolve(data as Appointement[]);
+        },
+        e => reject("Erreur, impossible d'obtenir la liste des événements"),
+      );
+    });
+  };
 }
