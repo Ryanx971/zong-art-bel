@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { LoadDefaultComponent } from '../../components/load-default/load-default.component';
+import { Component } from '@angular/core';
+import { LoadDefaultComponent } from '../../components/service/load-default/load-default.component';
 import { AlertController, PopoverController } from '@ionic/angular';
 import { ToastService } from '../../services/toast/toast.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
@@ -10,7 +10,7 @@ import { Service } from 'src/app/models/Service';
   templateUrl: './service.page.html',
   styleUrls: ['./service.page.scss'],
 })
-export class ServicePage implements OnInit {
+export class ServicePage {
   title = 'Mes prestations';
   services: Service[] = [];
 
@@ -18,10 +18,8 @@ export class ServicePage implements OnInit {
     private nativeStorage: NativeStorage,
     public alertController: AlertController,
     public popoverController: PopoverController,
-    private toast: ToastService,
+    private toastService: ToastService,
   ) {}
-
-  ngOnInit() {}
 
   /**
    * Récupération des prestations dans le localStorage
@@ -31,7 +29,7 @@ export class ServicePage implements OnInit {
       (data: Service[]) => {
         this.services = data;
       },
-      e => console.error('Erreur, impossible de récupérer les prestations [Get Item Services]', e),
+      (e) => console.error('Erreur, impossible de récupérer les prestations [Get Item Services]', e),
     );
   }
 
@@ -90,7 +88,7 @@ export class ServicePage implements OnInit {
         },
         {
           text: 'Enregistrer',
-          handler: data => {
+          handler: (data) => {
             const errors: string[] = [];
             if (!data.name.trim()) {
               errors.push('Le nom est vide');
@@ -116,17 +114,17 @@ export class ServicePage implements OnInit {
               // Mise à jour
               if (!add) {
                 this.services[index] = result;
-                this.toast.show('Modification effectuée avec succès.', 'success-toast', 'bottom', 4000);
+                this.toastService.show('Modification effectuée avec succès.', 'success-toast', 'bottom', 4000);
               }
 
               this.nativeStorage.setItem('services', this.services);
               return true;
             }
             let msg = 'Erreur, veuillez vérifier : \n';
-            errors.forEach(e => {
+            errors.forEach((e) => {
               msg += e + '\n';
             });
-            this.toast.show(msg, 'danger-toast', 'bottom', 5000);
+            this.toastService.show(msg, 'danger-toast', 'bottom', 5000);
             return false;
           },
         },
@@ -162,7 +160,7 @@ export class ServicePage implements OnInit {
           handler: () => {
             this.services.splice(index, 1);
             this.nativeStorage.setItem('services', this.services);
-            this.toast.show('Suppression effectuée avec succès', 'success-toast', 'bottom', 4000);
+            this.toastService.show('Suppression effectuée avec succès', 'success-toast', 'bottom', 4000);
           },
         },
       ],
@@ -174,12 +172,13 @@ export class ServicePage implements OnInit {
    * Ouverture du popover (Remise des informations par défaut)
    */
   async getPopover(event: any) {
-    const popover = await this.popoverController.create({
+    let popover = null;
+    popover = await this.popoverController.create({
       component: LoadDefaultComponent,
       event,
       animated: true,
-      showBackdrop: true,
       translucent: true,
+      componentProps: [{ popover: popover }],
     });
     await popover.present();
     popover.onDidDismiss().then(() => {

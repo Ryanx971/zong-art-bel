@@ -8,6 +8,7 @@ import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { Customer } from 'src/app/models/Customer';
 import { Service } from 'src/app/models/Service';
 import { Appointement } from 'src/app/models/Appointment';
+import { STORAGE_CUSTOMERS } from '../../constants/app.constant';
 
 @Component({
   selector: 'app-rdv-add',
@@ -18,7 +19,7 @@ export class RdvAddPage implements OnInit {
   rdvForm: FormGroup;
   submitAttempt = false;
   title = 'Rendez-vous';
-  customer: Customer = { name: '' };
+  customer: Customer = null;
   customerSearch: string;
   service: any;
   customers = [];
@@ -52,7 +53,7 @@ export class RdvAddPage implements OnInit {
       (data: Service[]) => {
         this.services = data;
       },
-      e => console.error('Erreur, impossible de récupérer les services [Get Item Service]', e),
+      (e) => console.error('Erreur, impossible de récupérer les services [Get Item Service]', e),
     );
   }
 
@@ -62,7 +63,7 @@ export class RdvAddPage implements OnInit {
   setRdv(): void {
     if (this.rdvForm.valid) {
       // Récupération des informations des formulaires
-      this.customer.name = this.rdvForm.controls.customer.value;
+      // this.customer.name = this.rdvForm.controls.customer.value;
       const priceAndService = JSON.parse(this.rdvForm.controls.service.value);
       const date: string = this.rdvForm.controls.date.value;
       const startHour: string = this.rdvForm.controls.startHour.value;
@@ -72,10 +73,10 @@ export class RdvAddPage implements OnInit {
       let price = priceAndService.price;
 
       // Majuscule de la cliente
-      this.customer.name = this.customer.name.charAt(0).toUpperCase() + this.customer.name.slice(1);
+      // this.customer.displayName = this.customer.name.charAt(0).toUpperCase() + this.customer.name.slice(1);
 
       // Sauvegarde du nom de la cliente
-      this.saveCustomer(this.customer);
+      // this.saveCustomer(this.customer);
 
       const startDate = new Date(date + 'T' + startHour);
       // Transformation de la duree en minute
@@ -86,7 +87,7 @@ export class RdvAddPage implements OnInit {
         price = this.rdvForm.controls.price.value;
       }
 
-      const title = this.customer.name + ' - ' + service + ', ' + price;
+      const title = this.customer.displayName + ' - ' + service + ', ' + price;
 
       const rdv: Appointement = { title, price, startDate, endDate, frequence };
 
@@ -94,12 +95,12 @@ export class RdvAddPage implements OnInit {
         () => {
           this.dialogs
             .confirm('Voulez-vous envoyer le rendez-vous sous forme de message ?', 'Rendez-vous', ['Oui', 'Non'])
-            .then(buttonIndex => {
+            .then((buttonIndex) => {
               if (buttonIndex === 1) {
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                 const msg: string =
                   'Bonjour ' +
-                  this.customer.name +
+                  this.customer.displayName +
                   ',\nVotre prochain rendez-vous est le ' +
                   startDate.toLocaleString('fr-FR', options) +
                   ' à ' +
@@ -117,9 +118,7 @@ export class RdvAddPage implements OnInit {
           this.toast.show('Rendez-vous ajouté avec succès', 'success-toast', 'bottom', 4000);
           this.resetForm();
         },
-        e => {
-          alert('Une erreur est survenue');
-          // tslint:disable-next-line: quotemark
+        (e) => {
           console.error("Erreur, impossible d'ajouter un événement.", e);
         },
       );
@@ -151,24 +150,25 @@ export class RdvAddPage implements OnInit {
       return;
     }
 
-    this.nativeStorage.getItem('customers').then(
+    this.nativeStorage.getItem(STORAGE_CUSTOMERS).then(
       (data: Customer[]) => {
         this.customers = data.filter((v: Customer) => {
-          if (v.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+          if (v.displayName.toLowerCase().indexOf(search.toLowerCase()) > -1) {
             return true;
           }
           return false;
         });
       },
-      e => {
+      (e) => {
         console.error('Erreur, impossible de récupérer les clientes [Get Item Customer]', e);
       },
     );
   }
 
   itemListClick(customer: Customer): void {
-    this.customer.name = customer.name;
-    this.rdvForm.controls.customer.setValue(customer.name);
+    // this.customer.name = customer.name;
+    this.customer = customer;
+    this.rdvForm.controls.customer.setValue(customer.displayName);
     this.customers = [];
     this.customerSearch = '';
   }
@@ -177,27 +177,27 @@ export class RdvAddPage implements OnInit {
    * Sauvegarde la cliente dans le localStorage
    * @param customer Cliente
    */
-  saveCustomer(customer: Customer): void {
-    this.nativeStorage.getItem('customers').then(
-      (data: Customer[]) => {
-        let exists = false;
-        data.forEach((item: Customer) => {
-          if (item.name === customer.name) {
-            exists = true;
-          }
-        });
+  //   saveCustomer(customer: Customer): void {
+  //     this.nativeStorage.getItem('customers').then(
+  //       (data: Customer[]) => {
+  //         let exists = false;
+  //         data.forEach((item: Customer) => {
+  //           if (item.name === customer.name) {
+  //             exists = true;
+  //           }
+  //         });
 
-        // Si la cliente n'existe pas on l'ajoute
-        if (!exists) {
-          data.push(customer);
-          this.nativeStorage.setItem('customers', data).catch(e => {
-            console.error('Erreur stockage cliente', e);
-          });
-        }
-      },
-      e => {
-        console.error('Erreur, impossible de récupérer les clientes [Get Item Customer]', e);
-      },
-    );
-  }
+  //         // Si la cliente n'existe pas on l'ajoute
+  //         if (!exists) {
+  //           data.push(customer);
+  //           this.nativeStorage.setItem('customers', data).catch(e => {
+  //             console.error('Erreur stockage cliente', e);
+  //           });
+  //         }
+  //       },
+  //       e => {
+  //         console.error('Erreur, impossible de récupérer les clientes [Get Item Customer]', e);
+  //       },
+  //     );
+  //   }
 }
