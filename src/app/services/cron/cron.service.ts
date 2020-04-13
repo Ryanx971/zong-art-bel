@@ -31,6 +31,10 @@ export class CronService {
     }
   };
 
+  stopCron = (): void => {
+    this.job.stop();
+  };
+
   private doCron = (): void => {
     let customers: Customer[] = [];
     this.nativeStorage.getItem(STORAGE_CUSTOMERS).then(
@@ -70,10 +74,6 @@ export class CronService {
         console.error('Error in getItem', e);
       },
     );
-  };
-
-  stopCron = (): void => {
-    this.job.stop();
   };
 
   // HELPER

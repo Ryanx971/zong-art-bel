@@ -23,12 +23,11 @@ export class PopoverComponent {
     });
     loading.present();
     let popover: PopoverController = this.navParam.get('popover');
-    const SUCCESS_MESSAGE = 'Synchronisation effectuée avec succès';
     this.contactSerice
       .synchronize()
       .then(
-        () => {
-          this.toastService.show(SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000);
+        (msg: string) => {
+          this.toastService.show(msg, 'success-toast', 'bottom', 4000);
           popover.dismiss();
         },
         (e) => this.toastService.show(e, 'danger-toast', 'bottom', 4000),

@@ -29,17 +29,19 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      // CUSTOMER
       this.nativeStorage.getItem(STORAGE_FIRST_CUSTOMERS).catch(() => {
         this.nativeStorage.setItem(STORAGE_FIRST_CUSTOMERS, 'true');
         this.nativeStorage.setItem(STORAGE_CUSTOMERS, []);
       });
 
+      // SERVICE
       this.nativeStorage.getItem(STORAGE_FIRST_SERVICES).catch(() => {
         this.nativeStorage.setItem(STORAGE_SERVICES, SERVICES);
         this.nativeStorage.setItem(STORAGE_FIRST_SERVICES, 'true');
       });
 
-      // Run cron
+      // Lancement de cron
       this.cronService.runMsgCron();
 
       this.statusBar.styleLightContent();

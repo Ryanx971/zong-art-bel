@@ -33,6 +33,7 @@ export class ContactService {
 
   synchronize = (): Promise<string> => {
     const ERROR_MESSAGE = 'Erreur durant la synchronisation';
+    const SUCCESS_MESSAGE = 'Synchronisation effectuée avec succès';
     return new Promise((resolve, reject) => {
       this.getAll().then(
         (data: Contact[]) => {
@@ -51,8 +52,7 @@ export class ContactService {
               // Suppression des doublons
               const result: Customer[] = this.removeDuplicate(customers.concat(storage));
               this.nativeStorage.setItem(STORAGE_CUSTOMERS, result).then(
-                // this.nativeStorage.setItem(STORAGE_CUSTOMERS, customers).then(
-                () => resolve(),
+                () => resolve(SUCCESS_MESSAGE),
                 (e) => {
                   console.error('Error in setItem', e);
                   reject(ERROR_MESSAGE);

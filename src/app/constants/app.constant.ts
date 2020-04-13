@@ -4,6 +4,7 @@ export const STORAGE_SERVICES = 'services';
 export const STORAGE_CUSTOMERS = 'customers';
 export const STORAGE_FIRST_SERVICES = 'first_time_services';
 export const STORAGE_FIRST_CUSTOMERS = 'first_time_customers';
+export const STORAGE_FIRST_TIME = 'first_time_app';
 
 export const MONTHS: Array<string> = [
   'Janvier',
