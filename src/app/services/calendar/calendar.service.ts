@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Calendar, CalendarOptions } from '@ionic-native/calendar/ngx';
-import { MONTHS, EVENT_LOCATION } from '../../constants/app.constant';
-import { type } from 'os';
+import { EVENT_LOCATION } from '../../constants/app.constant';
 import { Appointement } from 'src/app/models/Appointment';
 
 export interface Benefit {
@@ -30,20 +29,24 @@ export class CalendarService {
             (data: any) => {
               data.forEach((ev: any) => {
                 if (Number(ev.calendar_id) === cal.calendarId && ev.eventLocation === EVENT_LOCATION) {
-                  result.nbVisit += 1;
-                  const split = ev.title.split(',');
-                  result.sum += parseInt(split[1], 10);
+                  const split: string[] = ev.title.split('|•|');
+                  if (split[2] !== undefined) {
+                    console.log('S2', split[2]);
+                    result.nbVisit += 1;
+                    const price: number = parseInt(split[2].trim(), 10);
+                    if (!isNaN(price)) result.sum += price;
+                  }
                 }
               });
               resolve(result);
             },
-            e => {
+            (e) => {
               console.error('Erreur, impossible de trouver la liste des évenements [List Events In Range]', e);
               reject('Erreur, impossible de trouver la liste des évenements');
             },
           );
         },
-        e => reject('Erreur, impossible de trouver le calendrier '),
+        (e) => reject('Erreur, impossible de trouver le calendrier '),
       );
     });
   }
@@ -54,7 +57,7 @@ export class CalendarService {
   checkCalendar(): Promise<CalendarOptions | string> {
     return new Promise((resolve, reject) => {
       this.calendar.listCalendars().then(
-        data => {
+        (data) => {
           let id = null;
           data.forEach((cal: any) => {
             if (cal.name === 'zongartbel@gmail.com') {
@@ -70,7 +73,7 @@ export class CalendarService {
           calOptions.calendarId = id;
           resolve(calOptions);
         },
-        e => {
+        (e) => {
           console.error('Erreur, impossible de récupérer la liste des calendriers. [List Calendars]', e);
           reject('Erreur, impossible de récupérer la liste des calendriers.');
         },
@@ -113,7 +116,7 @@ export class CalendarService {
           }
           reject("Pas de rendez-vous aujourd''hui.");
         },
-        e => {
+        (e) => {
           console.error('Erreur, impossible de trouver la liste des évenements [List Events In Range]', e);
           reject('Erreur, impossible de trouver la liste des évenements.');
         },
@@ -141,13 +144,13 @@ export class CalendarService {
             .createEventWithOptions(title, EVENT_LOCATION, notes + ' €', startDate, endDate, calOptions)
             .then(
               () => resolve(),
-              e => {
+              (e) => {
                 console.error('Erreur, impossible de créer un évenement [Create Event With Options]', e);
                 reject('Erreur, impossible de créer un évenement [Create Event With Options]');
               },
             );
         },
-        e => console.error('Erreur, impossible de trouver le calendrier ', e),
+        (e) => console.error('Erreur, impossible de trouver le calendrier ', e),
       );
     });
   }
@@ -158,7 +161,7 @@ export class CalendarService {
         (data: any) => {
           resolve(data as Appointement[]);
         },
-        e => reject("Erreur, impossible d'obtenir la liste des événements"),
+        (e) => reject("Erreur, impossible d'obtenir la liste des événements"),
       );
     });
   };

@@ -16,6 +16,7 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { Contacts } from '@ionic-native/contacts/ngx';
+import { SMS } from '@ionic-native/sms/ngx';
 
 @NgModule({
   declarations: [AppComponent, LoadDefaultComponent, PopoverComponent],
@@ -29,6 +30,7 @@ import { Contacts } from '@ionic-native/contacts/ngx';
     SocialSharing,
     Dialogs,
     Contacts,
+    SMS,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],

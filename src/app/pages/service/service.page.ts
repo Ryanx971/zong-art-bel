@@ -4,6 +4,13 @@ import { AlertController, PopoverController } from '@ionic/angular';
 import { ToastService } from '../../services/toast/toast.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { Service } from 'src/app/models/Service';
+import { STORAGE_SERVICES } from '../../constants/app.constant';
+
+interface ServiceValue {
+  name: string;
+  price: number;
+  duration: string;
+}
 
 @Component({
   selector: 'app-services',
@@ -25,11 +32,12 @@ export class ServicePage {
    * Récupération des prestations dans le localStorage
    */
   loadServices(): void {
-    this.nativeStorage.getItem('services').then(
+    const ERROR_MESSAGE = 'Erreur, impossible de récupérer les presations';
+    this.nativeStorage.getItem(STORAGE_SERVICES).then(
       (data: Service[]) => {
         this.services = data;
       },
-      (e) => console.error('Erreur, impossible de récupérer les prestations [Get Item Services]', e),
+      (e) => this.toastService.show(ERROR_MESSAGE, 'danger-toast', 'bottom', 5000),
     );
   }
 
@@ -43,6 +51,8 @@ export class ServicePage {
    * @param index Position
    */
   async manage(service: Service = null, index: number) {
+    const ERROR_MESSAGE = "Erreur, impossible d'ajouter le client";
+    let SUCCESS_MESSAGE = 'Ajout effectué avec succès.';
     let name = null;
     let price = null;
     let duration = '02:00';
@@ -55,6 +65,7 @@ export class ServicePage {
       price = service.price;
       duration = service.duration;
       title = 'Modification';
+      SUCCESS_MESSAGE = 'Mise à jour effectuée avec succès';
       add = false;
     }
 
@@ -88,7 +99,7 @@ export class ServicePage {
         },
         {
           text: 'Enregistrer',
-          handler: (data) => {
+          handler: (data: ServiceValue) => {
             const errors: string[] = [];
             if (!data.name.trim()) {
               errors.push('Le nom est vide');
@@ -105,19 +116,21 @@ export class ServicePage {
             }
 
             if (errors.length === 0) {
-              const result = { name: data.name, price: +data.price, duration: data.duration };
+              const result: Service = { name: data.name, price: +data.price, duration: data.duration };
               // Ajout
               if (add) {
                 this.services.push(result);
-              }
-
-              // Mise à jour
-              if (!add) {
+              } else {
+                // Mise à jour
                 this.services[index] = result;
-                this.toastService.show('Modification effectuée avec succès.', 'success-toast', 'bottom', 4000);
               }
 
-              this.nativeStorage.setItem('services', this.services);
+              this.nativeStorage.setItem(STORAGE_SERVICES, this.services).then(
+                () => this.toastService.show(SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000),
+                (e) => {
+                  this.toastService.show(ERROR_MESSAGE, 'danger-toast', 'bottom', 5000);
+                },
+              );
               return true;
             }
             let msg = 'Erreur, veuillez vérifier : \n';
@@ -139,6 +152,7 @@ export class ServicePage {
    * @param index Position
    */
   async remove(item: Service, index: number) {
+    const ERROR_MESSAGE = "Erreur, impossible d'ajouter le client";
     const msg =
       'Êtes-vous sûr de vouloir supprimer la prestation <br><br> <strong> - Nom : ' +
       item.name +
@@ -159,8 +173,13 @@ export class ServicePage {
           text: 'Supprimer',
           handler: () => {
             this.services.splice(index, 1);
-            this.nativeStorage.setItem('services', this.services);
-            this.toastService.show('Suppression effectuée avec succès', 'success-toast', 'bottom', 4000);
+            this.nativeStorage.setItem('services', this.services).then(
+              () => this.toastService.show('Suppression effectuée avec succès', 'success-toast', 'bottom', 4000),
+              (e) => {
+                this.toastService.show(ERROR_MESSAGE, 'danger-toast', 'bottom', 5000);
+                console.error('Error in setItem', e);
+              },
+            );
           },
         },
       ],

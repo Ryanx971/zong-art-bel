@@ -43,12 +43,24 @@ export class ContactService {
               phoneNumbers: c.phoneNumbers,
               note: c.note,
               rawId: c['rawId'],
+              isSync: true,
             };
           });
-          this.nativeStorage.setItem(STORAGE_CUSTOMERS, customers).then(
-            () => resolve(),
+          this.nativeStorage.getItem(STORAGE_CUSTOMERS).then(
+            (storage) => {
+              // Suppression des doublons
+              const result: Customer[] = this.removeDuplicate(customers.concat(storage));
+              this.nativeStorage.setItem(STORAGE_CUSTOMERS, result).then(
+                // this.nativeStorage.setItem(STORAGE_CUSTOMERS, customers).then(
+                () => resolve(),
+                (e) => {
+                  console.error('Error in setItem', e);
+                  reject(ERROR_MESSAGE);
+                },
+              );
+            },
             (e) => {
-              console.error('Error in SET ITEM', e);
+              console.error('Error in getItem', e);
               reject(ERROR_MESSAGE);
             },
           );
@@ -59,4 +71,18 @@ export class ContactService {
       );
     });
   };
+
+  sendMessage = (): void => {};
+
+  // HELPER
+  private removeDuplicate(array: Customer[]) {
+    var a: Customer[] = array.concat();
+    for (var i = 0; i < a.length; ++i) {
+      for (var j = i + 1; j < a.length; ++j) {
+        if (a[i].id === a[j].id) a.splice(j--, 1);
+      }
+    }
+
+    return a;
+  }
 }

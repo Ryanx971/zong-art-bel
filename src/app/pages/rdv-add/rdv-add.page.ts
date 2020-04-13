@@ -3,12 +3,10 @@ import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms'
 import { CalendarService } from '../../services/calendar/calendar.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
-import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { Customer } from 'src/app/models/Customer';
 import { Service } from 'src/app/models/Service';
 import { Appointement } from 'src/app/models/Appointment';
-import { STORAGE_CUSTOMERS } from '../../constants/app.constant';
+import { STORAGE_CUSTOMERS, STORAGE_SERVICES } from '../../constants/app.constant';
 
 @Component({
   selector: 'app-rdv-add',
@@ -29,14 +27,12 @@ export class RdvAddPage implements OnInit {
   constructor(
     public formBuilder: FormBuilder,
     private nativeStorage: NativeStorage,
-    private socialSharing: SocialSharing,
-    private dialogs: Dialogs,
-    private calendar: CalendarService,
-    private toast: ToastService,
+    private calendarService: CalendarService,
+    private toastService: ToastService,
   ) {
     this.JSON = JSON;
     this.rdvForm = this.formBuilder.group({
-      customer: ['', Validators.compose([Validators.required])],
+      customer: [{ value: '', disabled: true }, Validators.compose([Validators.required])],
       service: [''],
       date: ['', Validators.required],
       startHour: ['', Validators.required],
@@ -49,11 +45,14 @@ export class RdvAddPage implements OnInit {
   ngOnInit() {}
 
   ionViewWillEnter() {
-    this.nativeStorage.getItem('services').then(
+    this.nativeStorage.getItem(STORAGE_SERVICES).then(
       (data: Service[]) => {
         this.services = data;
       },
-      (e) => console.error('Erreur, impossible de récupérer les services [Get Item Service]', e),
+      (e) => {
+        this.toastService.show('Erreur, impossible de récupérer les services', 'danger-toast', 'bottom', 6000);
+        console.error('Error in getItem', e);
+      },
     );
   }
 
@@ -63,7 +62,6 @@ export class RdvAddPage implements OnInit {
   setRdv(): void {
     if (this.rdvForm.valid) {
       // Récupération des informations des formulaires
-      // this.customer.name = this.rdvForm.controls.customer.value;
       const priceAndService = JSON.parse(this.rdvForm.controls.service.value);
       const date: string = this.rdvForm.controls.date.value;
       const startHour: string = this.rdvForm.controls.startHour.value;
@@ -71,12 +69,6 @@ export class RdvAddPage implements OnInit {
       const frequence: string = this.rdvForm.controls.frequence.value;
       const service = priceAndService.name;
       let price = priceAndService.price;
-
-      // Majuscule de la cliente
-      // this.customer.displayName = this.customer.name.charAt(0).toUpperCase() + this.customer.name.slice(1);
-
-      // Sauvegarde du nom de la cliente
-      // this.saveCustomer(this.customer);
 
       const startDate = new Date(date + 'T' + startHour);
       // Transformation de la duree en minute
@@ -87,45 +79,24 @@ export class RdvAddPage implements OnInit {
         price = this.rdvForm.controls.price.value;
       }
 
-      const title = this.customer.displayName + ' - ' + service + ', ' + price;
+      const title = this.customer.displayName + ' |•| ' + service + ' |•| ' + price + ' |•| ' + this.customer.rawId;
 
       const rdv: Appointement = { title, price, startDate, endDate, frequence };
 
-      this.calendar.createEvent(rdv.title, rdv.price.toString(), rdv.startDate, rdv.endDate, rdv.frequence).then(
+      this.calendarService.createEvent(rdv.title, rdv.price.toString(), rdv.startDate, rdv.endDate, rdv.frequence).then(
         () => {
-          this.dialogs
-            .confirm('Voulez-vous envoyer le rendez-vous sous forme de message ?', 'Rendez-vous', ['Oui', 'Non'])
-            .then((buttonIndex) => {
-              if (buttonIndex === 1) {
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-                const msg: string =
-                  'Bonjour ' +
-                  this.customer.displayName +
-                  ',\nVotre prochain rendez-vous est le ' +
-                  startDate.toLocaleString('fr-FR', options) +
-                  ' à ' +
-                  startHour +
-                  '.\nPour un/une ' +
-                  service +
-                  ', le prix sera de ' +
-                  rdv.price +
-                  '€\n À bientôt';
-                this.socialSharing.share(msg, 'Rendez-vous', null, null);
-              }
-              this.toast.show('Rendez-vous ajouté avec succès', 'success-toast', 'bottom', 4000);
-              this.resetForm();
-            });
-          this.toast.show('Rendez-vous ajouté avec succès', 'success-toast', 'bottom', 4000);
+          this.toastService.show('Rendez-vous ajouté avec succès', 'success-toast', 'bottom', 4000);
           this.resetForm();
         },
         (e) => {
-          console.error("Erreur, impossible d'ajouter un événement.", e);
+          this.toastService.show("Erreur lors de l'ajout du rendez-vous", 'danger-toast', 'bottom', 5000);
+          console.error(e);
         },
       );
     }
   }
 
-  resetForm(): void {
+  private resetForm(): void {
     this.rdvForm.reset();
     this.rdvForm.controls.price.setValue('');
     this.rdvForm.controls.frequence.setValue('aucune');
@@ -134,7 +105,7 @@ export class RdvAddPage implements OnInit {
   /**
    * Dès que le choix de prestation change, on affecte la durée
    */
-  onSelectChange(event): void {
+  onSelectChange(event: any): void {
     if (event.detail.value) {
       const service: Service = JSON.parse(event.detail.value);
       this.rdvForm.controls.duration.setValue(service.duration);
@@ -160,7 +131,8 @@ export class RdvAddPage implements OnInit {
         });
       },
       (e) => {
-        console.error('Erreur, impossible de récupérer les clientes [Get Item Customer]', e);
+        this.toastService.show('Erreur, impossible de récupérer les utilisateurs', 'danger-toast', 'bottom', 6000);
+        console.error('Error in getItem', e);
       },
     );
   }
@@ -172,32 +144,4 @@ export class RdvAddPage implements OnInit {
     this.customers = [];
     this.customerSearch = '';
   }
-
-  /**
-   * Sauvegarde la cliente dans le localStorage
-   * @param customer Cliente
-   */
-  //   saveCustomer(customer: Customer): void {
-  //     this.nativeStorage.getItem('customers').then(
-  //       (data: Customer[]) => {
-  //         let exists = false;
-  //         data.forEach((item: Customer) => {
-  //           if (item.name === customer.name) {
-  //             exists = true;
-  //           }
-  //         });
-
-  //         // Si la cliente n'existe pas on l'ajoute
-  //         if (!exists) {
-  //           data.push(customer);
-  //           this.nativeStorage.setItem('customers', data).catch(e => {
-  //             console.error('Erreur stockage cliente', e);
-  //           });
-  //         }
-  //       },
-  //       e => {
-  //         console.error('Erreur, impossible de récupérer les clientes [Get Item Customer]', e);
-  //       },
-  //     );
-  //   }
 }

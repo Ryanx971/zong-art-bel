@@ -6,6 +6,7 @@ import { Customer } from '../../models/Customer';
 import { STORAGE_CUSTOMERS, SYNC_KEY } from '../../constants/app.constant';
 import { IContactField, ContactField } from '@ionic-native/contacts/ngx';
 import { PopoverComponent } from '../../components/customer/popover/popover.component';
+import { v4 as uuidv4 } from 'uuid';
 
 interface CustomerValue {
   name: string;
@@ -28,20 +29,21 @@ export class CustomersPage {
     public popoverCtrl: PopoverController,
   ) {}
 
-  ionViewWillEnter() {
-    this.loadCustomers();
-  }
-
   /**
    * Récupération des clients dans le localStorage
    */
   loadCustomers(): void {
+    const ERROR_MESSAGE = 'Erreur, impossible de récupérer les clients';
     this.nativeStorage.getItem(STORAGE_CUSTOMERS).then(
       (data: Customer[]) => {
         this.customers = data;
       },
-      (e) => this.toastService.show('Erreur, impossible de récupérer les clients', 'danger-toast', 'bottom', 5000),
+      (e) => this.toastService.show(ERROR_MESSAGE, 'danger-toast', 'bottom', 5000),
     );
+  }
+
+  ionViewWillEnter() {
+    this.loadCustomers();
   }
 
   /**
@@ -51,10 +53,13 @@ export class CustomersPage {
   // TODO: la modification n'a pas été géré
   async manage(customer: Customer = null, index: number) {
     let title = "Ajout d'une cliente";
+    const ERROR_MESSAGE = "Erreur, impossible d'ajouter le client";
+    let SUCCESS_MESSAGE = 'Ajout effectué avec succès.';
     // Mode
     let add = true;
     if (customer != null) {
       title = "Modification d'une cliente";
+      SUCCESS_MESSAGE = 'Mise à jour effectuée avec succès';
       add = false;
     }
 
@@ -92,19 +97,30 @@ export class CustomersPage {
             if (!this.isPhoneNumber(data.phone.trim())) errors.push('Veuillez saisir un numéro de téléphone valide');
             if (errors.length === 0) {
               const phoneNumbers: IContactField[] = [new ContactField('mobile', data.phone)];
-              const result: Customer = { displayName: data.name.trim(), note: SYNC_KEY, phoneNumbers };
+              const id: string = uuidv4();
+              const result: Customer = {
+                id,
+                displayName: data.name.trim(),
+                note: SYNC_KEY,
+                phoneNumbers,
+                rawId: id,
+                isSync: false,
+              };
 
               // Ajout
               if (add) {
                 this.customers.push(result);
+              } else {
+                // Mise à jour
+                this.customers[index] = result;
               }
 
-              // Mise à jour
-              if (!add) {
-                this.customers[index] = result;
-                this.toastService.show('Modification effectuée avec succès.', 'success-toast', 'bottom', 4000);
-              }
-              this.nativeStorage.setItem('customers', this.customers);
+              this.nativeStorage.setItem(STORAGE_CUSTOMERS, this.customers).then(
+                () => this.toastService.show(SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000),
+                (e) => {
+                  this.toastService.show(ERROR_MESSAGE, 'danger-toast', 'bottom', 5000);
+                },
+              );
               return true;
             }
 
@@ -112,7 +128,6 @@ export class CustomersPage {
             errors.forEach((e) => {
               msg += e + '\n';
             });
-
             this.toastService.show(msg, 'danger-toast', 'bottom', 5000);
             return false;
           },

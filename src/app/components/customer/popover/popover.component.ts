@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, PopoverController } from '@ionic/angular';
+import { NavParams, PopoverController, LoadingController } from '@ionic/angular';
 import { ContactService } from 'src/app/services/contact/contact.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 
@@ -9,18 +9,30 @@ import { ToastService } from 'src/app/services/toast/toast.service';
   styleUrls: ['./popover.component.scss'],
 })
 export class PopoverComponent {
-  constructor(private contactSerice: ContactService, private toastService: ToastService, public navParam: NavParams) {}
+  constructor(
+    private contactSerice: ContactService,
+    private toastService: ToastService,
+    public navParam: NavParams,
+    public loadingCtrl: LoadingController,
+  ) {}
 
-  synchronise = () => {
+  synchronise = async () => {
+    // LOADER
+    const loading = await this.loadingCtrl.create({
+      message: 'Synchronisation en cours...',
+    });
+    loading.present();
     let popover: PopoverController = this.navParam.get('popover');
-    console.log('Popover', this.navParam.get('popover'));
     const SUCCESS_MESSAGE = 'Synchronisation effectuée avec succès';
-    this.contactSerice.synchronize().then(
-      () => {
-        this.toastService.show(SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000);
-        popover.dismiss();
-      },
-      (e) => this.toastService.show(e, 'danger-toast', 'bottom', 4000),
-    );
+    this.contactSerice
+      .synchronize()
+      .then(
+        () => {
+          this.toastService.show(SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000);
+          popover.dismiss();
+        },
+        (e) => this.toastService.show(e, 'danger-toast', 'bottom', 4000),
+      )
+      .finally(() => loading.dismiss());
   };
 }
