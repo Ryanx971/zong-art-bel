@@ -13,11 +13,11 @@ import { ToastService } from 'src/app/services/toast/toast.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  title = 'Zong Art Bel';
-  // rdvInProgress:string = "Aucun rendez-vous aujourd'hui";
+  title: string = 'Zong Art Bel';
+  rdvInProgress: string = "Aucun rendez-vous aujourd'hui";
 
   constructor(
-    private calendar: CalendarService,
+    private calendarService: CalendarService,
     private router: Router,
     private nativeStorage: NativeStorage,
     private contactService: ContactService,
@@ -26,9 +26,12 @@ export class HomePage {
   ) {}
 
   ionViewWillEnter() {
-    // this.calendar.getRdvOfDay().then(nbr => {
-    //   this.rdvInProgress = "Il vous reste "+ nbr +" rendez-vous aujourd'hui";
-    // });
+    this.calendarService.getDailyRdv().then(
+      (nbRdv: number) => {
+        this.rdvInProgress = 'Il vous reste ' + nbRdv + " rendez-vous aujourd'hui";
+      },
+      (e: string) => (this.rdvInProgress = e),
+    );
 
     this.nativeStorage.getItem(STORAGE_FIRST_TIME).catch(() => {
       this.nativeStorage.setItem(STORAGE_FIRST_TIME, 'true');
@@ -37,7 +40,7 @@ export class HomePage {
   }
 
   openCalendar = (date: Date = null) => {
-    this.calendar.openCalendar(date);
+    this.calendarService.openCalendar(date);
   };
 
   open = (path: string) => {

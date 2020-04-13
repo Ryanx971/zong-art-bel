@@ -95,7 +95,7 @@ export class CalendarService {
    * Retourne le nombre de rendez-vous qu'il reste à faire
    * au cours de la journée
    */
-  getRdvOfDay(): Promise<number | string> {
+  getDailyRdv(): Promise<number | string> {
     return new Promise((resolve, reject) => {
       const startDate = new Date();
       const endDate = new Date();
@@ -114,7 +114,7 @@ export class CalendarService {
           if (count > 0) {
             resolve(count);
           }
-          reject("Pas de rendez-vous aujourd''hui.");
+          reject("Plus de rendez-vous aujourd'hui.");
         },
         (e) => {
           console.error('Erreur, impossible de trouver la liste des évenements [List Events In Range]', e);
