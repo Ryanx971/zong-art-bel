@@ -10,6 +10,8 @@ import {
   STORAGE_FIRST_SERVICES,
   STORAGE_CUSTOMERS,
   STORAGE_SERVICES,
+  STORAGE_CALENDAR,
+  STORAGE_SYNC_KEY,
 } from '../../constants/app.constant';
 
 @Component({
@@ -29,24 +31,37 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      // CUSTOMER
-      this.nativeStorage.getItem(STORAGE_FIRST_CUSTOMERS).catch(() => {
-        this.nativeStorage.setItem(STORAGE_FIRST_CUSTOMERS, 'true');
-        this.nativeStorage.setItem(STORAGE_CUSTOMERS, []);
-      });
-
-      // SERVICE
-      this.nativeStorage.getItem(STORAGE_FIRST_SERVICES).catch(() => {
-        this.nativeStorage.setItem(STORAGE_SERVICES, SERVICES);
-        this.nativeStorage.setItem(STORAGE_FIRST_SERVICES, 'true');
-      });
+      this.defaultStorage();
 
       // Lancement de cron
       this.cronService.runMsgCron();
-
       this.statusBar.styleLightContent();
       this.statusBar.backgroundColorByHexString('#CC4159');
       this.splashScreen.hide();
     });
   }
+
+  private defaultStorage = (): void => {
+    // CUSTOMER
+    this.nativeStorage.getItem(STORAGE_FIRST_CUSTOMERS).catch(() => {
+      this.nativeStorage.setItem(STORAGE_FIRST_CUSTOMERS, 'true');
+      this.nativeStorage.setItem(STORAGE_CUSTOMERS, []);
+    });
+
+    // SERVICE
+    this.nativeStorage.getItem(STORAGE_FIRST_SERVICES).catch(() => {
+      this.nativeStorage.setItem(STORAGE_SERVICES, SERVICES);
+      this.nativeStorage.setItem(STORAGE_FIRST_SERVICES, 'true');
+    });
+
+    // SYNC KEY
+    this.nativeStorage.getItem(STORAGE_SYNC_KEY).catch(() => {
+      this.nativeStorage.setItem(STORAGE_SYNC_KEY, null);
+    });
+
+    // CALENDAR
+    this.nativeStorage.getItem(STORAGE_CALENDAR).catch(() => {
+      this.nativeStorage.setItem(STORAGE_CALENDAR, null);
+    });
+  };
 }

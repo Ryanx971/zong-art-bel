@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { CalendarService } from '../../services/calendar/calendar.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { Customer } from 'src/app/models/Customer';
 import { Service } from 'src/app/models/Service';
+import { Router } from '@angular/router';
 import { Appointement } from 'src/app/models/Appointment';
 import { STORAGE_CUSTOMERS, STORAGE_SERVICES } from '../../constants/app.constant';
 
@@ -13,15 +14,15 @@ import { STORAGE_CUSTOMERS, STORAGE_SERVICES } from '../../constants/app.constan
   templateUrl: './rdv-add.page.html',
   styleUrls: ['./rdv-add.page.scss'],
 })
-export class RdvAddPage implements OnInit {
+export class RdvAddPage {
   rdvForm: FormGroup;
-  submitAttempt = false;
-  title = 'Rendez-vous';
+  submitAttempt: boolean = false;
+  title: string = 'Rendez-vous';
   customer: Customer = null;
   customerSearch: string;
   service: any;
-  customers = [];
-  services = [];
+  customers: Customer[] = [];
+  services: Service[] = [];
   JSON: JSON;
 
   constructor(
@@ -29,6 +30,7 @@ export class RdvAddPage implements OnInit {
     private nativeStorage: NativeStorage,
     private calendarService: CalendarService,
     private toastService: ToastService,
+    private router: Router,
   ) {
     this.JSON = JSON;
     this.rdvForm = this.formBuilder.group({
@@ -42,8 +44,6 @@ export class RdvAddPage implements OnInit {
     });
   }
 
-  ngOnInit() {}
-
   ionViewWillEnter() {
     this.nativeStorage.getItem(STORAGE_SERVICES).then(
       (data: Service[]) => {
@@ -55,6 +55,10 @@ export class RdvAddPage implements OnInit {
       },
     );
   }
+
+  open = (path: string) => {
+    this.router.navigate([path]);
+  };
 
   /***
    * Création d'un rendez-vous

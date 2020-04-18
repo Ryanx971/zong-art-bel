@@ -4,6 +4,11 @@
     <ion-buttons slot="start">
       <ion-back-button color="light"></ion-back-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="open('/customers/manage')">
+        <ion-icon color="light" slot="icon-only" name="person-add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
