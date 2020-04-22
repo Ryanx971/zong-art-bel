@@ -44,6 +44,11 @@
   color: var(--ion-color-danger);
 }
 
+// L
+ion-label {
+  white-space: normal !important;
+}
+
 // R
 // ROUND STYLE
 .rounded {
@@ -83,4 +88,9 @@ ion-toast.danger-toast {
 
 ion-toast.info-toast {
   --background: var(--ion-color-primary);
+}
+
+// TEXT
+.text-bold {
+  font-weight: bold;
 }

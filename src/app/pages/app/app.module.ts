@@ -8,16 +8,19 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { LoadDefaultComponent } from '../../components/load-default/load-default.component';
+import { LoadDefaultComponent } from '../../components/service/load-default/load-default.component';
+import { PopoverComponent } from '../../components/customer/popover/popover.component';
 
 import { Calendar } from '@ionic-native/calendar/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
+import { Contacts } from '@ionic-native/contacts/ngx';
+import { SMS } from '@ionic-native/sms/ngx';
 
 @NgModule({
-  declarations: [AppComponent, LoadDefaultComponent],
-  entryComponents: [LoadDefaultComponent],
+  declarations: [AppComponent, LoadDefaultComponent, PopoverComponent],
+  entryComponents: [LoadDefaultComponent, PopoverComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [
     StatusBar,
@@ -26,6 +29,8 @@ import { Dialogs } from '@ionic-native/dialogs/ngx';
     NativeStorage,
     SocialSharing,
     Dialogs,
+    Contacts,
+    SMS,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],

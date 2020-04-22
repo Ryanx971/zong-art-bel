@@ -15,7 +15,7 @@ export class StatsPage implements OnInit {
   visible = false;
   monthYear: any;
 
-  constructor(private calendar: CalendarService, private toast: ToastService) {}
+  constructor(private calendarService: CalendarService, private toastService: ToastService) {}
 
   ngOnInit() {}
 
@@ -29,12 +29,11 @@ export class StatsPage implements OnInit {
     this.displayDate = MONTHS[parseInt(month, 10) - 1] + ' ' + year;
     const startDate = new Date(year, month - 1, 1);
     const endDate = new Date(startDate.getFullYear(), startDate.getMonth() + 1, 0);
-    this.calendar.getMonthBenefits(startDate, endDate).then(
+    this.calendarService.getMonthBenefits(startDate, endDate).then(
       (data: Benefit) => {
         this.benefit = data;
         if (this.benefit.nbVisit === 0) {
-          this.toast.show(
-            // tslint:disable-next-line: quotemark
+          this.toastService.show(
             "Vous n'avez pas effectué de prestation en " + this.displayDate + '.',
             'danger-toast',
             'bottom',
@@ -43,8 +42,14 @@ export class StatsPage implements OnInit {
         }
         this.visible = true;
       },
-      e => {
-        console.error('Erreur, impossible de récupérer les bénéfices [Get Month Benefits].', e);
+      (e) => {
+        this.toastService.show(
+          'Erreur, impossible de récupérer les bénéfices du mois de ' + this.displayDate,
+          'danger-toast',
+          'bottom',
+          5000,
+        );
+        console.error(e);
         this.visible = false;
       },
     );

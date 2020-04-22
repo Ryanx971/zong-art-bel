@@ -1,3 +1,10 @@
+import { IContactField } from '@ionic-native/contacts/ngx';
+
 export interface Customer {
-  name: string;
+  id: string;
+  displayName: string;
+  phoneNumbers: IContactField[];
+  note: string;
+  rawId: string;
+  isSync: boolean;
 }

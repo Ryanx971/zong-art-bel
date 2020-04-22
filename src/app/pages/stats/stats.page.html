@@ -5,13 +5,13 @@
       <ion-back-button color="light"></ion-back-button>
     </ion-buttons>
   </ion-toolbar>
-  <div class="banner" text-center>
+  <div class="banner ion-text-center">
     <span>Retrouvez vos gains mensuelles en temps réel !</span>
   </div>
 </ion-header>
 
 <ion-content>
-  <div class="input" padding>
+  <div class="input ion-padding">
     <ion-item>
       <ion-label color="primary" floating>Selectionner le mois <span class="errors">*</span></ion-label>
       <ion-input [(ngModel)]="monthYear" type="month" (ionChange)="monthChange()"></ion-input>
@@ -19,14 +19,14 @@
   </div>
 
   <div *ngIf="visible" class="result">
-    <div class="banner" text-center>
+    <div class="banner ion-text-center">
       {{ displayDate }}
     </div>
-    <div *ngIf="benefit.nbVisit !== 0" class="informations" padding>
+    <div *ngIf="benefit.nbVisit !== 0" class="informations ion-padding">
       <p>Vous avez réalisé {{ benefit.nbVisit }} rendez-vous en mois.</p>
       <p>Votre gain mensuel s'élève à <strong>{{ benefit.sum }} euros.</strong></p>
     </div>
-    <div *ngIf="benefit.nbVisit === 0" class="informations" padding>
+    <div *ngIf="benefit.nbVisit === 0" class="informations ion-padding">
       <p>Vous n'avez pas effectué de prestation en mois.</p>
     </div>
   </div>
