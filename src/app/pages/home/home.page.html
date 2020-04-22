@@ -1,0 +1,49 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-row>
+      <ion-title class="ion-text-center">{{ title }}</ion-title>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" fullscreen>
+  <ion-grid>
+    <div class="menu">
+      <ion-row>
+        <ion-col size="6">
+          <div class="icon-menu" (click)="openCalendar();">
+            <div class="icon">
+              <img src="assets/icon/calendar.svg" alt="Calendrier" class="icon" />
+            </div>
+            <h3 class="icon-title">Calendrier</h3>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="icon-menu" (click)="open('/rdv/add');">
+            <div class="icon"><img src="assets/icon/add.svg" alt="Rendez-vous" class="icon" /></div>
+            <h3 class="icon-title">Rendez-vous</h3>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6">
+          <div class="icon-menu" (click)="open('/stats');">
+            <div class="icon"><img src="assets/icon/stat.svg" alt="Statistiques" class="icon" /></div>
+            <h3 class="icon-title">Statistiques</h3>
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <div class="icon-menu" (click)="open('/config');">
+            <div class="icon"><img src="assets/icon/settings.svg" alt="Paramètres" class="icon" /></div>
+            <h3 class="icon-title">Paramètres</h3>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-grid>
+</ion-content>
+<ion-footer>
+  <ion-toolbar class="ion-text-center">
+    <p (click)="openCalendar()">{{ rdvInProgress }}</p>
+  </ion-toolbar>
+</ion-footer>

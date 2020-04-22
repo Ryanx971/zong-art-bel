@@ -1,0 +1,39 @@
+<ion-header no-border>
+  <ion-toolbar mode="ios">
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="getPopover($event)">
+        <ion-icon color="light" slot="icon-only" name="more"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-grid>
+      <div class="customers" *ngFor="let item of customers; index as i">
+        <ion-row class="rowItem">
+          <ion-col size="10" (click)="manage(item, i)">
+            <ion-label class="displayName">{{ item.displayName }}</ion-label> <br />
+            <ion-label class="phoneNumber">{{ item.phoneNumbers[0].value.split(' ').join('') }}</ion-label>
+          </ion-col>
+          <!-- SUPPRESSION -->
+          <!-- <ion-col size="2" (click)="remove(item, i)">
+            <ion-button fill="clear">
+              <ion-icon slot="icon-only" name="trash"></ion-icon>
+            </ion-button>
+          </ion-col> -->
+        </ion-row>
+      </div>
+    </ion-grid>
+  </ion-list>
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="manage()">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

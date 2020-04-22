@@ -1,0 +1,76 @@
+<ion-header no-border>
+  <ion-toolbar mode="ios">
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="light"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="open('/customers/manage')">
+        <ion-icon color="light" slot="icon-only" name="person-add"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-searchbar [(ngModel)]="customerSearch" (ionInput)="getItems()" placeholder="Votre cliente"></ion-searchbar>
+  <ion-list>
+    <ion-item *ngFor="let item of customers" (click)="itemListClick(item)">
+      <ion-label>{{ item.displayName }}</ion-label>
+    </ion-item>
+  </ion-list>
+  <form [formGroup]="rdvForm" id="form">
+    <ion-item>
+      <ion-label color="primary" floating>Cliente <span class="errors">*</span></ion-label>
+      <ion-input formControlName="customer" type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label color="primary" floating>Prestation <span class="errors">*</span></ion-label>
+      <ion-select
+        formControlName="service"
+        [(ngModel)]="service"
+        (ionChange)="onSelectChange($event)"
+        cancelText="Annuler"
+        okText="Valider"
+      >
+        <ion-select-option *ngFor="let item of services" value="{{ JSON.stringify(item) }}"
+          >{{ item.name }}</ion-select-option
+        >
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Date <span class="errors">*</span></ion-label>
+      <ion-input formControlName="date" type="date"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Heure du début <span class="errors">*</span></ion-label>
+      <ion-input formControlName="startHour" type="time"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Durée du rendez-vous <span class="errors">*</span></ion-label>
+      <ion-input formControlName="duration" type="time"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Prix spécial</ion-label>
+      <ion-input formControlName="price" type="number"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label color="primary" floating>Fréquence <span class="errors">*</span></ion-label>
+      <ion-select formControlName="frequence">
+        <ion-select-option value="aucune" selected="true">Aucune</ion-select-option>
+        <ion-select-option value="2">2 semaines</ion-select-option>
+        <ion-select-option value="3">3 semaines</ion-select-option>
+        <ion-select-option value="4">4 semaines</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </form>
+
+  <div class="ion-text-center">
+    <ion-button color="primary" [disabled]="!rdvForm.valid" (click)="setRdv()">Valider</ion-button>
+  </div>
+</ion-content>

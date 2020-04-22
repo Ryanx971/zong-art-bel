@@ -1,11 +1,3 @@
-// @Author: Ryan BALOJI <ryanx971>
-// @Date:   2019-08-13T22:24:38+02:00
-// @Email:  ryan.baloji9@gmail.com
-// @Last modified by:   ryanx971
-// @Last modified time: 2019-08-13T22:29:05+02:00
-
-
-
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------
@@ -18,20 +10,20 @@
  */
 
 /* Core CSS required for Ionic components to work properly */
-@import "~@ionic/angular/css/core.css";
+@import '~@ionic/angular/css/core.css';
 
 /* Basic CSS for apps built with Ionic */
-@import "~@ionic/angular/css/normalize.css";
-@import "~@ionic/angular/css/structure.css";
-@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/normalize.css';
+@import '~@ionic/angular/css/structure.css';
+@import '~@ionic/angular/css/typography.css';
 @import '~@ionic/angular/css/display.css';
 
 /* Optional CSS utils that can be commented out */
-@import "~@ionic/angular/css/padding.css";
-@import "~@ionic/angular/css/float-elements.css";
-@import "~@ionic/angular/css/text-alignment.css";
-@import "~@ionic/angular/css/text-transformation.css";
-@import "~@ionic/angular/css/flex-utils.css";
+@import '~@ionic/angular/css/padding.css';
+@import '~@ionic/angular/css/float-elements.css';
+@import '~@ionic/angular/css/text-alignment.css';
+@import '~@ionic/angular/css/text-transformation.css';
+@import '~@ionic/angular/css/flex-utils.css';
 
 // B
 // BACKGROUND
@@ -52,10 +44,15 @@
   color: var(--ion-color-danger);
 }
 
+// L
+ion-label {
+  white-space: normal !important;
+}
+
 // R
 // ROUND STYLE
 .rounded {
-    border-radius: 100%;
+  border-radius: 100%;
 }
 
 // T
@@ -91,4 +88,9 @@ ion-toast.danger-toast {
 
 ion-toast.info-toast {
   --background: var(--ion-color-primary);
+}
+
+// TEXT
+.text-bold {
+  font-weight: bold;
 }
