@@ -19,15 +19,16 @@
       ></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label>Calendrier utilisé</ion-label>
+      <ion-label floating>Calendrier utilisé</ion-label>
       <ion-select
-        value="{{ currentCalendarId }}"
+        [value]="currentCalendarId"
         (ionChange)="onSelectChange($event)"
         cancelText="Annuler"
         okText="Valider"
-        placeholder="Sélectionnez un calendrier"
       >
-        <ion-select-option *ngFor="let item of calendars" value="{{item.id}}">{{ item.displayname }}</ion-select-option>
+        <ion-select-option *ngFor="let item of calendars" value="{{ item.id }}"
+          >{{ item.displayname }}</ion-select-option
+        >
       </ion-select>
     </ion-item>
   </ion-list>

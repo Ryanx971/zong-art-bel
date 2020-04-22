@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Calendar, CalendarOptions } from '@ionic-native/calendar/ngx';
-import { EVENT_LOCATION } from '../../constants/app.constant';
+import { EVENT_LOCATION, STORAGE_CALENDAR } from '../../constants/app.constant';
 import { Appointement } from 'src/app/models/Appointment';
 import { CalendarType } from 'src/app/models/CalendarType';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
 export interface Benefit {
   nbVisit: number;
@@ -13,7 +14,7 @@ export interface Benefit {
   providedIn: 'root',
 })
 export class CalendarService {
-  constructor(private calendar: Calendar) {}
+  constructor(private calendar: Calendar, private nativeStorage: NativeStorage) {}
 
   /**
    * Retourne les bénéfices réalisés
@@ -57,27 +58,26 @@ export class CalendarService {
    */
   checkCalendar(): Promise<CalendarOptions | string> {
     return new Promise((resolve, reject) => {
-      this.calendar.listCalendars().then(
-        (data) => {
-          let id = null;
-          data.forEach((cal: any) => {
-            if (cal.name === 'zongartbel@gmail.com') {
-              id = parseInt(cal.id, 10);
-            }
-          });
-
-          if (!id) {
-            // tslint:disable-next-line: quotemark
-            reject("Erreur, pas de calendrier 'zongartbel@gmail.com'.");
-          }
-          const calOptions: CalendarOptions = this.calendar.getCalendarOptions();
-          calOptions.calendarId = id;
-          resolve(calOptions);
+      this.nativeStorage.getItem(STORAGE_CALENDAR).then(
+        (calendarId: string) => {
+          this.calendar.listCalendars().then(
+            (data: CalendarType[]) => {
+              data.forEach((cal: CalendarType) => {
+                if (cal.id === calendarId) {
+                  const calOptions: CalendarOptions = this.calendar.getCalendarOptions();
+                  calOptions.calendarId = parseInt(calendarId, 10);
+                  resolve(calOptions);
+                }
+              });
+              reject('Erreur, pas de calendrier.');
+            },
+            (e) => {
+              console.error('Erreur, impossible de récupérer la liste des calendriers. [List Calendars]', e);
+              reject('Erreur, impossible de récupérer la liste des calendriers.');
+            },
+          );
         },
-        (e) => {
-          console.error('Erreur, impossible de récupérer la liste des calendriers. [List Calendars]', e);
-          reject('Erreur, impossible de récupérer la liste des calendriers.');
-        },
+        (e: any) => reject('Error in getItem' + e),
       );
     });
   }

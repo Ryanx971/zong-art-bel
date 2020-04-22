@@ -50,7 +50,7 @@ export class ServicePage {
    * @param service Serive à modifier/créer
    * @param index Position
    */
-  async manage(service: Service = null, index: number) {
+  async manage(service: Service = null, index: number = -1) {
     const ERROR_MESSAGE = "Erreur, impossible d'ajouter le client";
     let SUCCESS_MESSAGE = 'Ajout effectué avec succès.';
     let name = null;

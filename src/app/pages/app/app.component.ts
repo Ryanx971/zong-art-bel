@@ -3,7 +3,7 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { SERVICES } from '../../settings';
+import { SERVICES, DEFAULT_SYNC_KEY } from '../../settings';
 import { CronService } from 'src/app/services/cron/cron.service';
 import {
   STORAGE_FIRST_CUSTOMERS,
@@ -56,7 +56,7 @@ export class AppComponent {
 
     // SYNC KEY
     this.nativeStorage.getItem(STORAGE_SYNC_KEY).catch(() => {
-      this.nativeStorage.setItem(STORAGE_SYNC_KEY, null);
+      this.nativeStorage.setItem(STORAGE_SYNC_KEY, DEFAULT_SYNC_KEY);
     });
 
     // CALENDAR

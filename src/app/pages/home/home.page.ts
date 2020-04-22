@@ -3,7 +3,7 @@ import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { CalendarService } from '../../services/calendar/calendar.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { STORAGE_FIRST_TIME } from 'src/app/constants/app.constant';
+import { STORAGE_FIRST_TIME, STORAGE_CALENDAR } from 'src/app/constants/app.constant';
 import { ContactService } from 'src/app/services/contact/contact.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 
@@ -35,7 +35,11 @@ export class HomePage {
 
     this.nativeStorage.getItem(STORAGE_FIRST_TIME).catch(() => {
       this.nativeStorage.setItem(STORAGE_FIRST_TIME, 'true');
-      this.showAlert();
+      this.showSyncAlert();
+    });
+
+    this.nativeStorage.getItem(STORAGE_CALENDAR).then((data: string | null) => {
+      if (data === null) this.showCalendarAlert();
     });
   }
 
@@ -47,7 +51,7 @@ export class HomePage {
     this.router.navigate([path]);
   };
 
-  private async showAlert() {
+  private async showSyncAlert() {
     const header: string = 'Synchronisation des contacts';
     const message: string =
       "Afin d'envoyer des messages à vos clients la veille des rendez-vous, il serait préférable de synchroniser vos contacts avec l'application. Vous pouvez syncroniser vos contactes dès maintenant ou vous rendre dans <strong>les paramètres</strong>.";
@@ -76,6 +80,29 @@ export class HomePage {
               .finally(() => {
                 return true;
               });
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
+  private async showCalendarAlert() {
+    const header: string = 'Calendrier';
+    const message: string = 'Veuillez sélectionner le calendrier qui sera utilisé pour enregistrer vos rendez-vous.';
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: 'Je le ferais plus tard',
+          role: 'cancel',
+          cssClass: 'secondary',
+        },
+        {
+          text: 'Choisir mon calendrier',
+          handler: () => {
+            this.router.navigate(['parameters']);
           },
         },
       ],

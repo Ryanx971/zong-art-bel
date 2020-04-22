@@ -51,7 +51,7 @@ export class CustomersPage {
    * @param customer Cliente à ajouter
    */
   // TODO: la modification n'a pas été géré
-  async manage(customer: Customer = null, index: number) {
+  async manage(customer: Customer = null, index: number = -1) {
     let title = "Ajout d'une cliente";
     const ERROR_MESSAGE = "Erreur, impossible d'ajouter le client";
     let SUCCESS_MESSAGE = 'Ajout effectué avec succès.';

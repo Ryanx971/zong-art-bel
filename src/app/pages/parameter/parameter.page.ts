@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { CalendarService } from 'src/app/services/calendar/calendar.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
 import { CalendarType } from 'src/app/models/CalendarType';
@@ -15,25 +14,31 @@ export class ParameterPage {
   title = 'Paramètres de synchronisation';
   calendars: CalendarType[] = [];
   syncKey: string = null;
-  currentCalendarId: string | null = null;
+  currentCalendarId: string | null;
   SUCCESS_MESSAGE = 'Modification effectuée avec succès';
   ERROR_MESSAGE = "Erreur, impossible d'effectuer la modification, veuillez réesayer";
 
   constructor(
-    private router: Router,
     private calendarService: CalendarService,
     private toastService: ToastService,
     private nativeStorage: NativeStorage,
-  ) {}
+  ) {
+    this.loadData();
+  }
 
-  ionViewWillEnter() {
+  ionViewWillEnter() {}
+
+  private loadData(): void {
     this.calendarService.getCalendars().then(
-      (data: CalendarType[]) => (this.calendars = data),
+      (data: CalendarType[]) => {
+        this.calendars = data;
+      },
       (e: string) => this.toastService.show(e, 'danger-toast', 'bottom', 4000),
     );
-
     this.nativeStorage.getItem(STORAGE_CALENDAR).then(
-      (data: string | null) => (this.currentCalendarId = data),
+      (data: string | null) => {
+        this.currentCalendarId = data;
+      },
       (e: any) => {
         console.error('Error in getItem', e);
         this.toastService.show(
@@ -44,7 +49,6 @@ export class ParameterPage {
         );
       },
     );
-
     this.nativeStorage.getItem(STORAGE_SYNC_KEY).then(
       (data: string | null) => (this.syncKey = data),
       (e: any) => {
