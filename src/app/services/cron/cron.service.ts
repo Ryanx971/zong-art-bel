@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { CronJob } from 'cron';
 import { CalendarService } from '../calendar/calendar.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { Appointement } from 'src/app/models/Appointment';
 import { Customer } from 'src/app/models/Customer';
 import { STORAGE_CUSTOMERS } from 'src/app/constants/app.constant';
 import { ToastService } from '../toast/toast.service';
@@ -24,8 +23,9 @@ export class CronService {
   runMsgCron = (): void => {
     if (!this.job) {
       this.calendarService.checkCalendar().then(() => {
-        // Toutes les jours a 11h30
-        this.job = new CronJob('30 11 * * *', this.doCron);
+        // Toutes les jours a 9h00
+        // this.job = new CronJob('* * * * *', this.doCron);
+        this.job = new CronJob('00 09 * * *', this.doCron);
         this.job.start();
       });
     }
@@ -42,9 +42,9 @@ export class CronService {
         customers = data;
         this.calendarService.checkCalendar().then(
           () => {
-            // Date d'aujourd'hui à minuit
-            const startDate: Date = new Date(new Date().setHours(0, 0, 0, 0));
-            const endDate: Date = new Date(new Date().setHours(24, 0, 0, 0));
+            const dateRef = new Date(new Date().setDate(new Date().getDate() + 4));
+            const startDate = new Date(dateRef.setHours(0, 0, 0, 0));
+            const endDate: Date = new Date(dateRef.setHours(24, 0, 0, 0));
             this.calendarService.getEventsByDate(startDate, endDate).then(
               (events: any[]) => {
                 events.forEach((a: any) => {
@@ -58,7 +58,7 @@ export class CronService {
                   if (contact) {
                     this.smsService.sendMessage(
                       contact.phoneNumbers[0].value,
-                      this.generateMessage(startDate, service),
+                      this.generateMessage(startDate, service, price),
                     );
                   }
                 });
@@ -90,19 +90,22 @@ export class CronService {
     return result;
   };
 
-  private generateMessage = (startDate: Date, service: string): string => {
+  private generateMessage = (startDate: Date, service: string, price: number): string => {
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     const minute = startDate.getMinutes() !== 0 ? startDate.getMinutes() : '';
     const startHour = startDate.getHours() + 'h' + minute;
     return (
-      'Bonjour ' +
-      ',\nVotre prochain rendez-vous est le ' +
+      'Bonjour,' +
+      '\nVotre prochain rendez-vous est le ' +
       startDate.toLocaleString('fr-FR', options) +
       ' à ' +
       startHour +
       '.\nPour un/une ' +
       service +
-      '\n À demain \nZong Art Bel'
+      ' au tarif de ' +
+      price +
+      '€.' +
+      "\nPar mesure de sécurité je ne pourrais pas recevoir d'accompagnateur 😔\nMerci de venir avec son masque 😷\nPrivilégiez le paiement par CB 💳 ou le cas échéant faire l'appoint de monnaie 💶.\n\n🤗 A bientôt 💅 Zong' Art Bel"
     );
   };
 }

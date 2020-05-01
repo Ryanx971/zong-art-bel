@@ -63,6 +63,62 @@ export class CustomersPage {
       add = false;
     }
 
+    // Buttons
+    let buttons: [any] = [
+      {
+        text: 'Retour',
+        role: 'cancel',
+        cssClass: 'secondary',
+      },
+    ];
+    if (!customer || !customer.isSync) {
+      buttons.push({
+        text: 'Enregistrer',
+        handler: (data: CustomerValue) => {
+          const errors: string[] = [];
+
+          if (!data.name.trim()) errors.push('Le nom de la cliente est vide');
+
+          if (!this.isPhoneNumber(data.phone.trim())) errors.push('Veuillez saisir un numéro de téléphone valide');
+          if (errors.length === 0) {
+            const phoneNumbers: IContactField[] = [new ContactField('mobile', data.phone)];
+            const id: string = uuidv4();
+            const result: Customer = {
+              id,
+              displayName: data.name.trim(),
+              note: SYNC_KEY,
+              phoneNumbers,
+              rawId: id,
+              isSync: false,
+            };
+
+            // Ajout
+            if (add) {
+              this.customers.push(result);
+            } else {
+              // Mise à jour
+              this.customers[index] = result;
+            }
+
+            this.nativeStorage.setItem(STORAGE_CUSTOMERS, this.customers).then(
+              () => this.toastService.show(SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000),
+              (e) => {
+                this.toastService.show(ERROR_MESSAGE, 'danger-toast', 'bottom', 5000);
+              },
+            );
+            return true;
+          }
+
+          let msg = 'Erreur : \n';
+          errors.forEach((e) => {
+            msg += e + '\n';
+          });
+          this.toastService.show(msg, 'danger-toast', 'bottom', 5000);
+          return false;
+        },
+      });
+    }
+
     const alert = await this.alertController.create({
       header: title,
       inputs: [
@@ -71,68 +127,17 @@ export class CustomersPage {
           type: 'text',
           value: customer ? customer.displayName : '',
           placeholder: 'Prénom de la cliente',
-          disabled: customer ? true : false,
+          disabled: customer.isSync ? true : false,
         },
         {
           name: 'phone',
           type: 'tel',
           value: customer ? customer.phoneNumbers[0].value : '',
           placeholder: 'Téléphone',
-          disabled: customer ? true : false,
+          disabled: customer.isSync ? true : false,
         },
       ],
-      buttons: [
-        {
-          text: 'Annuler',
-          role: 'cancel',
-          cssClass: 'secondary',
-        },
-        {
-          text: 'Enregistrer',
-          handler: (data: CustomerValue) => {
-            const errors: string[] = [];
-
-            if (!data.name.trim()) errors.push('Le nom de la cliente est vide');
-
-            if (!this.isPhoneNumber(data.phone.trim())) errors.push('Veuillez saisir un numéro de téléphone valide');
-            if (errors.length === 0) {
-              const phoneNumbers: IContactField[] = [new ContactField('mobile', data.phone)];
-              const id: string = uuidv4();
-              const result: Customer = {
-                id,
-                displayName: data.name.trim(),
-                note: SYNC_KEY,
-                phoneNumbers,
-                rawId: id,
-                isSync: false,
-              };
-
-              // Ajout
-              if (add) {
-                this.customers.push(result);
-              } else {
-                // Mise à jour
-                this.customers[index] = result;
-              }
-
-              this.nativeStorage.setItem(STORAGE_CUSTOMERS, this.customers).then(
-                () => this.toastService.show(SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000),
-                (e) => {
-                  this.toastService.show(ERROR_MESSAGE, 'danger-toast', 'bottom', 5000);
-                },
-              );
-              return true;
-            }
-
-            let msg = 'Erreur : \n';
-            errors.forEach((e) => {
-              msg += e + '\n';
-            });
-            this.toastService.show(msg, 'danger-toast', 'bottom', 5000);
-            return false;
-          },
-        },
-      ],
+      buttons,
     });
     await alert.present();
   }
