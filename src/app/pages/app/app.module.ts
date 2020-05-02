@@ -31,6 +31,7 @@ import { SMS } from '@ionic-native/sms/ngx';
     Dialogs,
     Contacts,
     SMS,
+
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],

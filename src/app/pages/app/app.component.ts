@@ -32,7 +32,6 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.defaultStorage();
-
       // Lancement de cron
       this.cronService.runMsgCron();
       this.statusBar.styleLightContent();
