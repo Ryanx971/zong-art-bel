@@ -18,7 +18,10 @@
       <div class="customers" *ngFor="let item of customers; index as i">
         <ion-row class="rowItem">
           <ion-col size="10" (click)="manage(item, i)">
-            <ion-label class="displayName">{{ item.displayName }}</ion-label> <br />
+            <ion-label class="displayName ion-align-items-center">
+              {{ item.displayName }}
+              <ion-icon *ngIf="item.isSync" color="primary" class="item-sync" name="sync"></ion-icon>
+            </ion-label>
             <ion-label class="phoneNumber">{{ item.phoneNumbers[0].value.split(' ').join('') }}</ion-label>
           </ion-col>
           <!-- SUPPRESSION -->
