@@ -3,7 +3,7 @@
     <name>Zong Art Bel</name>
     <description>Prise de rendez-vous de l'institut Zong Art Bel.</description>
     <author email="ryan.baloji@outlook.fr" href="#">Ryan BALOJI</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://localhost:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
