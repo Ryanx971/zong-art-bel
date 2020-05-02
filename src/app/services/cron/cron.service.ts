@@ -24,8 +24,11 @@ export class CronService {
     if (!this.job) {
       this.calendarService.checkCalendar().then(() => {
         // Toutes les jours a 9h00
-        // this.job = new CronJob('* * * * *', this.doCron);
         this.job = new CronJob('00 09 * * *', this.doCron);
+        // Every minute
+        // this.job = new CronJob('* * * * *', this.doCron);
+        // Every second
+        // this.job = new CronJob('* * * * * *', this.doCron);
         this.job.start();
       });
     }
@@ -55,12 +58,21 @@ export class CronService {
                   const startDate: Date = new Date(a.dtstart);
                   // On récupère le contact (pour récupérer son numéro de téléphone)
                   const contact: Customer | null = this.getContact(customers, id);
+                  // PROD MODE
                   if (contact) {
                     this.smsService.sendMessage(
                       contact.phoneNumbers[0].value,
                       this.generateMessage(startDate, service, price),
                     );
                   }
+
+                  // DEV MODE
+                  // if (contact && contact.rawId === '2241') {
+                  // this.smsService.sendMessage(
+                  //   contact.phoneNumbers[0].value,
+                  //   this.generateMessage(startDate, service, price),
+                  // );
+                  // }
                 });
               },
               (e) => this.showErrorToast(),
@@ -105,6 +117,7 @@ export class CronService {
       ' au tarif de ' +
       price +
       '€.' +
+      '\nMerci de confirmer' +
       "\nPar mesure de sécurité je ne pourrais pas recevoir d'accompagnateur 😔\nMerci de venir avec son masque 😷\nPrivilégiez le paiement par CB 💳 ou le cas échéant faire l'appoint de monnaie 💶.\n\n🤗 A bientôt 💅 Zong' Art Bel"
     );
   };
