@@ -23,8 +23,8 @@ export class CronService {
   runMsgCron = (): void => {
     if (!this.job) {
       this.calendarService.checkCalendar().then(() => {
-        // Toutes les jours a 9h00
-        this.job = new CronJob('00 09 * * *', this.doCron);
+        // Toutes les jours a 10h30
+        this.job = new CronJob('30 10 * * *', this.doCron);
         // Every minute
         // this.job = new CronJob('* * * * *', this.doCron);
         // Every second
@@ -45,7 +45,7 @@ export class CronService {
         customers = data;
         this.calendarService.checkCalendar().then(
           () => {
-            const dateRef = new Date(new Date().setDate(new Date().getDate() + 4));
+            const dateRef = new Date(new Date().setDate(new Date().getDate() + 3));
             const startDate = new Date(dateRef.setHours(0, 0, 0, 0));
             const endDate: Date = new Date(dateRef.setHours(24, 0, 0, 0));
             this.calendarService.getEventsByDate(startDate, endDate).then(
@@ -117,8 +117,7 @@ export class CronService {
       ' au tarif de ' +
       price +
       '€.' +
-      '\nMerci de confirmer' +
-      "\nPar mesure de sécurité je ne pourrais pas recevoir d'accompagnateur 😔\nMerci de venir avec son masque 😷\nPrivilégiez le paiement par CB 💳 ou le cas échéant faire l'appoint de monnaie 💶.\n\n🤗 A bientôt 💅 Zong' Art Bel"
+      "\nPar mesure de sécurité je ne pourrais pas recevoir d'accompagnateur 😔\nMerci de venir avec son masque 😷\nPrivilégiez le paiement par CB 💳 ou le cas échéant faire l'appoint de monnaie 💶.\n\nMerci de confirmer.\n\n🤗 A bientôt 💅 Zong' Art Bel"
     );
   };
 }
