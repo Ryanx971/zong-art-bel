@@ -13,6 +13,7 @@ import {
   STORAGE_CALENDAR,
   STORAGE_SYNC_KEY,
 } from '../../constants/app.constant';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     private nativeStorage: NativeStorage,
     private cronService: CronService,
+    private backgroundMode: BackgroundMode,
   ) {
     this.initializeApp();
   }
@@ -37,6 +39,9 @@ export class AppComponent {
       this.statusBar.styleLightContent();
       this.statusBar.backgroundColorByHexString('#CC4159');
       this.splashScreen.hide();
+
+      // On empêche l'application de se faire tuer
+      this.backgroundMode.excludeFromTaskList();
     });
   }
 

@@ -20,7 +20,7 @@ export class SmsService {
   //   });
   // };
 
-  sendMessage = (phoneNumber: string, message: string): void => {
+  sendMessage = (phoneNumber: string, message: string): Promise<any> => {
     const ERROR_MESSAGE = "Erreur, impossible d'envoyer le message " + phoneNumber;
     //CONFIGURATION
     const options = {
@@ -30,8 +30,15 @@ export class SmsService {
       },
     };
     phoneNumber = phoneNumber.split(' ').join('');
-    this.sms.send(phoneNumber, message, options).catch((e) => {
-      console.error(ERROR_MESSAGE);
+    return new Promise((resolve, reject) => {
+      // this.sms.send(phoneNumber, message, options).then(
+      //   () => resolve(),
+      //   (e: any) => {
+      //     reject();
+      //     console.error(ERROR_MESSAGE, e);
+      //   },
+      // );
+      resolve();
     });
   };
 }
