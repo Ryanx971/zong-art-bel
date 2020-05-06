@@ -8,18 +8,6 @@ import { resolve } from 'url';
 export class SmsService {
   constructor(private sms: SMS) {}
 
-  // sendMessage = (phoneNumber: string, message: string): Promise<string> => {
-  //   const ERROR_MESSAGE = "Erreur, impossible d'envoyer le message " + phoneNumber;
-  //   return new Promise((resolve, reject) => {
-  //     this.sms.send(phoneNumber, message).then(
-  //       () => resolve(),
-  //       (e) => {
-  //         reject(ERROR_MESSAGE);
-  //       },
-  //     );
-  //   });
-  // };
-
   sendMessage = (phoneNumber: string, message: string): Promise<any> => {
     const ERROR_MESSAGE = "Erreur, impossible d'envoyer le message " + phoneNumber;
     //CONFIGURATION
@@ -31,14 +19,13 @@ export class SmsService {
     };
     phoneNumber = phoneNumber.split(' ').join('');
     return new Promise((resolve, reject) => {
-      // this.sms.send(phoneNumber, message, options).then(
-      //   () => resolve(),
-      //   (e: any) => {
-      //     reject();
-      //     console.error(ERROR_MESSAGE, e);
-      //   },
-      // );
-      resolve();
+      this.sms.send(phoneNumber, message, options).then(
+        () => resolve(),
+        (e: any) => {
+          reject();
+          console.error(ERROR_MESSAGE, e);
+        },
+      );
     });
   };
 }
