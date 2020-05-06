@@ -1,0 +1,37 @@
+<ion-header no-border>
+  <ion-toolbar mode="ios">
+    <ion-title>{{ title }}</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="light"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list class="param-list">
+    <ion-item *ngIf="messageEnabled != null">
+      <ion-label>Activation de l'envoi des messages</ion-label>
+      <ion-toggle checked="{{ messageEnabled === true }}" (ionChange)="onToggleChange($event);"> </ion-toggle>
+    </ion-item>
+    <ion-item *ngIf="messageTime != null">
+      <ion-label position="floating">Date d'envoi des messages</ion-label>
+      <ion-input
+        type="text"
+        placeholder="Entrez une heure"
+        type="time"
+        value="{{ messageTime }}"
+        (ionChange)="onInputTimeChange($event)"
+      ></ion-input>
+    </ion-item>
+    <ion-item *ngIf="messageText != null">
+      <ion-label position="floating">Fin de message personalisé.</ion-label>
+      <ion-textarea
+        type="text"
+        placeholder="Entrez votre fin de message personalisé"
+        value="{{ messageText }}"
+        (ionBlur)="onInputTextBlur($event)"
+        rows="15"
+      ></ion-textarea>
+    </ion-item>
+  </ion-list>
+</ion-content>

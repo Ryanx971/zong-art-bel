@@ -9,6 +9,7 @@ const routes: Routes = [
   { path: 'config', loadChildren: '../config/config.module#ConfigPageModule' },
   { path: 'services/manage', loadChildren: '../service/service.module#ServicePageModule' },
   { path: 'customers/manage', loadChildren: '../customers/customers.module#CustomersPageModule' },
+  { path: 'message/manage', loadChildren: '../message/message.module#MessagePageModule' },
   { path: 'parameters', loadChildren: '../parameter/parameter.module#ParameterPageModule' },
 ];
 

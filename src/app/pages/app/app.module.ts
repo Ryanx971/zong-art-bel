@@ -17,6 +17,8 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import { Dialogs } from '@ionic-native/dialogs/ngx';
 import { Contacts } from '@ionic-native/contacts/ngx';
 import { SMS } from '@ionic-native/sms/ngx';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @NgModule({
   declarations: [AppComponent, LoadDefaultComponent, PopoverComponent],
@@ -31,7 +33,8 @@ import { SMS } from '@ionic-native/sms/ngx';
     Dialogs,
     Contacts,
     SMS,
-
+    BackgroundMode,
+    LocalNotifications,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
   ],
   bootstrap: [AppComponent],

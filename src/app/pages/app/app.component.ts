@@ -3,7 +3,13 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { SERVICES, DEFAULT_SYNC_KEY } from '../../settings';
+import {
+  SERVICES,
+  DEFAULT_SYNC_KEY,
+  DEFAULT_MESSAGE_ENABLED,
+  DEFAULT_MESSAGE_TIME,
+  DEFAULT_MESSAGE_TEXT,
+} from '../../settings';
 import { CronService } from 'src/app/services/cron/cron.service';
 import {
   STORAGE_FIRST_CUSTOMERS,
@@ -12,7 +18,11 @@ import {
   STORAGE_SERVICES,
   STORAGE_CALENDAR,
   STORAGE_SYNC_KEY,
+  STORAGE_MESSAGE_ENABLED,
+  STORAGE_MESSAGE_TIME,
+  STORAGE_MESSAGE_TEXT,
 } from '../../constants/app.constant';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +35,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     private nativeStorage: NativeStorage,
     private cronService: CronService,
+    private backgroundMode: BackgroundMode,
   ) {
     this.initializeApp();
   }
@@ -37,6 +48,9 @@ export class AppComponent {
       this.statusBar.styleLightContent();
       this.statusBar.backgroundColorByHexString('#CC4159');
       this.splashScreen.hide();
+
+      // On empêche l'application de se faire tuer
+      this.backgroundMode.excludeFromTaskList();
     });
   }
 
@@ -61,6 +75,21 @@ export class AppComponent {
     // CALENDAR
     this.nativeStorage.getItem(STORAGE_CALENDAR).catch(() => {
       this.nativeStorage.setItem(STORAGE_CALENDAR, null);
+    });
+
+    // MESSAGE ENABLED
+    this.nativeStorage.getItem(STORAGE_MESSAGE_ENABLED).catch(() => {
+      this.nativeStorage.setItem(STORAGE_MESSAGE_ENABLED, DEFAULT_MESSAGE_ENABLED);
+    });
+
+    // MESSAGE TIME
+    this.nativeStorage.getItem(STORAGE_MESSAGE_TIME).catch(() => {
+      this.nativeStorage.setItem(STORAGE_MESSAGE_TIME, DEFAULT_MESSAGE_TIME);
+    });
+
+    // MESSAGE END TEXT
+    this.nativeStorage.getItem(STORAGE_MESSAGE_TEXT).catch(() => {
+      this.nativeStorage.setItem(STORAGE_MESSAGE_TEXT, DEFAULT_MESSAGE_TEXT);
     });
   };
 }
