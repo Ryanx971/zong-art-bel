@@ -18,3 +18,6 @@ export const SERVICES: Service[] = [
   { name: 'Remplissage + de 3 ongles cassés', price: 25, duration: '01:30' },
 ];
 export const DEFAULT_SYNC_KEY: string = 'Zong Art Bel';
+export const DEFAULT_MESSAGE_TIME: string = '10:30';
+export const DEFAULT_MESSAGE_TEXT: string = '';
+export const DEFAULT_MESSAGE_ENABLED: boolean = true;

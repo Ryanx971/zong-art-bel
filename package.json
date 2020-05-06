@@ -20,10 +20,12 @@
     "@angular/platform-browser": "~8.1.2",
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/router": "~8.1.2",
+    "@ionic-native/background-mode": "^5.24.0",
     "@ionic-native/calendar": "^5.12.0",
     "@ionic-native/contacts": "^5.23.0",
     "@ionic-native/core": "^5.0.0",
     "@ionic-native/dialogs": "^5.12.0",
+    "@ionic-native/local-notifications": "^5.24.0",
     "@ionic-native/native-storage": "^5.12.0",
     "@ionic-native/sms": "^5.23.0",
     "@ionic-native/social-sharing": "^5.12.0",
@@ -33,6 +35,7 @@
     "@types/cron": "^1.7.2",
     "@types/uuid": "^7.0.2",
     "cordova-android": "^8.1.0",
+    "cordova-plugin-background-mode": "^0.7.3",
     "cordova-plugin-calendar": "^5.1.4",
     "cordova-plugin-contacts": "^3.0.1",
     "cordova-plugin-device": "^2.0.2",
@@ -98,7 +101,9 @@
       },
       "cordova-plugin-dialogs": {},
       "cordova-plugin-contacts": {},
-      "cordova-sms-plugin": {}
+      "cordova-sms-plugin": {},
+      "cordova-plugin-background-mode": {},
+      "cordova-plugin-local-notification": {}
     },
     "platforms": [
       "android"
