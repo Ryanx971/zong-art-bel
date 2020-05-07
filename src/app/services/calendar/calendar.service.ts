@@ -33,7 +33,6 @@ export class CalendarService {
                 if (Number(ev.calendar_id) === cal.calendarId && ev.eventLocation === EVENT_LOCATION) {
                   const split: string[] = ev.title.split('|•|');
                   if (split[2] !== undefined) {
-                    console.log('S2', split[2]);
                     result.nbVisit += 1;
                     const price: number = parseInt(split[2].trim(), 10);
                     if (!isNaN(price)) result.sum += price;
