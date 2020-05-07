@@ -9,7 +9,7 @@
 
 <ion-content>
   <ion-list class="param-list">
-    <ion-item>
+    <ion-item *ngIf="syncKey != null">
       <ion-label position="floating">Mot clé de synchronisation des contacts</ion-label>
       <ion-input
         type="text"
@@ -18,7 +18,7 @@
         (ionBlur)="onInputBlur($event)"
       ></ion-input>
     </ion-item>
-    <ion-item>
+    <ion-item *ngIf="calendars.length">
       <ion-label floating>Calendrier utilisé</ion-label>
       <ion-select
         [value]="currentCalendarId"
