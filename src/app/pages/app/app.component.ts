@@ -51,6 +51,7 @@ export class AppComponent {
 
       // On empêche l'application de se faire tuer
       this.backgroundMode.excludeFromTaskList();
+      // this.backgroundMode.enable();
     });
   }
 
