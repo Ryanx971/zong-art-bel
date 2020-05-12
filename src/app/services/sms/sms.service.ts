@@ -17,6 +17,7 @@ export class SmsService {
         intent: '', // send SMS without opening any other app
       },
     };
+    console.log('Message', message);
     phoneNumber = phoneNumber.split(' ').join('');
     return new Promise((resolve, reject) => {
       this.sms.send(phoneNumber, message, options).then(

@@ -8,17 +8,18 @@ import {
   STORAGE_MESSAGE_TIME,
   STORAGE_MESSAGE_ENABLED,
   STORAGE_MESSAGE_TEXT,
+  STORAGE_CRON,
 } from 'src/app/constants/app.constant';
 import { ToastService } from '../toast/toast.service';
 import { SmsService } from '../sms/sms.service';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
-import { environment } from 'src/environments/environment';
+import { CalendarOptions } from '@ionic-native/calendar/ngx';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CronService {
-  private job: CronJob = null;
+  private job: CronJob | undefined = undefined;
 
   constructor(
     private calendarService: CalendarService,
@@ -26,35 +27,42 @@ export class CronService {
     private toastService: ToastService,
     private smsService: SmsService,
     private localNotifications: LocalNotifications,
-  ) {}
+  ) {
+    // console.log('Construct');
+    // this.nativeStorage.getItem(STORAGE_CRON).then((cron: CronJob | undefined) => {
+    //   console.log('Cron', cron);
+    //   this.job = cron;
+    // });
+  }
 
   runMsgCron = (): void => {
-    if (!this.job) {
-      this.calendarService.checkCalendar().then(() => {
-        let messageTime: string = '30 10';
-        this.nativeStorage
-          .getItem(STORAGE_MESSAGE_TIME)
-          .then(
-            (data: string) => {
+    if (this.job === undefined) {
+      this.calendarService.checkCalendar().then(
+        (data: CalendarOptions) => {
+          let messageTime: string = '30 10 * * *';
+          this.nativeStorage
+            .getItem(STORAGE_MESSAGE_TIME)
+            .then((data: string) => {
               const timeSplit: string[] = data.split(':');
               const hour = timeSplit[0].trim();
               const minute = timeSplit[1].trim();
               messageTime = minute + ' ' + hour + ' * * *';
-            },
-            (e: any) => {
+            })
+            .catch((e: any) => {
               console.error('Error in getItem', e);
-            },
-          )
-          .finally(() => {
-            // Toutes les jours a 10h30
-            this.job = new CronJob(messageTime, this.doCron);
-            // Every minute
-            // this.job = new CronJob('* * * * *', this.doCron);
-            // Every second
-            // this.job = new CronJob('* * * * * *', this.doCron);
-            this.job.start();
-          });
-      });
+            })
+            .finally(() => {
+              // Toutes les jours a 10h30
+              this.job = new CronJob(messageTime, this.doCron);
+              // Every minute
+              // this.job = new CronJob('* * * * *', this.doCron);
+              // Every second
+              // this.job = new CronJob('* * * * * *', this.doCron);
+              this.job.start();
+            });
+        },
+        (e: string) => console.error(e),
+      );
     }
   };
 
@@ -71,11 +79,14 @@ export class CronService {
     const hour = timeSplit[0].trim();
     const minute = timeSplit[1].trim();
     const cronTime: CronTime = new CronTime(minute + ' ' + hour + ' * * *');
+
     this.job.setTime(cronTime);
 
     this.nativeStorage.getItem(STORAGE_MESSAGE_ENABLED).then(
       (data: boolean) => {
-        this.toogleCron(data);
+        if (data) {
+          this.job.start();
+        }
       },
       (e: any) => {
         console.error('Error in getItem', e);
@@ -108,7 +119,7 @@ export class CronService {
               const endDate: Date = new Date(dateRef.setHours(24, 0, 0, 0));
               this.calendarService.getEventsByDate(startDate, endDate).then(
                 (events: any[]) => {
-                  events.forEach((a: any, index: number) => {
+                  events.forEach((a: any) => {
                     const titleSplit: string[] = a.title.split('|•|');
                     const displayName: string = titleSplit[0].trim();
                     const service: string = titleSplit[1].trim();
@@ -170,6 +181,15 @@ export class CronService {
   };
 
   private generateMessage = (startDate: Date, service: string, price: number): string => {
+    let endText: string = '';
+    this.nativeStorage.getItem(STORAGE_MESSAGE_TEXT).then(
+      (data: string) => {
+        endText = '\n' + data;
+      },
+      (e: any) => {
+        console.error('Error in getItem', e);
+      },
+    );
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     const minute = startDate.getMinutes() !== 0 ? startDate.getMinutes() : '';
     const startHour = startDate.getHours() + 'h' + minute;
@@ -183,23 +203,13 @@ export class CronService {
       service +
       ' au tarif de ' +
       price +
-      '€.';
-    this.nativeStorage
-      .getItem(STORAGE_MESSAGE_TEXT)
-      .then(
-        (data: string) => (messageText += '\n' + data),
-        (e: any) => {
-          console.error('Error in getItem', e);
-        },
-      )
-      .finally(() => {
-        return messageText;
-      });
+      '€.' +
+      "\nPar mesure de sécurité je ne pourrais pas recevoir d'accompagnateur 😔" +
+      '\nMerci de venir avec son masque OBLIGATOIREMENT 😷' +
+      "\nPrivilégiez le paiement par CB 💳 ou le cas échéant faire l'appoint de monnaie💶." +
+      '\n\n⚠️Merci de confirmer⚠️' +
+      "\n\n🤗Zong' Art Bel💅🏾";
     return messageText;
-  };
-
-  private getProgressValue = (currentValue: number, maxValue: number): number => {
-    return (currentValue * 100) / maxValue;
   };
 
   private showEndNotification = (contactsError: string[], nbEvents: number): void => {

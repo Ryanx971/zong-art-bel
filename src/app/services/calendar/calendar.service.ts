@@ -59,7 +59,7 @@ export class CalendarService {
     return new Promise((resolve, reject) => {
       this.nativeStorage.getItem(STORAGE_CALENDAR).then(
         (calendarId: string) => {
-          this.calendar.listCalendars().then(
+          this.getCalendars().then(
             (data: CalendarType[]) => {
               data.forEach((cal: CalendarType) => {
                 if (cal.id === calendarId) {
@@ -70,7 +70,7 @@ export class CalendarService {
               });
               reject('Erreur, pas de calendrier.');
             },
-            (e) => {
+            (e: string) => {
               console.error('Erreur, impossible de récupérer la liste des calendriers. [List Calendars]', e);
               reject('Erreur, impossible de récupérer la liste des calendriers.');
             },
@@ -170,7 +170,9 @@ export class CalendarService {
     const ERROR_MESSAGE = 'Erreur, impossible de récupérer les calendriers';
     return new Promise((resolve, reject) => {
       this.calendar.listCalendars().then(
-        (data: CalendarType[]) => resolve(data),
+        (data: CalendarType[]) => {
+          resolve(data);
+        },
         (e: string) => {
           console.error('Error in listCalendars', e);
           reject(ERROR_MESSAGE);
