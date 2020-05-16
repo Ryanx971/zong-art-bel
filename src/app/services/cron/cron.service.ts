@@ -131,11 +131,11 @@ export class CronService {
 
                     // PROD MODE
                     if (contact) {
-                      this.smsService
-                        .sendMessage(contact.phoneNumbers[0].value, this.generateMessage(startDate, service, price))
-                        .catch(() => {
+                      this.generateMessage(startDate, service, price).then((message: string) => {
+                        this.smsService.sendMessage(contact.phoneNumbers[0].value, message).catch(() => {
                           customersErrors.push(displayName);
                         });
+                      });
                     } else {
                       // Le contact n'a pas été trouvé
                       customersErrors.push(displayName);
@@ -180,16 +180,8 @@ export class CronService {
     return result;
   };
 
-  private generateMessage = (startDate: Date, service: string, price: number): string => {
-    let endText: string = '';
-    this.nativeStorage.getItem(STORAGE_MESSAGE_TEXT).then(
-      (data: string) => {
-        endText = '\n' + data;
-      },
-      (e: any) => {
-        console.error('Error in getItem', e);
-      },
-    );
+  private generateMessage = async (startDate: Date, service: string, price: number): Promise<string> => {
+    const endText: string = await this.nativeStorage.getItem(STORAGE_MESSAGE_TEXT);
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     const minute = startDate.getMinutes() !== 0 ? startDate.getMinutes() : '';
     const startHour = startDate.getHours() + 'h' + minute;
@@ -203,12 +195,8 @@ export class CronService {
       service +
       ' au tarif de ' +
       price +
-      '€.' +
-      "\nPar mesure de sécurité je ne pourrais pas recevoir d'accompagnateur 😔" +
-      '\nMerci de venir avec son masque OBLIGATOIREMENT 😷' +
-      "\nPrivilégiez le paiement par CB 💳 ou le cas échéant faire l'appoint de monnaie💶." +
-      '\n\n⚠️Merci de confirmer⚠️' +
-      "\n\n🤗Zong' Art Bel💅🏾";
+      '€.\n' +
+      endText;
     return messageText;
   };
 

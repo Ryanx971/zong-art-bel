@@ -19,5 +19,10 @@ export const SERVICES: Service[] = [
 ];
 export const DEFAULT_SYNC_KEY: string = 'Zong Art Bel';
 export const DEFAULT_MESSAGE_TIME: string = '10:30';
-export const DEFAULT_MESSAGE_TEXT: string = '';
+export const DEFAULT_MESSAGE_TEXT: string =
+  "Par mesure de sécurité je ne pourrais pas recevoir d'accompagnateur 😔" +
+  '\nMerci de venir avec son masque OBLIGATOIREMENT 😷' +
+  "\nPrivilégiez le paiement par CB 💳 ou le cas échéant faire l'appoint de monnaie💶." +
+  '\n\n⚠️Merci de confirmer⚠️' +
+  "\n\n🤗Zong' Art Bel💅🏾";
 export const DEFAULT_MESSAGE_ENABLED: boolean = true;
