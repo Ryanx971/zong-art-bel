@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+// import 'rxjs/add/operator/map';
 import { CronJob, CronTime } from 'cron';
 import { CalendarService } from '../calendar/calendar.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
@@ -8,16 +9,13 @@ import {
   STORAGE_MESSAGE_TIME,
   STORAGE_MESSAGE_ENABLED,
   STORAGE_MESSAGE_TEXT,
-  STORAGE_CRON,
 } from 'src/app/constants/app.constant';
 import { ToastService } from '../toast/toast.service';
 import { SmsService } from '../sms/sms.service';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { CalendarOptions } from '@ionic-native/calendar/ngx';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class CronService {
   private job: CronJob | undefined = undefined;
 
@@ -27,42 +25,31 @@ export class CronService {
     private toastService: ToastService,
     private smsService: SmsService,
     private localNotifications: LocalNotifications,
-  ) {
-    // console.log('Construct');
-    // this.nativeStorage.getItem(STORAGE_CRON).then((cron: CronJob | undefined) => {
-    //   console.log('Cron', cron);
-    //   this.job = cron;
-    // });
-  }
+  ) {}
 
   runMsgCron = (): void => {
     if (this.job === undefined) {
-      this.calendarService.checkCalendar().then(
-        (data: CalendarOptions) => {
-          let messageTime: string = '30 10 * * *';
-          this.nativeStorage
-            .getItem(STORAGE_MESSAGE_TIME)
-            .then((data: string) => {
-              const timeSplit: string[] = data.split(':');
-              const hour = timeSplit[0].trim();
-              const minute = timeSplit[1].trim();
-              messageTime = minute + ' ' + hour + ' * * *';
-            })
-            .catch((e: any) => {
-              console.error('Error in getItem', e);
-            })
-            .finally(() => {
-              // Toutes les jours a 10h30
-              this.job = new CronJob(messageTime, this.doCron);
-              // Every minute
-              // this.job = new CronJob('* * * * *', this.doCron);
-              // Every second
-              // this.job = new CronJob('* * * * * *', this.doCron);
-              this.job.start();
-            });
-        },
-        (e: string) => console.error(e),
-      );
+      let messageTime: string = '30 10 * * *';
+      this.nativeStorage
+        .getItem(STORAGE_MESSAGE_TIME)
+        .then((data: string) => {
+          const timeSplit: string[] = data.split(':');
+          const hour = timeSplit[0].trim();
+          const minute = timeSplit[1].trim();
+          messageTime = minute + ' ' + hour + ' * * *';
+        })
+        .catch((e: any) => {
+          console.error('Error in getItem', e);
+        })
+        .finally(() => {
+          // Toutes les jours a 10h30
+          this.job = new CronJob(messageTime, this.doCron);
+          // Every minute
+          // this.job = new CronJob('* * * * *', this.doCron);
+          // Every second
+          // this.job = new CronJob('* * * * * *', this.doCron);
+          this.job.start();
+        });
     }
   };
 
