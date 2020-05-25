@@ -1,15 +1,7 @@
 import { Component } from '@angular/core';
-import { CalendarService } from 'src/app/services/calendar/calendar.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { CalendarType } from 'src/app/models/CalendarType';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import {
-  STORAGE_CALENDAR,
-  STORAGE_SYNC_KEY,
-  STORAGE_MESSAGE_ENABLED,
-  STORAGE_MESSAGE_TIME,
-  STORAGE_MESSAGE_TEXT,
-} from 'src/app/constants/app.constant';
+import { STORAGE_MESSAGE_ENABLED, STORAGE_MESSAGE_TIME, STORAGE_MESSAGE_TEXT } from 'src/app/constants/app.constant';
 import { CronService } from 'src/app/services/cron/cron.service';
 
 @Component({
@@ -26,7 +18,6 @@ export class MessagePage {
   ERROR_MESSAGE = "Erreur, impossible d'effectuer la modification, veuillez réesayer";
 
   constructor(
-    private calendarService: CalendarService,
     private toastService: ToastService,
     private nativeStorage: NativeStorage,
     private cronService: CronService,
@@ -78,33 +69,29 @@ export class MessagePage {
   }
 
   onToggleChange(event: any): void {
-    if (event.target) {
-      this.nativeStorage.setItem(STORAGE_MESSAGE_ENABLED, event.target.checked).then(
-        () => {
-          this.cronService.toogleCron(event.target.checked);
-          this.toastService.show(this.SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000);
-        },
-        (e: any) => {
-          console.error('Error in setItem', e);
-          this.toastService.show(this.ERROR_MESSAGE, 'danger-toast', 'bottom', 4000);
-        },
-      );
-    }
+    this.nativeStorage.setItem(STORAGE_MESSAGE_ENABLED, event.target.checked).then(
+      () => {
+        this.cronService.toogleCron(event.target.checked);
+        this.toastService.show(this.SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000);
+      },
+      (e: any) => {
+        console.error('Error in setItem', e);
+        this.toastService.show(this.ERROR_MESSAGE, 'danger-toast', 'bottom', 4000);
+      },
+    );
   }
 
   onInputTimeChange(event: any): void {
-    if (event.target.value) {
-      this.nativeStorage.setItem(STORAGE_MESSAGE_TIME, event.target.value).then(
-        () => {
-          this.cronService.setTime(event.target.value);
-          this.toastService.show(this.SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000);
-        },
-        (e: any) => {
-          console.error('Error in setItem', e);
-          this.toastService.show(this.ERROR_MESSAGE, 'danger-toast', 'bottom', 4000);
-        },
-      );
-    }
+    this.nativeStorage.setItem(STORAGE_MESSAGE_TIME, event.target.value).then(
+      () => {
+        this.cronService.setTime(event.target.value);
+        this.toastService.show(this.SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000);
+      },
+      (e: any) => {
+        console.error('Error in setItem', e);
+        this.toastService.show(this.ERROR_MESSAGE, 'danger-toast', 'bottom', 4000);
+      },
+    );
   }
 
   onInputTextBlur(event: any): void {

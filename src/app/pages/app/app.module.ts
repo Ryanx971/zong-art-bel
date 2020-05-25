@@ -19,6 +19,7 @@ import { Contacts } from '@ionic-native/contacts/ngx';
 import { SMS } from '@ionic-native/sms/ngx';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { CronService } from 'src/app/services/cron/cron.service';
 
 @NgModule({
   declarations: [AppComponent, LoadDefaultComponent, PopoverComponent],
@@ -36,6 +37,8 @@ import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
     BackgroundMode,
     LocalNotifications,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    // Services
+    CronService,
   ],
   bootstrap: [AppComponent],
 })

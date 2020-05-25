@@ -10,6 +10,7 @@ export const STORAGE_CALENDAR = 'calendar';
 export const STORAGE_MESSAGE_ENABLED = 'message_enabled';
 export const STORAGE_MESSAGE_TIME = 'message_time';
 export const STORAGE_MESSAGE_TEXT = 'message_text';
+export const STORAGE_CRON = 'cron';
 
 export const MONTHS: Array<string> = [
   'Janvier',

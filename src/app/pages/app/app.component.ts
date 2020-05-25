@@ -10,7 +10,6 @@ import {
   DEFAULT_MESSAGE_TIME,
   DEFAULT_MESSAGE_TEXT,
 } from '../../settings';
-import { CronService } from 'src/app/services/cron/cron.service';
 import {
   STORAGE_FIRST_CUSTOMERS,
   STORAGE_FIRST_SERVICES,
@@ -21,7 +20,9 @@ import {
   STORAGE_MESSAGE_ENABLED,
   STORAGE_MESSAGE_TIME,
   STORAGE_MESSAGE_TEXT,
+  STORAGE_CRON,
 } from '../../constants/app.constant';
+import { CronService } from 'src/app/services/cron/cron.service';
 import { BackgroundMode } from '@ionic-native/background-mode/ngx';
 
 @Component({
@@ -43,15 +44,19 @@ export class AppComponent {
   initializeApp() {
     this.platform.ready().then(() => {
       this.defaultStorage();
-      // Lancement de cron
-      this.cronService.runMsgCron();
       this.statusBar.styleLightContent();
       this.statusBar.backgroundColorByHexString('#CC4159');
       this.splashScreen.hide();
 
-      // On empêche l'application de se faire tuer
-      this.backgroundMode.excludeFromTaskList();
-      // this.backgroundMode.enable();
+      // Lancement de cron
+      this.cronService.runMsgCron();
+      if (!this.backgroundMode.isEnabled()) {
+        this.backgroundMode.setDefaults({
+          silent: true,
+        });
+        this.backgroundMode.setEnabled(true);
+        this.backgroundMode.excludeFromTaskList();
+      }
     });
   }
 
@@ -91,6 +96,11 @@ export class AppComponent {
     // MESSAGE END TEXT
     this.nativeStorage.getItem(STORAGE_MESSAGE_TEXT).catch(() => {
       this.nativeStorage.setItem(STORAGE_MESSAGE_TEXT, DEFAULT_MESSAGE_TEXT);
+    });
+
+    // CRON
+    this.nativeStorage.getItem(STORAGE_CRON).catch(() => {
+      this.nativeStorage.setItem(STORAGE_CRON, undefined);
     });
   };
 }
