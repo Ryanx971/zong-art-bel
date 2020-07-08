@@ -13,7 +13,6 @@ import {
 import { ToastService } from '../toast/toast.service';
 import { SmsService } from '../sms/sms.service';
 import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
-import { CalendarOptions } from '@ionic-native/calendar/ngx';
 
 @Injectable()
 export class CronService {
@@ -81,7 +80,7 @@ export class CronService {
     );
   };
 
-  private doCron = (): void => {
+  doCron = (): void => {
     this.nativeStorage.getItem(STORAGE_MESSAGE_ENABLED).then(
       (data: boolean) => {
         if (data) {
@@ -139,14 +138,14 @@ export class CronService {
                   });
                   if (events.length) this.showEndNotification(customersErrors, events.length);
                 },
-                (e) => this.showErrorToast(),
+                (e) => this.showErrorToast(e),
               );
             },
-            (e) => this.showErrorToast(),
+            (e) => this.showErrorToast(e),
           );
         },
         (e) => {
-          this.showErrorToast();
+          this.showErrorToast(e);
           console.error('Error in getItem', e);
         },
       );
@@ -154,9 +153,14 @@ export class CronService {
   };
 
   // HELPER
-  private showErrorToast = (): void => {
-    console.error('Error in cron');
-    this.toastService.show("Impossible d'envoyer les messages aux clients", 'danger-toast', 'bottom', 4000);
+  private showErrorToast = (e: any): void => {
+    console.error('Error in cron', e);
+    this.toastService.show(
+      "Impossible d'envoyer les messages aux clients \nInformation sur l'erreur " + e,
+      'danger-toast',
+      'bottom',
+      9000,
+    );
   };
 
   private getContact = (customersList: Customer[], id: string): Customer | null => {

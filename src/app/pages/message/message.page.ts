@@ -105,4 +105,9 @@ export class MessagePage {
       );
     }
   }
+
+  runTest = (event: any): void => {
+    // TODO: should be a private method
+    this.cronService.doCron();
+  };
 }
