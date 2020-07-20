@@ -10,6 +10,16 @@
   <ion-grid>
     <div class="menu">
       <ion-row>
+        <ion-col size="6" *ngFor="let m of menu">
+          <div class="icon-menu" (click)="open(m.open);">
+            <div class="icon">
+              <img src="{{ m.icon }}" alt="{{ m.alt }}" class="icon" />
+            </div>
+            <h3 class="icon-title">{{ m.title }}</h3>
+          </div>
+        </ion-col>
+      </ion-row>
+      <!-- <ion-row>
         <ion-col size="6">
           <div class="icon-menu" (click)="openCalendar();">
             <div class="icon">
@@ -38,7 +48,7 @@
             <h3 class="icon-title">Paramètres</h3>
           </div>
         </ion-col>
-      </ion-row>
+      </ion-row> -->
     </div>
   </ion-grid>
 </ion-content>
