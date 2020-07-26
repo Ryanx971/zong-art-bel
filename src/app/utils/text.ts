@@ -59,12 +59,19 @@ const texts = {
   messagePageSuccessMessage: 'Modification effectuée avec succès',
   messagePageERRORMessage: "Erreur, impossible d'effectuer la modification, veuillez réesayer",
 
+  // PARAMETER PAGE
+  parameterPageTitle: 'Paramètres de synchronisation',
+  parameterPageSuccessMessage: 'Modification effectuée avec succès',
+  parameterPageErrorMessage: "Erreur, impossible d'effectuer la modification, veuillez réesayer",
+
   // ERRORS //
   // NATIVE STORAGE
   errorNSGetCustomers: 'Erreur, impossible de récupérer les clients',
   errorNSGetMessageEnabled: "Erreur, impossible de savoir si l'envoi de message est activé",
   errorNSGetMessageTime: "Erreur, impossible de récupérer la date d'envoi des messages",
   errorNSGetMessageText: 'Erreur, impossible de récupérer le message personalisé',
+  errorNSGetStorageCalendar: 'Erreur, impossible de récupérer le calendrier sélectionné',
+  errorNSGetStorageSyncKey: 'Erreur, impossible de récupérer le mot clé de synchronisation sélectionné',
 };
 
 export const text = (key: keyof typeof texts): string => {
