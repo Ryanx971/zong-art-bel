@@ -21,6 +21,15 @@ const texts = {
   menuAppointmentTitle: 'Rendez-vous',
   menuStatsTitle: 'Statistiques',
   menuParamTitle: 'Paramètres',
+
+  // CONFIG PAGE
+  configPageTitle: 'Paramètres',
+
+  // CONFIG MENU
+  configMenuSyncTitle: 'Paramètres de synchronisation',
+  configMenuMessageTitle: 'Paramètres des messages',
+  configMenuServiceTitle: 'Gestion des prestations',
+  configMenuCustomerTitle: 'Gestion des clientes',
 };
 
 export const text = (key: keyof typeof texts): string => {
