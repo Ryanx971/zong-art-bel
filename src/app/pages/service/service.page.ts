@@ -5,6 +5,8 @@ import { ToastService } from '../../services/toast/toast.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { Service } from 'src/app/models/Service';
 import { STORAGE_SERVICES } from '../../constants/app.constant';
+import { text } from 'src/app/utils/text';
+import { ToastColor, ToastPosition } from 'src/app/utils/enumeration';
 
 interface ServiceValue {
   name: string;
@@ -18,7 +20,7 @@ interface ServiceValue {
   styleUrls: ['./service.page.scss'],
 })
 export class ServicePage {
-  title = 'Mes prestations';
+  title = text('servicePageTitle');
   services: Service[] = [];
 
   constructor(
@@ -32,12 +34,14 @@ export class ServicePage {
    * Récupération des prestations dans le localStorage
    */
   loadServices(): void {
-    const ERROR_MESSAGE = 'Erreur, impossible de récupérer les presations';
     this.nativeStorage.getItem(STORAGE_SERVICES).then(
       (data: Service[]) => {
         this.services = data;
       },
-      (e) => this.toastService.show(ERROR_MESSAGE, 'danger-toast', 'bottom', 5000),
+      (e) => {
+        console.error(text('errorNSGetServices'), e);
+        this.toastService.show(text('errorNSGetServices'), ToastColor.ERROR, ToastPosition.BOTTOM, 5000);
+      },
     );
   }
 
@@ -51,12 +55,12 @@ export class ServicePage {
    * @param index Position
    */
   async manage(service: Service = null, index: number = -1) {
-    const ERROR_MESSAGE = "Erreur, impossible d'ajouter le client";
-    let SUCCESS_MESSAGE = 'Ajout effectué avec succès.';
+    const ERROR_MESSAGE = text('serviceAlertError');
+    let SUCCESS_MESSAGE = text('serviceAlertSuccessAdd');
     let name = null;
     let price = null;
     let duration = '02:00';
-    let title = 'Ajout';
+    let title = text('serviceAlertTitleAdd');
     // Mode
     let add = true;
 
@@ -64,8 +68,8 @@ export class ServicePage {
       name = service.name;
       price = service.price;
       duration = service.duration;
-      title = 'Modification';
-      SUCCESS_MESSAGE = 'Mise à jour effectuée avec succès';
+      title = text('serviceAlertTitleUpdate');
+      SUCCESS_MESSAGE = text('serviceAlertSuccessUpdate');
       add = false;
     }
 
@@ -93,7 +97,7 @@ export class ServicePage {
       ],
       buttons: [
         {
-          text: 'Annuler',
+          text: text('cancel'),
           role: 'cancel',
           cssClass: 'secondary',
         },
@@ -102,17 +106,17 @@ export class ServicePage {
           handler: (data: ServiceValue) => {
             const errors: string[] = [];
             if (!data.name.trim()) {
-              errors.push('Le nom est vide');
+              errors.push(text('serviceAlertErrorNameEmpty'));
             }
             if (!data.duration) {
-              errors.push('La durée est vide');
+              errors.push(text('serviceAlertErrorDurationEmpty'));
             }
             if (data.price) {
               if (data.price <= 0) {
-                errors.push('Le prix doit être positif');
+                errors.push(text('serviceAlertErrorPriceSize'));
               }
             } else {
-              errors.push('Le prix est vide');
+              errors.push(text('serviceAlertErrorPriceEmpty'));
             }
 
             if (errors.length === 0) {
@@ -137,7 +141,7 @@ export class ServicePage {
             errors.forEach((e) => {
               msg += e + '\n';
             });
-            this.toastService.show(msg, 'danger-toast', 'bottom', 5000);
+            this.toastService.show(msg, ToastColor.ERROR, ToastPosition.BOTTOM, 5000);
             return false;
           },
         },
@@ -152,7 +156,8 @@ export class ServicePage {
    * @param index Position
    */
   async remove(item: Service, index: number) {
-    const ERROR_MESSAGE = "Erreur, impossible d'ajouter le client";
+    const ERROR_MESSAGE = text('serviceAlertRemoveError');
+
     const msg =
       'Êtes-vous sûr de vouloir supprimer la prestation <br><br> <strong> - Nom : ' +
       item.name +
@@ -162,22 +167,28 @@ export class ServicePage {
       item.duration +
       '</strong>';
     const alert = await this.alertController.create({
-      header: 'Suppression!',
+      header: text('serviceAlertRemoveHeader'),
       message: msg,
       buttons: [
         {
-          text: 'Annuller',
+          text: text('cancel'),
           role: 'cancel',
         },
         {
-          text: 'Supprimer',
+          text: text('supp'),
           handler: () => {
             this.services.splice(index, 1);
-            this.nativeStorage.setItem('services', this.services).then(
-              () => this.toastService.show('Suppression effectuée avec succès', 'success-toast', 'bottom', 4000),
+            this.nativeStorage.setItem(STORAGE_SERVICES, this.services).then(
+              () =>
+                this.toastService.show(
+                  text('serviceAlertRemoveSuccess'),
+                  ToastColor.SUCCESS,
+                  ToastPosition.BOTTOM,
+                  4000,
+                ),
               (e) => {
-                this.toastService.show(ERROR_MESSAGE, 'danger-toast', 'bottom', 5000);
-                console.error('Error in setItem', e);
+                console.error(ERROR_MESSAGE, e);
+                this.toastService.show(ERROR_MESSAGE, ToastColor.ERROR, ToastPosition.BOTTOM, 5000);
               },
             );
           },

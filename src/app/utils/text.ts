@@ -2,9 +2,10 @@ import { COMPANY_NAME } from '../settings';
 
 const texts = {
   // COMMON
-  cancel: 'Retour',
+  back: 'Retour',
   save: 'Enregistrer',
   supp: 'Supprimer',
+  cancel: 'Annuler',
 
   // HOME PAGE
   homePageTitle: COMPANY_NAME,
@@ -69,6 +70,23 @@ const texts = {
   rdvPageAddSuccess: 'Rendez-vous ajouté avec succès',
   rdvPageAddError: "Erreur lors de l'ajout du rendez-vous",
 
+  // SERVICE PAGE
+  servicePageTitle: 'Mes prestations',
+
+  serviceAlertTitleAdd: 'Ajout',
+  serviceAlertTitleUpdate: 'Modification',
+  serviceAlertError: "Erreur, impossible d'ajouter le client",
+  serviceAlertSuccessAdd: 'Ajout effectué avec succès.',
+  serviceAlertSuccessUpdate: 'Mise à jour effectuée avec succès',
+
+  serviceAlertErrorNameEmpty: 'Le nom est vide',
+  serviceAlertErrorDurationEmpty: 'La durée est vide',
+  serviceAlertErrorPriceSize: 'Le prix doit être positif',
+  serviceAlertErrorPriceEmpty: 'Le prix est vide',
+
+  serviceAlertRemoveError: "Erreur, impossible d'ajouter le client",
+  serviceAlertRemoveHeader: 'Suppression',
+  serviceAlertRemoveSuccess: 'Suppression effectuée avec succès',
   // ERRORS //
   // NATIVE STORAGE
   errorNSGetCustomers: 'Erreur, impossible de récupérer les clients',
