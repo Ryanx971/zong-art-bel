@@ -64,6 +64,11 @@ const texts = {
   parameterPageSuccessMessage: 'Modification effectuée avec succès',
   parameterPageErrorMessage: "Erreur, impossible d'effectuer la modification, veuillez réesayer",
 
+  // RDV PAGE
+  rdvPageTitle: 'Rendez-vous',
+  rdvPageAddSuccess: 'Rendez-vous ajouté avec succès',
+  rdvPageAddError: "Erreur lors de l'ajout du rendez-vous",
+
   // ERRORS //
   // NATIVE STORAGE
   errorNSGetCustomers: 'Erreur, impossible de récupérer les clients',
@@ -72,6 +77,7 @@ const texts = {
   errorNSGetMessageText: 'Erreur, impossible de récupérer le message personalisé',
   errorNSGetStorageCalendar: 'Erreur, impossible de récupérer le calendrier sélectionné',
   errorNSGetStorageSyncKey: 'Erreur, impossible de récupérer le mot clé de synchronisation sélectionné',
+  errorNSGetServices: 'Erreur, impossible de récupérer les services',
 };
 
 export const text = (key: keyof typeof texts): string => {
