@@ -41,7 +41,7 @@ export class CustomersPage {
       },
       (e) => {
         console.error(text('errorNSGetCustomers'), e);
-        this.toastService.show(text('errorNSGetCustomers'), ToastColor.ERROR, ToastPosition.bottom, 5000);
+        this.toastService.show(text('errorNSGetCustomers'), ToastColor.ERROR, ToastPosition.BOTTOM, 5000);
       },
     );
   }
@@ -105,10 +105,10 @@ export class CustomersPage {
             }
 
             this.nativeStorage.setItem(STORAGE_CUSTOMERS, this.customers).then(
-              () => this.toastService.show(SUCCESS_MESSAGE, ToastColor.SUCCESS, ToastPosition.bottom, 4000),
+              () => this.toastService.show(SUCCESS_MESSAGE, ToastColor.SUCCESS, ToastPosition.BOTTOM, 4000),
               (e) => {
                 console.error(ERROR_MESSAGE, e);
-                this.toastService.show(ERROR_MESSAGE, ToastColor.ERROR, ToastPosition.bottom, 5000);
+                this.toastService.show(ERROR_MESSAGE, ToastColor.ERROR, ToastPosition.BOTTOM, 5000);
               },
             );
             return true;
@@ -118,7 +118,7 @@ export class CustomersPage {
           errors.forEach((e) => {
             msg += e + '\n';
           });
-          this.toastService.show(msg, ToastColor.ERROR, ToastPosition.bottom, 5000);
+          this.toastService.show(msg, ToastColor.ERROR, ToastPosition.BOTTOM, 5000);
           return false;
         },
       });
@@ -171,7 +171,7 @@ export class CustomersPage {
           handler: () => {
             this.customers.splice(index, 1);
             this.nativeStorage.setItem('customers', this.customers);
-            this.toastService.show(text('customerAlertRemoveSuccess'), ToastColor.SUCCESS, ToastPosition.bottom, 4000);
+            this.toastService.show(text('customerAlertRemoveSuccess'), ToastColor.SUCCESS, ToastPosition.BOTTOM, 4000);
           },
         },
       ],

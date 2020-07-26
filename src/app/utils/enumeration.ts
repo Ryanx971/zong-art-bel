@@ -5,7 +5,7 @@ export enum ToastColor {
 }
 
 export enum ToastPosition {
-  middle = 'middle',
-  bottom = 'bottom',
-  top = 'top',
+  MIDDLE = 'middle',
+  BOTTOM = 'bottom',
+  TOP = 'top',
 }

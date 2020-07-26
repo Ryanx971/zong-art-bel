@@ -54,9 +54,17 @@ const texts = {
   customerAlertRemoveHeaderTitle: 'Suppression',
   customerAlertRemoveSuccess: 'Suppression effectuée avec succès',
 
+  // MESSAGE PAGE
+  messagePageTitle: 'Paramètres des messages',
+  messagePageSuccessMessage: 'Modification effectuée avec succès',
+  messagePageERRORMessage: "Erreur, impossible d'effectuer la modification, veuillez réesayer",
+
   // ERRORS //
   // NATIVE STORAGE
   errorNSGetCustomers: 'Erreur, impossible de récupérer les clients',
+  errorNSGetMessageEnabled: "Erreur, impossible de savoir si l'envoi de message est activé",
+  errorNSGetMessageTime: "Erreur, impossible de récupérer la date d'envoi des messages",
+  errorNSGetMessageText: 'Erreur, impossible de récupérer le message personalisé',
 };
 
 export const text = (key: keyof typeof texts): string => {
