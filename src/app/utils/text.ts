@@ -87,6 +87,10 @@ const texts = {
   serviceAlertRemoveError: "Erreur, impossible d'ajouter le client",
   serviceAlertRemoveHeader: 'Suppression',
   serviceAlertRemoveSuccess: 'Suppression effectuée avec succès',
+
+  // STATS PAGE
+  statPageTitle: 'Mes statistiques',
+
   // ERRORS //
   // NATIVE STORAGE
   errorNSGetCustomers: 'Erreur, impossible de récupérer les clients',

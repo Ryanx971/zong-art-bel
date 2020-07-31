@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CalendarService, Benefit } from '../../services/calendar/calendar.service';
 import { ToastService } from '../../services/toast/toast.service';
 import { MONTHS } from '../../constants/app.constant';
+import { text } from 'src/app/utils/text';
+import { ToastColor, ToastPosition } from 'src/app/utils/enumeration';
 
 @Component({
   selector: 'app-stats',
@@ -9,7 +11,7 @@ import { MONTHS } from '../../constants/app.constant';
   styleUrls: ['./stats.page.scss'],
 })
 export class StatsPage implements OnInit {
-  title = 'Mes statistiques';
+  title = text('statPageTitle');
   displayDate: string;
   benefit: Benefit = { nbVisit: 0, sum: 0 };
   visible = false;
@@ -35,8 +37,8 @@ export class StatsPage implements OnInit {
         if (this.benefit.nbVisit === 0) {
           this.toastService.show(
             "Vous n'avez pas effectué de prestation en " + this.displayDate + '.',
-            'danger-toast',
-            'bottom',
+            ToastColor.ERROR,
+            ToastPosition.BOTTOM,
             6000,
           );
         }
@@ -45,11 +47,10 @@ export class StatsPage implements OnInit {
       (e) => {
         this.toastService.show(
           'Erreur, impossible de récupérer les bénéfices du mois de ' + this.displayDate,
-          'danger-toast',
-          'bottom',
+          ToastColor.ERROR,
+          ToastPosition.BOTTOM,
           5000,
         );
-        console.error(e);
         this.visible = false;
       },
     );
