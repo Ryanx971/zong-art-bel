@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { AlertController, PopoverController } from '@ionic/angular';
-import { ToastService } from '../../services/toast/toast.service';
+import { ContactField, IContactField } from '@ionic-native/contacts/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { Customer } from '../../models/Customer';
-import { STORAGE_CUSTOMERS, SYNC_KEY } from '../../constants/app.constant';
-import { IContactField, ContactField } from '@ionic-native/contacts/ngx';
-import { PopoverComponent } from '../../components/customer/popover/popover.component';
+import { AlertController, PopoverController } from '@ionic/angular';
+import { text, ToastColor, ToastPosition } from 'src/app/utils';
 import { v4 as uuidv4 } from 'uuid';
+import { PopoverComponent } from '../../components/customer/popover/popover.component';
+import { STORAGE_CUSTOMERS, SYNC_KEY } from '../../constants';
+import { Customer } from '../../models';
+import { ToastService } from '../../services/toast/toast.service';
 
 interface CustomerValue {
   name: string;
@@ -19,7 +20,7 @@ interface CustomerValue {
   styleUrls: ['./customers.page.scss'],
 })
 export class CustomersPage {
-  title = 'Mes clientes';
+  title = text('customerPageTitle');
   customers: Customer[] = [];
 
   constructor(
@@ -33,12 +34,14 @@ export class CustomersPage {
    * Récupération des clients dans le localStorage
    */
   loadCustomers(): void {
-    const ERROR_MESSAGE = 'Erreur, impossible de récupérer les clients';
     this.nativeStorage.getItem(STORAGE_CUSTOMERS).then(
       (data: Customer[]) => {
         this.customers = data;
       },
-      (e) => this.toastService.show(ERROR_MESSAGE, 'danger-toast', 'bottom', 5000),
+      (e) => {
+        console.error(text('errorNSGetCustomers'), e);
+        this.toastService.show(text('errorNSGetCustomers'), ToastColor.ERROR, ToastPosition.BOTTOM, 5000);
+      },
     );
   }
 
@@ -52,34 +55,34 @@ export class CustomersPage {
    */
   // TODO: la modification n'a pas été géré
   async manage(customer: Customer = null, index: number = -1) {
-    let title = "Ajout d'une cliente";
-    const ERROR_MESSAGE = "Erreur, impossible d'ajouter le client";
-    let SUCCESS_MESSAGE = 'Ajout effectué avec succès.';
+    let title = text('customerAlertTitleAdd');
+    const ERROR_MESSAGE = text('customerAlertErrorMessage');
+    let SUCCESS_MESSAGE = text('customerAlertSuccessMessageAdd');
     // Mode
     let add = true;
     if (customer != null) {
-      title = "Modification d'une cliente";
-      SUCCESS_MESSAGE = 'Mise à jour effectuée avec succès';
+      title = text('customerAlertTitleUpdate');
+      SUCCESS_MESSAGE = text('customerAlertSuccessMessageUpdate');
       add = false;
     }
 
     // Buttons
     let buttons: [any] = [
       {
-        text: 'Retour',
+        text: text('cancel'),
         role: 'cancel',
         cssClass: 'secondary',
       },
     ];
     if (!customer || !customer.isSync) {
       buttons.push({
-        text: 'Enregistrer',
+        text: text('save'),
         handler: (data: CustomerValue) => {
           const errors: string[] = [];
 
-          if (!data.name.trim()) errors.push('Le nom de la cliente est vide');
+          if (!data.name.trim()) errors.push(text('customerAlertErrorNameEmpty'));
 
-          if (!this.isPhoneNumber(data.phone.trim())) errors.push('Veuillez saisir un numéro de téléphone valide');
+          if (!this.isPhoneNumber(data.phone.trim())) errors.push(text('customerAlertErrorTelEmpty'));
           if (errors.length === 0) {
             const phoneNumbers: IContactField[] = [new ContactField('mobile', data.phone)];
             const id: string = uuidv4();
@@ -101,9 +104,10 @@ export class CustomersPage {
             }
 
             this.nativeStorage.setItem(STORAGE_CUSTOMERS, this.customers).then(
-              () => this.toastService.show(SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000),
+              () => this.toastService.show(SUCCESS_MESSAGE, ToastColor.SUCCESS, ToastPosition.BOTTOM, 4000),
               (e) => {
-                this.toastService.show(ERROR_MESSAGE, 'danger-toast', 'bottom', 5000);
+                console.error(ERROR_MESSAGE, e);
+                this.toastService.show(ERROR_MESSAGE, ToastColor.ERROR, ToastPosition.BOTTOM, 5000);
               },
             );
             return true;
@@ -113,7 +117,7 @@ export class CustomersPage {
           errors.forEach((e) => {
             msg += e + '\n';
           });
-          this.toastService.show(msg, 'danger-toast', 'bottom', 5000);
+          this.toastService.show(msg, ToastColor.ERROR, ToastPosition.BOTTOM, 5000);
           return false;
         },
       });
@@ -126,14 +130,14 @@ export class CustomersPage {
           name: 'name',
           type: 'text',
           value: customer ? customer.displayName : '',
-          placeholder: 'Prénom de la cliente',
+          placeholder: text('customerAlertInputNamePH'),
           disabled: customer && customer.isSync ? true : false,
         },
         {
           name: 'phone',
           type: 'tel',
           value: customer ? customer.phoneNumbers[0].value : '',
-          placeholder: 'Téléphone',
+          placeholder: text('customerAlertInputPhonePH'),
           disabled: customer && customer.isSync ? true : false,
         },
       ],
@@ -154,19 +158,19 @@ export class CustomersPage {
   async remove(customer: Customer, index: number) {
     const msg = 'Êtes-vous sûr de vouloir supprimer la cliente <strong>' + customer.displayName + '</strong> ?';
     const alert = await this.alertController.create({
-      header: 'Suppression!',
+      header: text('customerAlertRemoveHeaderTitle'),
       message: msg,
       buttons: [
         {
-          text: 'Annuller',
+          text: text('cancel'),
           role: 'cancel',
         },
         {
-          text: 'Supprimer',
+          text: text('supp'),
           handler: () => {
             this.customers.splice(index, 1);
             this.nativeStorage.setItem('customers', this.customers);
-            this.toastService.show('Suppression effectuée avec succès', 'success-toast', 'bottom', 4000);
+            this.toastService.show(text('customerAlertRemoveSuccess'), ToastColor.SUCCESS, ToastPosition.BOTTOM, 4000);
           },
         },
       ],

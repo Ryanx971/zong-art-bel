@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { ToastService } from 'src/app/services/toast/toast.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { STORAGE_MESSAGE_ENABLED, STORAGE_MESSAGE_TIME, STORAGE_MESSAGE_TEXT } from 'src/app/constants/app.constant';
+import { STORAGE_MESSAGE_ENABLED, STORAGE_MESSAGE_TEXT, STORAGE_MESSAGE_TIME } from 'src/app/constants';
 import { CronService } from 'src/app/services/cron/cron.service';
+import { ToastService } from 'src/app/services/toast/toast.service';
+import { text, ToastColor, ToastPosition } from 'src/app/utils';
 
 @Component({
   selector: 'app-message',
@@ -10,12 +11,12 @@ import { CronService } from 'src/app/services/cron/cron.service';
   styleUrls: ['./message.page.scss'],
 })
 export class MessagePage {
-  title = 'Paramètres des messages';
+  title = text('messagePageTitle');
   messageTime: string = null;
   messageEnabled: boolean = null;
   messageText: string = null;
-  SUCCESS_MESSAGE = 'Modification effectuée avec succès';
-  ERROR_MESSAGE = "Erreur, impossible d'effectuer la modification, veuillez réesayer";
+  SUCCESS_MESSAGE = text('messagePageSuccessMessage');
+  ERROR_MESSAGE = text('messagePageERRORMessage');
 
   constructor(
     private toastService: ToastService,
@@ -33,37 +34,22 @@ export class MessagePage {
         this.messageEnabled = data;
       },
       (e: any) => {
-        console.error('Error in getItem', e);
-        this.toastService.show(
-          "Erreur, impossible de savoir si l'envoi de message est activé",
-          'danger-toast',
-          'bottom',
-          4000,
-        );
+        console.error(text('errorNSGetMessageEnabled'), e);
+        this.toastService.show(text('errorNSGetMessageEnabled'), ToastColor.ERROR, ToastPosition.BOTTOM, 4000);
       },
     );
     this.nativeStorage.getItem(STORAGE_MESSAGE_TIME).then(
       (data: string) => (this.messageTime = data),
       (e: any) => {
-        console.error('Error in getItem', e);
-        this.toastService.show(
-          "Erreur, impossible de récupérer la date d'envoi des messages",
-          'danger-toast',
-          'bottom',
-          4000,
-        );
+        console.error(text('errorNSGetMessageTime'), e);
+        this.toastService.show(text('errorNSGetMessageTime'), ToastColor.ERROR, ToastPosition.BOTTOM, 4000);
       },
     );
     this.nativeStorage.getItem(STORAGE_MESSAGE_TEXT).then(
       (data: string) => (this.messageText = data),
       (e: any) => {
-        console.error('Error in getItem', e);
-        this.toastService.show(
-          'Erreur, impossible de récupérer le message personalisé',
-          'danger-toast',
-          'bottom',
-          4000,
-        );
+        console.error(text('errorNSGetMessageText'), e);
+        this.toastService.show(text('errorNSGetMessageText'), ToastColor.ERROR, ToastPosition.BOTTOM, 4000);
       },
     );
   }
@@ -72,11 +58,11 @@ export class MessagePage {
     this.nativeStorage.setItem(STORAGE_MESSAGE_ENABLED, event.target.checked).then(
       () => {
         this.cronService.toogleCron(event.target.checked);
-        this.toastService.show(this.SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000);
+        this.toastService.show(this.SUCCESS_MESSAGE, ToastColor.SUCCESS, ToastPosition.BOTTOM, 4000);
       },
       (e: any) => {
-        console.error('Error in setItem', e);
-        this.toastService.show(this.ERROR_MESSAGE, 'danger-toast', 'bottom', 4000);
+        console.error(this.ERROR_MESSAGE, e);
+        this.toastService.show(this.ERROR_MESSAGE, ToastColor.ERROR, ToastPosition.BOTTOM, 4000);
       },
     );
   }
@@ -85,11 +71,11 @@ export class MessagePage {
     this.nativeStorage.setItem(STORAGE_MESSAGE_TIME, event.target.value).then(
       () => {
         this.cronService.setTime(event.target.value);
-        this.toastService.show(this.SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000);
+        this.toastService.show(this.SUCCESS_MESSAGE, ToastColor.SUCCESS, ToastPosition.BOTTOM, 4000);
       },
       (e: any) => {
-        console.error('Error in setItem', e);
-        this.toastService.show(this.ERROR_MESSAGE, 'danger-toast', 'bottom', 4000);
+        console.error(this.ERROR_MESSAGE, e);
+        this.toastService.show(this.ERROR_MESSAGE, ToastColor.ERROR, ToastPosition.BOTTOM, 4000);
       },
     );
   }
@@ -97,10 +83,10 @@ export class MessagePage {
   onInputTextBlur(event: any): void {
     if (event.target.value) {
       this.nativeStorage.setItem(STORAGE_MESSAGE_TEXT, event.target.value).then(
-        () => this.toastService.show(this.SUCCESS_MESSAGE, 'success-toast', 'bottom', 4000),
+        () => this.toastService.show(this.SUCCESS_MESSAGE, ToastColor.SUCCESS, ToastPosition.BOTTOM, 4000),
         (e: any) => {
-          console.error('Error in setItem', e);
-          this.toastService.show(this.ERROR_MESSAGE, 'danger-toast', 'bottom', 4000);
+          console.error(this.ERROR_MESSAGE, e);
+          this.toastService.show(this.ERROR_MESSAGE, ToastColor.ERROR, ToastPosition.BOTTOM, 4000);
         },
       );
     }
