@@ -100,6 +100,24 @@ const texts = {
   errorNSGetStorageCalendar: 'Erreur, impossible de récupérer le calendrier sélectionné',
   errorNSGetStorageSyncKey: 'Erreur, impossible de récupérer le mot clé de synchronisation sélectionné',
   errorNSGetServices: 'Erreur, impossible de récupérer les services',
+  errorNSGetCalendars: 'Erreur, impossible de récupérer les calendriers',
+  errorNSSetCustomers: "Erreur, impossible d'ajouter les clients",
+  // CALENDAR SERVICE
+  errorCSListEventInRange: 'Erreur, impossible de trouver la liste des évenements',
+  errorCSFindCalendar: 'Erreur, impossible de trouver le calendrier.',
+  errorCSNoCalendar: 'Erreur, pas de calendrier.',
+  errorCSNoAppointmentToday: "Plus de rendez-vous aujourd'hui.",
+  errorCSCreateEventWO: 'Erreur, impossible de créer un évenement',
+
+  // CONTACT SERVICE
+  errorContactSFind: "Erreur, impossible d'obtenir les contacts",
+  syncErrorMessage: 'Erreur durant la synchronisation',
+  syncSuccessMessage: 'Synchronisation effectuée avec succès',
+
+  // CRON SERVICE
+  errorCron: 'Erreur durant la tache.',
+  errorCronToast: "Impossible d'envoyer les messages aux clients",
+  localNotificationTitle: 'Envoi des messages',
 };
 
 export const text = (key: keyof typeof texts): string => {

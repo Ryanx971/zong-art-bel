@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Contacts, Contact, IContactFindOptions, ContactFieldType } from '@ionic-native/contacts/ngx';
+import { Contact, ContactFieldType, Contacts, IContactFindOptions } from '@ionic-native/contacts/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { STORAGE_CUSTOMERS, STORAGE_SERVICES } from '../../constants/app.constant';
-import { Customer } from 'src/app/models/Customer';
+import { Customer } from 'src/app/models';
+import { removeDuplicate, text } from 'src/app/utils';
+import { STORAGE_CUSTOMERS } from '../../constants/app.constant';
 
 @Injectable({
   providedIn: 'root',
@@ -24,16 +25,16 @@ export class ContactService {
           resolve(contacts.filter((c: Contact) => c.note === 'Zong Art Bel'));
         },
         (e) => {
-          console.error("Erreur, impossible d'obtenir les contacts [Get All Contact]", e);
-          reject("Erreur, impossible d'obtenir les contacts [Get All Contact]");
+          console.error(text('errorContactSFind') + ' [Get All Contact]', e);
+          reject(text('errorContactSFind'));
         },
       );
     });
   };
 
   synchronize = (): Promise<string> => {
-    const ERROR_MESSAGE = 'Erreur durant la synchronisation';
-    const SUCCESS_MESSAGE = 'Synchronisation effectuée avec succès';
+    const ERROR_MESSAGE = text('syncErrorMessage');
+    const SUCCESS_MESSAGE = text('syncSuccessMessage');
     return new Promise((resolve, reject) => {
       this.getAll().then(
         (data: Contact[]) => {
@@ -50,17 +51,17 @@ export class ContactService {
           this.nativeStorage.getItem(STORAGE_CUSTOMERS).then(
             (storage) => {
               // Suppression des doublons
-              const result: Customer[] = this.removeDuplicate(customers.concat(storage));
+              const result: Customer[] = removeDuplicate(customers.concat(storage));
               this.nativeStorage.setItem(STORAGE_CUSTOMERS, result).then(
                 () => resolve(SUCCESS_MESSAGE),
                 (e) => {
-                  console.error('Error in setItem', e);
+                  console.error(text('errorNSSetCustomers'), e);
                   reject(ERROR_MESSAGE);
                 },
               );
             },
             (e) => {
-              console.error('Error in getItem', e);
+              console.error(text('errorNSGetCustomers'), e);
               reject(ERROR_MESSAGE);
             },
           );
@@ -71,18 +72,4 @@ export class ContactService {
       );
     });
   };
-
-  sendMessage = (): void => {};
-
-  // HELPER
-  private removeDuplicate(array: Customer[]) {
-    var a: Customer[] = array.concat();
-    for (var i = 0; i < a.length; ++i) {
-      for (var j = i + 1; j < a.length; ++j) {
-        if (a[i].id === a[j].id) a.splice(j--, 1);
-      }
-    }
-
-    return a;
-  }
 }

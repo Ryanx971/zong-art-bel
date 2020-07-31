@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { ToastPosition } from 'src/app/utils/enumeration';
+import { ToastPosition } from 'src/app/utils';
 
 @Injectable({
   providedIn: 'root',
