@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { LoadDefaultComponent } from '../../components/service/load-default/load-default.component';
-import { AlertController, PopoverController } from '@ionic/angular';
-import { ToastService } from '../../services/toast/toast.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { Service } from 'src/app/models/Service';
-import { STORAGE_SERVICES } from '../../constants/app.constant';
-import { text } from 'src/app/utils/text';
-import { ToastColor, ToastPosition } from 'src/app/utils/enumeration';
+import { AlertController, PopoverController } from '@ionic/angular';
+import { Service } from 'src/app/models';
+import { text, ToastColor, ToastPosition } from 'src/app/utils';
+import { LoadDefaultComponent } from '../../components/service/load-default/load-default.component';
+import { STORAGE_SERVICES } from '../../constants';
+import { ToastService } from '../../services/toast/toast.service';
 
 interface ServiceValue {
   name: string;

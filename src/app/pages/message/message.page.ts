@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { ToastService } from 'src/app/services/toast/toast.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { STORAGE_MESSAGE_ENABLED, STORAGE_MESSAGE_TIME, STORAGE_MESSAGE_TEXT } from 'src/app/constants/app.constant';
+import { STORAGE_MESSAGE_ENABLED, STORAGE_MESSAGE_TEXT, STORAGE_MESSAGE_TIME } from 'src/app/constants';
 import { CronService } from 'src/app/services/cron/cron.service';
-import { text } from 'src/app/utils/text';
-import { ToastColor, ToastPosition } from 'src/app/utils/enumeration';
+import { ToastService } from 'src/app/services/toast/toast.service';
+import { text, ToastColor, ToastPosition } from 'src/app/utils';
 
 @Component({
   selector: 'app-message',

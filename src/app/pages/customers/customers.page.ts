@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
-import { AlertController, PopoverController } from '@ionic/angular';
-import { ToastService } from '../../services/toast/toast.service';
+import { ContactField, IContactField } from '@ionic-native/contacts/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { Customer } from '../../models/Customer';
-import { STORAGE_CUSTOMERS, SYNC_KEY } from '../../constants/app.constant';
-import { IContactField, ContactField } from '@ionic-native/contacts/ngx';
-import { PopoverComponent } from '../../components/customer/popover/popover.component';
+import { AlertController, PopoverController } from '@ionic/angular';
+import { text, ToastColor, ToastPosition } from 'src/app/utils';
 import { v4 as uuidv4 } from 'uuid';
-import { text } from 'src/app/utils/text';
-import { ToastColor, ToastPosition } from 'src/app/utils/enumeration';
+import { PopoverComponent } from '../../components/customer/popover/popover.component';
+import { STORAGE_CUSTOMERS, SYNC_KEY } from '../../constants';
+import { Customer } from '../../models';
+import { ToastService } from '../../services/toast/toast.service';
 
 interface CustomerValue {
   name: string;

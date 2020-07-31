@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { CalendarService } from '../../services/calendar/calendar.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { STORAGE_FIRST_TIME, STORAGE_CALENDAR } from 'src/app/constants/app.constant';
+import { AlertController } from '@ionic/angular';
+import { STORAGE_CALENDAR, STORAGE_FIRST_TIME } from 'src/app/constants';
 import { ContactService } from 'src/app/services/contact/contact.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { text } from 'src/app/utils/text';
+import { text } from 'src/app/utils';
+import { CalendarService } from '../../services/calendar/calendar.service';
 
 interface IMenu {
   open: string;

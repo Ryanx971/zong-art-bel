@@ -1,15 +1,12 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
+import { Appointement, Customer, Service } from 'src/app/models';
+import { text, ToastColor, ToastPosition } from 'src/app/utils';
+import { STORAGE_CUSTOMERS, STORAGE_SERVICES } from '../../constants';
 import { CalendarService } from '../../services/calendar/calendar.service';
 import { ToastService } from '../../services/toast/toast.service';
-import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { Customer } from 'src/app/models/Customer';
-import { Service } from 'src/app/models/Service';
-import { Router } from '@angular/router';
-import { Appointement } from 'src/app/models/Appointment';
-import { STORAGE_CUSTOMERS, STORAGE_SERVICES } from '../../constants/app.constant';
-import { text } from 'src/app/utils/text';
-import { ToastColor, ToastPosition } from 'src/app/utils/enumeration';
 
 @Component({
   selector: 'app-rdv-add',

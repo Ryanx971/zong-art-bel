@@ -1,5 +1,5 @@
 export enum ToastColor {
-  SUCCESS = 'sucess-toast',
+  SUCCESS = 'success-toast',
   ERROR = 'danger-toast',
   INFOS = 'info-toast',
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { text } from 'src/app/utils/text';
+import { text } from 'src/app/utils';
 
 interface IConfig {
   open: string;

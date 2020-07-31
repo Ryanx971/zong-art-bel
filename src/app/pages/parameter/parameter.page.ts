@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
+import { STORAGE_CALENDAR, STORAGE_SYNC_KEY } from 'src/app/constants';
+import { CalendarType } from 'src/app/models';
 import { CalendarService } from 'src/app/services/calendar/calendar.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
-import { CalendarType } from 'src/app/models/CalendarType';
-import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { STORAGE_CALENDAR, STORAGE_SYNC_KEY } from 'src/app/constants/app.constant';
-import { text } from 'src/app/utils/text';
-import { ToastColor, ToastPosition } from 'src/app/utils/enumeration';
+import { text, ToastColor, ToastPosition } from 'src/app/utils';
 
 @Component({
   selector: 'app-parameter',

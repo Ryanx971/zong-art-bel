@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CalendarService, Benefit } from '../../services/calendar/calendar.service';
+import { text, ToastColor, ToastPosition } from 'src/app/utils';
+import { MONTHS } from '../../constants';
+import { Benefit, CalendarService } from '../../services/calendar/calendar.service';
 import { ToastService } from '../../services/toast/toast.service';
-import { MONTHS } from '../../constants/app.constant';
-import { text } from 'src/app/utils/text';
-import { ToastColor, ToastPosition } from 'src/app/utils/enumeration';
 
 @Component({
   selector: 'app-stats',
