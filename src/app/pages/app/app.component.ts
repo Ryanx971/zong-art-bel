@@ -52,13 +52,6 @@ export class AppComponent {
 
       // Lancement de cron
       this.cronService.runMsgCron();
-      if (!this.backgroundMode.isEnabled()) {
-        this.backgroundMode.setDefaults({
-          silent: true,
-        });
-        this.backgroundMode.enable();
-        this.backgroundMode.excludeFromTaskList();
-      }
     });
   }
 
@@ -107,24 +100,15 @@ export class AppComponent {
   };
 
   _manageBackgroundMode = (): void => {
-    this.backgroundMode.on('enable').subscribe(() => {
-      this.backgroundMode.disableWebViewOptimizations();
-    });
-
-    this.backgroundMode.on('disable').subscribe(() => {
-      this.backgroundMode.disableWebViewOptimizations();
-    });
-
+    // Background mode
     this.backgroundMode.on('activate').subscribe(() => {
+      this.backgroundMode.disableBatteryOptimizations();
       this.backgroundMode.disableWebViewOptimizations();
     });
-
-    this.backgroundMode.on('deactivate').subscribe(() => {
-      this.backgroundMode.disableWebViewOptimizations();
+    this.backgroundMode.setDefaults({
+      silent: true,
     });
-
-    this.backgroundMode.on('failure').subscribe(() => {
-      this.backgroundMode.disableWebViewOptimizations();
-    });
+    this.backgroundMode.excludeFromTaskList();
+    if (!this.backgroundMode.isEnabled()) this.backgroundMode.enable();
   };
 }
