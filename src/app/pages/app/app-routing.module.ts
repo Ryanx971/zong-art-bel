@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '', redirectTo: 'onboarding', pathMatch: 'full' },
+  // { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', loadChildren: () => import('../home/home.module').then((m) => m.HomePageModule) },
   { path: 'rdv/add', loadChildren: '../rdv-add/rdv-add.module#RdvAddPageModule' },
   { path: 'stats', loadChildren: '../stats/stats.module#StatsPageModule' },
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'customers/manage', loadChildren: '../customers/customers.module#CustomersPageModule' },
   { path: 'message/manage', loadChildren: '../message/message.module#MessagePageModule' },
   { path: 'parameters', loadChildren: '../parameter/parameter.module#ParameterPageModule' },
+  { path: 'onboarding', loadChildren: '../onboarding/onboarding.module#OnBoardingPageModule' },
 ];
 
 @NgModule({

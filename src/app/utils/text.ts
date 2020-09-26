@@ -91,6 +91,9 @@ const texts = {
   // STATS PAGE
   statPageTitle: 'Mes statistiques',
 
+  // ON BOARDING PAGE
+  onBoardingPageTitle: 'Bienvenue',
+
   // ERRORS //
   // NATIVE STORAGE
   errorNSGetCustomers: 'Erreur, impossible de récupérer les clients',
