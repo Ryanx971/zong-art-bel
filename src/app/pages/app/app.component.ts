@@ -30,6 +30,9 @@ import { BackgroundMode } from '@ionic-native/background-mode/ngx';
   templateUrl: 'app.component.html',
 })
 export class AppComponent {
+  // backgroundColor: string = '#CC4159';
+  backgroundColor: string = '#4B0082';
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -47,7 +50,7 @@ export class AppComponent {
       this._manageBackgroundMode();
 
       this.statusBar.styleLightContent();
-      this.statusBar.backgroundColorByHexString('#CC4159');
+      this.statusBar.backgroundColorByHexString(this.backgroundColor);
       this.splashScreen.hide();
 
       // Lancement de cron
