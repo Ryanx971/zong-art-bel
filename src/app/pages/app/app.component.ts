@@ -101,14 +101,14 @@ export class AppComponent {
 
   _manageBackgroundMode = (): void => {
     // Background mode
+    this.backgroundMode.excludeFromTaskList();
     this.backgroundMode.on('activate').subscribe(() => {
-      this.backgroundMode.disableBatteryOptimizations();
+      // this.backgroundMode.disableBatteryOptimizations();
       this.backgroundMode.disableWebViewOptimizations();
     });
-    this.backgroundMode.setDefaults({
-      silent: true,
-    });
-    this.backgroundMode.excludeFromTaskList();
+    // this.backgroundMode.setDefaults({
+    //   silent: true,
+    // });
     if (!this.backgroundMode.isEnabled()) this.backgroundMode.enable();
   };
 }
