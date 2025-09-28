@@ -3,6 +3,13 @@
 A mobile application built with Ionic 4 (Android only) to help a nail technician manage her appointments, clients, and services — while staying synced with Google Calendar.
 This app is already used in production (V1), and still evolving 🚀.
 
+## 📷 Screenshots
+
+![zong-art-bel-home](./resources/screens/home.jpeg)
+![zong-art-bel-message](./resources/screens/message.jpeg)
+![zong-art-bel-rdv](./resources/screens/rdv.jpeg)
+![zong-art-bel-services](./resources/screens/services.jpeg)
+
 ## 📱 Features
 
 - 📆 Appointment booking
