@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
+import { Appointement, Customer, Service } from 'src/app/models';
+import { text, ToastColor, ToastPosition } from 'src/app/utils';
+import { STORAGE_CUSTOMERS, STORAGE_SERVICES } from '../../constants';
 import { CalendarService } from '../../services/calendar/calendar.service';
 import { ToastService } from '../../services/toast/toast.service';
-import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { Customer } from 'src/app/models/Customer';
-import { Service } from 'src/app/models/Service';
-import { Router } from '@angular/router';
-import { Appointement } from 'src/app/models/Appointment';
-import { STORAGE_CUSTOMERS, STORAGE_SERVICES } from '../../constants/app.constant';
 
 @Component({
   selector: 'app-rdv-add',
@@ -17,7 +16,7 @@ import { STORAGE_CUSTOMERS, STORAGE_SERVICES } from '../../constants/app.constan
 export class RdvAddPage {
   rdvForm: FormGroup;
   submitAttempt: boolean = false;
-  title: string = 'Rendez-vous';
+  title: string = text('rdvPageTitle');
   customer: Customer = null;
   customerSearch: string;
   service: any;
@@ -50,8 +49,8 @@ export class RdvAddPage {
         this.services = data;
       },
       (e) => {
-        this.toastService.show('Erreur, impossible de récupérer les services', 'danger-toast', 'bottom', 6000);
-        console.error('Error in getItem', e);
+        console.error(text('errorNSGetServices'), e);
+        this.toastService.show(text('errorNSGetServices'), ToastColor.ERROR, ToastPosition.BOTTOM, 6000);
       },
     );
   }
@@ -89,11 +88,11 @@ export class RdvAddPage {
 
       this.calendarService.createEvent(rdv.title, rdv.price.toString(), rdv.startDate, rdv.endDate, rdv.frequence).then(
         () => {
-          this.toastService.show('Rendez-vous ajouté avec succès', 'success-toast', 'bottom', 4000);
+          this.toastService.show(text('rdvPageAddSuccess'), ToastColor.SUCCESS, ToastPosition.BOTTOM, 4000);
           this.resetForm();
         },
         (e) => {
-          this.toastService.show("Erreur lors de l'ajout du rendez-vous", 'danger-toast', 'bottom', 5000);
+          this.toastService.show(text('rdvPageAddError'), ToastColor.SUCCESS, ToastPosition.BOTTOM, 5000);
           console.error(e);
         },
       );
@@ -135,14 +134,13 @@ export class RdvAddPage {
         });
       },
       (e) => {
-        this.toastService.show('Erreur, impossible de récupérer les utilisateurs', 'danger-toast', 'bottom', 6000);
-        console.error('Error in getItem', e);
+        console.error(text('errorNSGetCustomers'), e);
+        this.toastService.show(text('errorNSGetCustomers'), ToastColor.ERROR, ToastPosition.BOTTOM, 6000);
       },
     );
   }
 
   itemListClick(customer: Customer): void {
-    // this.customer.name = customer.name;
     this.customer = customer;
     this.rdvForm.controls.customer.setValue(customer.displayName);
     this.customers = [];

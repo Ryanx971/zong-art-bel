@@ -1,11 +1,19 @@
 import { Component } from '@angular/core';
-import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { CalendarService } from '../../services/calendar/calendar.service';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { STORAGE_FIRST_TIME, STORAGE_CALENDAR } from 'src/app/constants/app.constant';
+import { AlertController } from '@ionic/angular';
+import { STORAGE_CALENDAR, STORAGE_FIRST_TIME } from 'src/app/constants';
 import { ContactService } from 'src/app/services/contact/contact.service';
 import { ToastService } from 'src/app/services/toast/toast.service';
+import { text } from 'src/app/utils';
+import { CalendarService } from '../../services/calendar/calendar.service';
+
+interface IMenu {
+  open: string;
+  icon: string;
+  alt: string;
+  title: string;
+}
 
 @Component({
   selector: 'app-home',
@@ -13,9 +21,35 @@ import { ToastService } from 'src/app/services/toast/toast.service';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  title: string = 'Zong Art Bel';
-  rdvInProgress: string = "Aucun rendez-vous aujourd'hui";
+  title: string = text('homePageTitle');
+  rdvInProgress: string = text('noAppointmentInProgress');
 
+  menu: IMenu[] = [
+    {
+      title: text('menuCalendarTitle'),
+      open: 'Calendar',
+      icon: 'assets/icon/calendar.svg',
+      alt: text('menuCalendarTitle'),
+    },
+    {
+      title: text('menuAppointmentTitle'),
+      open: '/rdv/add',
+      icon: 'assets/icon/add.svg',
+      alt: text('menuAppointmentTitle'),
+    },
+    {
+      title: text('menuStatsTitle'),
+      open: '/stats',
+      icon: 'assets/icon/stat.svg',
+      alt: text('menuStatsTitle'),
+    },
+    {
+      title: text('menuParamTitle'),
+      open: '/config',
+      icon: 'assets/icon/settings.svg',
+      alt: text('menuParamTitle'),
+    },
+  ];
   constructor(
     private calendarService: CalendarService,
     private router: Router,
@@ -47,25 +81,28 @@ export class HomePage {
     this.calendarService.openCalendar(date);
   };
 
-  open = (path: string) => {
+  open = (path: string, date: Date = null) => {
+    if (path === 'Calendar') {
+      this.calendarService.openCalendar(date);
+      return;
+    }
     this.router.navigate([path]);
   };
 
   private async showSyncAlert() {
-    const header: string = 'Synchronisation des contacts';
-    const message: string =
-      "Afin d'envoyer des messages à vos clients la veille des rendez-vous, il serait préférable de synchroniser vos contacts avec l'application. Vous pouvez syncroniser vos contactes dès maintenant ou vous rendre dans <strong>les paramètres</strong>.";
+    const header: string = text('syncAlertHeader');
+    const message: string = text('syncAlertMessage');
     const alert = await this.alertController.create({
       header,
       message,
       buttons: [
         {
-          text: 'Je le ferais plus tard',
+          text: text('syncAlertCancelBtn'),
           role: 'cancel',
           cssClass: 'secondary',
         },
         {
-          text: 'Synchroniser mes contacts',
+          text: text('syncAlertSyncBtn'),
           handler: () => {
             this.contactService
               .synchronize()
@@ -88,19 +125,19 @@ export class HomePage {
   }
 
   private async showCalendarAlert() {
-    const header: string = 'Calendrier';
-    const message: string = 'Veuillez sélectionner le calendrier qui sera utilisé pour enregistrer vos rendez-vous.';
+    const header: string = text('calendarAlertHeader');
+    const message: string = text('calendarAlertMessage');
     const alert = await this.alertController.create({
       header,
       message,
       buttons: [
         {
-          text: 'Je le ferais plus tard',
+          text: text('calendarAlertCancelBtn'),
           role: 'cancel',
           cssClass: 'secondary',
         },
         {
-          text: 'Choisir mon calendrier',
+          text: text('calendarAlertOkBtn'),
           handler: () => {
             this.router.navigate(['parameters']);
           },

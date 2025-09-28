@@ -30,6 +30,9 @@ import { BackgroundMode } from '@ionic-native/background-mode/ngx';
   templateUrl: 'app.component.html',
 })
 export class AppComponent {
+  // backgroundColor: string = '#CC4159';
+  backgroundColor: string = '#4B0082';
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -43,9 +46,11 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.defaultStorage();
+      this._defaultStorage();
+      this._manageBackgroundMode();
+
       this.statusBar.styleLightContent();
-      this.statusBar.backgroundColorByHexString('#CC4159');
+      this.statusBar.backgroundColorByHexString(this.backgroundColor);
       this.splashScreen.hide();
 
       // Lancement de cron
@@ -54,13 +59,13 @@ export class AppComponent {
         this.backgroundMode.setDefaults({
           silent: true,
         });
-        this.backgroundMode.setEnabled(true);
+        this.backgroundMode.enable();
         this.backgroundMode.excludeFromTaskList();
       }
     });
   }
 
-  private defaultStorage = (): void => {
+  _defaultStorage = (): void => {
     // CUSTOMER
     this.nativeStorage.getItem(STORAGE_FIRST_CUSTOMERS).catch(() => {
       this.nativeStorage.setItem(STORAGE_FIRST_CUSTOMERS, 'true');
@@ -101,6 +106,28 @@ export class AppComponent {
     // CRON
     this.nativeStorage.getItem(STORAGE_CRON).catch(() => {
       this.nativeStorage.setItem(STORAGE_CRON, undefined);
+    });
+  };
+
+  _manageBackgroundMode = (): void => {
+    this.backgroundMode.on('enable').subscribe(() => {
+      this.backgroundMode.disableWebViewOptimizations();
+    });
+
+    this.backgroundMode.on('disable').subscribe(() => {
+      this.backgroundMode.disableWebViewOptimizations();
+    });
+
+    this.backgroundMode.on('activate').subscribe(() => {
+      this.backgroundMode.disableWebViewOptimizations();
+    });
+
+    this.backgroundMode.on('deactivate').subscribe(() => {
+      this.backgroundMode.disableWebViewOptimizations();
+    });
+
+    this.backgroundMode.on('failure').subscribe(() => {
+      this.backgroundMode.disableWebViewOptimizations();
     });
   };
 }

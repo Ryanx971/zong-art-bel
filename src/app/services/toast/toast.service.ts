@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-
-export enum positionEnum {
-  middle = 'middle',
-  bottom = 'bottom',
-  top = 'top',
-}
+import { ToastPosition } from 'src/app/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +11,7 @@ export class ToastService {
   async show(msg: string, css: string, position: string, duration: number) {
     const toast = await this.toastCtrl.create({
       message: msg,
-      position: positionEnum[position],
+      position: ToastPosition[position],
       duration,
       cssClass: css,
     });

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { SMS } from '@ionic-native/sms/ngx';
-import { resolve } from 'url';
 
 @Injectable({
   providedIn: 'root',

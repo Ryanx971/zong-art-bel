@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
-// import 'rxjs/add/operator/map';
-import { CronJob, CronTime } from 'cron';
-import { CalendarService } from '../calendar/calendar.service';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
-import { Customer } from 'src/app/models/Customer';
+import { CronJob, CronTime } from 'cron';
 import {
   STORAGE_CUSTOMERS,
-  STORAGE_MESSAGE_TIME,
   STORAGE_MESSAGE_ENABLED,
   STORAGE_MESSAGE_TEXT,
-} from 'src/app/constants/app.constant';
-import { ToastService } from '../toast/toast.service';
+  STORAGE_MESSAGE_TIME,
+} from 'src/app/constants';
+import { Customer } from 'src/app/models';
+import { text, ToastColor, ToastPosition } from 'src/app/utils';
+import { CalendarService } from '../calendar/calendar.service';
 import { SmsService } from '../sms/sms.service';
-import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
-import { CalendarOptions } from '@ionic-native/calendar/ngx';
+import { ToastService } from '../toast/toast.service';
 
 @Injectable()
 export class CronService {
@@ -39,7 +38,7 @@ export class CronService {
           messageTime = minute + ' ' + hour + ' * * *';
         })
         .catch((e: any) => {
-          console.error('Error in getItem', e);
+          console.error(text('errorNSGetMessageTime'), e);
         })
         .finally(() => {
           // Toutes les jours a 10h30
@@ -76,12 +75,12 @@ export class CronService {
         }
       },
       (e: any) => {
-        console.error('Error in getItem', e);
+        console.error(text('errorNSGetMessageEnabled'), e);
       },
     );
   };
 
-  private doCron = (): void => {
+  doCron = (): void => {
     this.nativeStorage.getItem(STORAGE_MESSAGE_ENABLED).then(
       (data: boolean) => {
         if (data) {
@@ -89,7 +88,7 @@ export class CronService {
         }
       },
       (e: any) => {
-        console.error('Error in getItem', e);
+        console.error(text('errorNSGetMessageEnabled'), e);
       },
     );
 
@@ -139,24 +138,24 @@ export class CronService {
                   });
                   if (events.length) this.showEndNotification(customersErrors, events.length);
                 },
-                (e) => this.showErrorToast(),
+                (e) => this.showErrorToast(e),
               );
             },
-            (e) => this.showErrorToast(),
+            (e) => this.showErrorToast(e),
           );
         },
         (e) => {
-          this.showErrorToast();
-          console.error('Error in getItem', e);
+          this.showErrorToast(text('errorNSGetCustomers'));
+          console.error(text('errorNSGetCustomers'), e);
         },
       );
     };
   };
 
   // HELPER
-  private showErrorToast = (): void => {
-    console.error('Error in cron');
-    this.toastService.show("Impossible d'envoyer les messages aux clients", 'danger-toast', 'bottom', 4000);
+  private showErrorToast = (e: any): void => {
+    this.toastService.show(text('errorCronToast'), ToastColor.ERROR, ToastPosition.BOTTOM, 9000);
+    console.error(text('errorCron'), e);
   };
 
   private getContact = (customersList: Customer[], id: string): Customer | null => {
@@ -201,7 +200,7 @@ export class CronService {
     }
     this.localNotifications.schedule({
       id: NOTIFICATION_ID,
-      title: 'Envoi des messages',
+      title: text('localNotificationTitle'),
       text: message,
       progressBar: { value: (nbSuccess * 100) / nbEvents },
     });

@@ -1,5 +1,7 @@
 import { Service } from './models/Service';
 
+export const COMPANY_NAME: string = 'Zong Art Bel';
+
 // Default values
 export const SERVICES: Service[] = [
   { name: 'Pose capsules', price: 25, duration: '02:00' },
